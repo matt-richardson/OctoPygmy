@@ -2,6 +2,9 @@
 
 A small Chrome extension for Octopus Deploy to provide some additional functions to the user interface.
 
+Get it from the Chrome web store
+[OctoPygmy Extension]
+
 ##### Currently working
  - Dashboard project collapser
  - [Environment collapser]
@@ -17,6 +20,7 @@ There is another individual that has a project of Powershell cmdlets that you ma
 
 [Octopus-Cmdlets]
 
+[OctoPygmy Extension]:https://chrome.google.com/webstore/detail/octopygmy/gmnfhfdbcadjmpoigffmoondjhblabom?hl=en-US&gl=US
 [Octopus-Cmdlets]:https://github.com/Swoogan/Octopus-Cmdlets
 [Update step template across all projects]:https://octopusdeploy.uservoice.com/forums/170787-general/suggestions/6072178-when-updating-a-step-template-update-across-all
 [Environment Collapser]:https://octopusdeploy.uservoice.com/forums/170787-general/suggestions/6150522-collapsible-environment-tabs
