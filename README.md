@@ -2,8 +2,9 @@
 
 A small Chrome extension for Octopus Deploy to provide some additional functions to the user interface.
 
-Get it from the Chrome web store
-[OctoPygmy Extension]
+Get it from the Chrome web store [OctoPygmy Extension]
+
+**Note: I am not affiliated with Octopus Deploy. This is an independent project.**
 
 ##### Currently working
  - Dashboard project collapser
@@ -16,7 +17,7 @@ Get it from the Chrome web store
 
 #### Other project of note
 
-There is another individual that has a project of Powershell cmdlets that you may also be interested in. Please not, I am not the author of that project.
+There is another individual that has a project of Powershell cmdlets that you may also be interested in. Please note, I am not the author of that project.
 
 [Octopus-Cmdlets]
 
