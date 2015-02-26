@@ -14,5 +14,9 @@
   }],
   "permissions": ["https://*/app","http://*/app"],
 
-  "default_locale": "en"
+  "icons": {
+    "48": "logo48.png",
+    "64": "logo64.png",
+    "128": "logo128.png"
+  }
 }
