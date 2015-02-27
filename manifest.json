@@ -9,7 +9,11 @@
   "content_scripts": [
   {
     "matches": ["https://*/app","http://*/app"],
-    "js": ["dashboard-collapser.js","environment-collapser.js"],
+    "js": [
+      "dashboard-collapser.js",
+      "environment-collapser.js",
+      "environment-rolename-filter.js"
+    ],
     "css": ["style.css"]
   }],
   "permissions": ["https://*/app","http://*/app"],

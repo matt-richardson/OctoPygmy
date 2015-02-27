@@ -33,15 +33,36 @@ var environmentRoleNameFilter = {
 
 	addMachineToCache: function(node)
 	{
-		var machineName = node.innerText;
-		var machineNode = node.parentNode.parentNode.parentNode.parentNode; // Ernest P. Worrell goes 'Ewwwwwwww'
-		console.log(machineNode.innerHTML);
+		console.debug("Adding machine to cache:");
+
+		var machineNode = node.parentNode.parentNode.parentNode.parentNode.parentNode; // Ernest P. Worrell goes 'Ewwwwwwww'
+		console.debug("Machine node:")
+		console.debug(machineNode);
+
+		var machineNameNode = node.parentNode.parentNode.getElementsByTagName('H5')[0];
+		console.debug("Machine name:")
+		console.debug(machineNameNode);
+
+		var rolesNodes = node.parentNode.getElementsByTagName('SPAN');
+		console.debug("Roles:")
+		console.debug(rolesNodes);
+
+		var machineName = machineNameNode.innerText;
+		
+		// Get roles of server
+		var roles = [];
+		for(var i = 0; i < rolesNodes.length; i++) {
+			roles.push(rolesNodes[i].innerText.trim());
+		}
+		console.debug(roles);
 
 		machineNode.id = environmentRoleNameFilter.machineId(machineName);
+		
 		var item = {};
 		item.id = machineNode.id;
 		item.name = machineName;
-
+		item.roles = roles;
+		
 		environmentRoleNameFilter.machines.push(item);
 
 		console.debug('Environment machine added: ' + machineName);
@@ -70,12 +91,11 @@ var environmentRoleNameFilter = {
 		if (node.nodeType != 1) 
 			return;
 		
-		if (node.tagName == 'LI' && node.getAttribute("ng-repeat") == "machine in machines")
+		if (node.tagName == 'SPAN' && node.getAttribute("ng-repeat") == "role in machine.Roles")
 		{
-			//console.debug(node.innerHTML);
-
 			node.addEventListener("DOMCharacterDataModified", function(e) {
-				if(e.prevValue == "{{ machine.Name }}")
+				if(e.prevValue == "{{ role }} "
+					&& e.path[1].parentNode.outerHTML.indexOf("{{ role }} ") < 0) // Need to wait until ALL roles have been Angulared.
 				{
 					environmentRoleNameFilter.addMachineToCache(e.path[1]);
 				}
