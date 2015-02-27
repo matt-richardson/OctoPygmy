@@ -1,6 +1,6 @@
 var environmentRoleNameFilter = {
 	inputId: "rolename-filter",
-	machines: [],
+	machines: {},
 
 	machineId: function(machineName) {
 		return machineName.toLowerCase().replace(/[^a-z0-9]/g,'') + "-machine";
@@ -51,25 +51,31 @@ var environmentRoleNameFilter = {
 		
 		// Get roles of server
 		var roles = [];
-		for(var i = 0; i < rolesNodes.length; i++) {
+		for(var i = 0; i < rolesNodes.length; i++)
+		{
 			roles.push(rolesNodes[i].innerText.trim());
 		}
 		console.debug(roles);
 
 		machineNode.id = environmentRoleNameFilter.machineId(machineName);
 		
-		var item = {};
-		item.id = machineNode.id;
-		item.name = machineName;
-		item.roles = roles;
-		
-		environmentRoleNameFilter.machines.push(item);
+		// The cache is machine/role -> [machineId, machineId, ...]
+		environmentRoleNameFilter.machines[machineName] = machineNode.id;
+		for(var i = 0; i < roles.length; i++)
+		{
+			if(environmentRoleNameFilter.machines[roles[i]] == null)
+			{
+				environmentRoleNameFilter.machines[roles[i]] = [];
+			}
+
+			environmentRoleNameFilter.machines[roles[i]].push(machineNode.id);
+		}
 
 		console.debug('Environment machine added: ' + machineName);
-		console.debug(item);
+		console.log(environmentRoleNameFilter.machines);
 	},
 
-	showOnlygroup: function(event) {
+	filterFor: function(event) {
 		var groupingId = event.target.value;
 		console.debug("Showing only " + groupingId);
 		
