@@ -1,6 +1,7 @@
 var environmentRoleNameFilter = {
 	inputId: "rolename-filter",
 	machines: {},
+	machineIds: [],
 
 	machineId: function(machineName) {
 		return machineName.toLowerCase().replace(/[^a-z0-9]/g,'') + "-machine";
@@ -12,6 +13,7 @@ var environmentRoleNameFilter = {
 		input.id = this.inputId;
 		input.type = "text";
 		input.className = "grouping-chooser";
+		input.oninput = environmentRoleNameFilter.filterFor;
 
 		return input;
 	},
@@ -47,20 +49,21 @@ var environmentRoleNameFilter = {
 		console.debug("Roles:")
 		console.debug(rolesNodes);
 
-		var machineName = machineNameNode.innerText;
+		var machineName = machineNameNode.innerText.toLowerCase();
 		
 		// Get roles of server
 		var roles = [];
 		for(var i = 0; i < rolesNodes.length; i++)
 		{
-			roles.push(rolesNodes[i].innerText.trim());
+			roles.push(rolesNodes[i].innerText.trim().toLowerCase());
 		}
 		console.debug(roles);
 
 		machineNode.id = environmentRoleNameFilter.machineId(machineName);
 		
 		// The cache is machine/role -> [machineId, machineId, ...]
-		environmentRoleNameFilter.machines[machineName] = machineNode.id;
+		environmentRoleNameFilter.machines[machineName] = [machineNode.id]; // So we don't have to switch loading styles when finding machine ids later.
+		environmentRoleNameFilter.machineIds.push(machineNode.id);
 		for(var i = 0; i < roles.length; i++)
 		{
 			if(environmentRoleNameFilter.machines[roles[i]] == null)
@@ -76,16 +79,39 @@ var environmentRoleNameFilter = {
 	},
 
 	filterFor: function(event) {
-		var groupingId = event.target.value;
-		console.debug("Showing only " + groupingId);
-		
-		for(var id of environmentCollapser.environmentGroupIds) {
-			var grouping = document.getElementById(id);
+		console.log("Filtering for");
+		console.log(event.srcElement.value.toLowerCase());
+		console.log(environmentRoleNameFilter.machines);
 
-			if (id == groupingId || groupingId == environmentCollapser.allGroupsValue) {
-				grouping.style.display = "block";
-			} else {
-				grouping.style.display = "none"
+		var machineIdsToShow = [];
+		var filterText = event.srcElement.value.toLowerCase();
+		for(var rolename in environmentRoleNameFilter.machines)
+		{
+			if (rolename.indexOf(filterText) == 0)
+			{
+				for(var id of environmentRoleNameFilter.machines[rolename])
+				{
+					console.log("pushing " + id)
+					machineIdsToShow.push(id);
+				}
+			}
+		}
+
+		console.log("Showing:");
+		console.log(machineIdsToShow);
+		
+		for(var id of environmentRoleNameFilter.machineIds)
+		{
+			var machineNode = document.getElementById(id);
+			if (machineIdsToShow.indexOf(id) >= 0)
+			{
+				console.log("Showing " + id);
+				machineNode.style.display = "block";
+			} 
+			else 
+			{
+				console.log("hiding " + id);
+				machineNode.style.display = "none";
 			}
 		}
 	},
