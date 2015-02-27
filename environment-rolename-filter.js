@@ -106,7 +106,7 @@ var environmentRoleNameFilter = {
 			if (machineIdsToShow.indexOf(id) >= 0)
 			{
 				console.log("Showing " + id);
-				machineNode.style.display = "block";
+				machineNode.style.display = "inline-block";
 			} 
 			else 
 			{
