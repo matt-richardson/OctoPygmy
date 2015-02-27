@@ -83,12 +83,13 @@ function nodeInsertion(event)
 	{
 		dashboardCollapser.addGroupToChooser(node);
 	}
-
+	
 	if (node.tagName == 'H1' && node.innerText == 'Dashboard') {
 		dashboardCollapser.addProjectChooserToDashboard(node);
 	}
 
 	environmentCollapser.nodeInsertion(event);
+	environmentRoleNameFilter.nodeInsertion(event);
 }
 
 function startDashboardCollapser()

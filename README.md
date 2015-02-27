@@ -9,12 +9,15 @@ Get it from the Chrome web store [OctoPygmy Extension]
 ##### Currently working
  - Dashboard project collapser
  - [Environment collapser]
+ - [Filter machines by role or name]
 
 ##### Todo (not exhaustive list just some I like on the UserVoice site)
  - [Update step template across all projects]
  - Projects collapser (just the projects page, dashboard already done)
- - [Filter machines by role or name]
 
+#### Development note
+This is using some ugly JavaScript. So please don't use this as an example of how to do JavaScript. I'm figuring this stuff out as I go. I'm primarily a server side dev on C#.
+ 
 #### Other project of note
 
 There is another individual that has a project of Powershell cmdlets that you may also be interested in. Please note, I am not the author of that project.
