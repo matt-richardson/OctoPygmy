@@ -18,21 +18,6 @@ var environmentRoleNameFilter = {
 		return input;
 	},
 
-	addFilterInput: function(node)
-	{
-		console.debug("Adding environment role name filter input");
-
-		var input = this.createFilterInput();
-		var existingInput = document.getElementById(input.id);
-
-		if (existingInput) {
-			console.debug("Filter input already added, skipping...");
-			return;
-		}
-
-		node.parentNode.appendChild(input);
-	},
-
 	addMachineToCache: function(node)
 	{
 		console.debug("Adding machine to cache:");
@@ -75,13 +60,12 @@ var environmentRoleNameFilter = {
 		}
 
 		console.debug('Environment machine added: ' + machineName);
-		console.log(environmentRoleNameFilter.machines);
+		console.debug(environmentRoleNameFilter.machines);
 	},
 
 	filterFor: function(event) {
-		console.log("Filtering for");
-		console.log(event.srcElement.value.toLowerCase());
-		console.log(environmentRoleNameFilter.machines);
+		console.log("Filtering machines for " + event.srcElement.value.toLowerCase());
+		console.debug(environmentRoleNameFilter.machines);
 
 		var machineIdsToShow = [];
 		var filterText = event.srcElement.value.toLowerCase();
@@ -91,29 +75,14 @@ var environmentRoleNameFilter = {
 			{
 				for(var id of environmentRoleNameFilter.machines[rolename])
 				{
-					console.log("pushing " + id)
+					console.debug("pushing " + id)
 					machineIdsToShow.push(id);
 				}
 			}
 		}
 
-		console.log("Showing:");
-		console.log(machineIdsToShow);
-		
-		for(var id of environmentRoleNameFilter.machineIds)
-		{
-			var machineNode = document.getElementById(id);
-			if (machineIdsToShow.indexOf(id) >= 0)
-			{
-				console.log("Showing " + id);
-				machineNode.style.display = "inline-block";
-			} 
-			else 
-			{
-				console.log("hiding " + id);
-				machineNode.style.display = "none";
-			}
-		}
+		commonpygmy.showItems(environmentRoleNameFilter.machineIds, machineIdsToShow, 
+			'inline-block', 'none');
 	},
 
 	nodeInsertion: function(event)
@@ -135,7 +104,10 @@ var environmentRoleNameFilter = {
 		}
 
 		if (node.tagName == 'H1' && node.innerText == 'Environments') {
-			environmentRoleNameFilter.addFilterInput(node);
+			console.log('Setting up environment role/name filter');
+			
+			var filterInput = environmentRoleNameFilter.createFilterInput();
+			commonpygmy.addFilterInput(filterInput, node.parentNode);
 		}
 	}
 }
