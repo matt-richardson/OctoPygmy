@@ -23,22 +23,6 @@ var dashboardCollapser = {
 		return chooser;
 	},
 
-
-	addProjectChooserToDashboard: function(node)
-	{
-		console.debug("Adding project chooser");
-
-		var chooser = this.createChooser();
-		var existingChooser = document.getElementById(chooser.id);
-
-		if (existingChooser) {
-			console.debug("Chooser already added, skipping...");
-			return;
-		}
-
-		node.parentNode.appendChild(chooser);
-	},
-
 	addGroupToChooser: function(node)
 	{
 		var projectHeader = node.getElementsByTagName("H3")[0];
@@ -58,38 +42,40 @@ var dashboardCollapser = {
 	},
 
 	showOnlygroup: function(event) {
-		var groupingId = event.target.value;
-		console.debug("Showing only " + groupingId);
-		
-		for(var id of dashboardCollapser.projectGroupIds) {
-			var grouping = document.getElementById(id);
+		var showGroups = [];
 
-			if (id == groupingId || groupingId == dashboardCollapser.allGroupsValue) {
-				grouping.style.display = "block";
-			} else {
-				grouping.style.display = "none"
-			}
+		var groupingId = event.target.value;
+		if (groupingId == dashboardCollapser.projectGroupIds)
+		{
+			showGroups = dashboardCollapser.projectGroupIds;
+		}
+		else
+		{
+			showGroups.push(groupingId);
+		}
+
+		commonpygmy.showItems(dashboardCollapser.projectGroupIds, showGroups,
+			'block', 'none');
+	},
+
+	nodeInsertion: function(event)
+	{
+		// Catch Angular messing with the DOM.
+		var node = event.target;
+		if (node.nodeType != 1) return;
+
+		if (node.parentNode.tagName == 'FASTBOARD')
+		{
+			dashboardCollapser.addGroupToChooser(node);
+		}
+		
+		if (node.tagName == 'H1' && node.innerText == 'Dashboard') {
+			console.log('Setting up dashboard filter');
+			var filterInput = dashboardCollapser.createChooser();
+			commonpygmy.addFilterInput(filterInput, node.parentNode);
 		}
 	}
-}
 
-function nodeInsertion(event)
-{
-	// Catch Angular messing with the DOM.
-	var node = event.target;
-	if (node.nodeType != 1) return;
-
-	if (node.parentNode.tagName == 'FASTBOARD')
-	{
-		dashboardCollapser.addGroupToChooser(node);
-	}
-	
-	if (node.tagName == 'H1' && node.innerText == 'Dashboard') {
-		dashboardCollapser.addProjectChooserToDashboard(node);
-	}
-
-	environmentCollapser.nodeInsertion(event);
-	environmentRoleNameFilter.nodeInsertion(event);
 }
 
 function startDashboardCollapser()
@@ -98,7 +84,12 @@ function startDashboardCollapser()
 
 	console.debug("Adding dom listener.")
 	var body = document.getElementById("body");
-	body.addEventListener("DOMNodeInserted", nodeInsertion);
+	body.addEventListener("DOMNodeInserted", function(event)
+	{
+		dashboardCollapser.nodeInsertion(event);
+		environmentCollapser.nodeInsertion(event);
+		environmentRoleNameFilter.nodeInsertion(event);
+	});
 }
 
 startDashboardCollapser();
