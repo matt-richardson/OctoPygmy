@@ -23,21 +23,6 @@ var environmentCollapser = {
 		return chooser;
 	},
 
-	addChooser: function(node)
-	{
-		console.debug("Adding environment chooser");
-
-		var chooser = this.createChooser();
-		var existingChooser = document.getElementById(chooser.id);
-
-		if (existingChooser) {
-			console.debug("Chooser already added, skipping...");
-			return;
-		}
-
-		node.parentNode.appendChild(chooser);
-	},
-
 	addGroupToChooser: function(node)
 	{
 		var groupName = node.innerText;
@@ -57,18 +42,20 @@ var environmentCollapser = {
 	},
 
 	showOnlygroup: function(event) {
-		var groupingId = event.target.value;
-		console.debug("Showing only " + groupingId);
-		
-		for(var id of environmentCollapser.environmentGroupIds) {
-			var grouping = document.getElementById(id);
+		var showGroups = [];
 
-			if (id == groupingId || groupingId == environmentCollapser.allGroupsValue) {
-				grouping.style.display = "block";
-			} else {
-				grouping.style.display = "none"
-			}
+		var groupingId = event.target.value;
+		if (groupingId == environmentCollapser.allGroupsValue)
+		{
+			showGroups = environmentCollapser.environmentGroupIds;
 		}
+		else
+		{
+			showGroups.push(groupingId);
+		}
+
+		commonpygmy.showItems(environmentCollapser.environmentGroupIds, showGroups,
+			'block', 'none');
 	},
 
 	nodeInsertion: function(event)
@@ -87,7 +74,9 @@ var environmentCollapser = {
 		}
 
 		if (node.tagName == 'H1' && node.innerText == 'Environments') {
-			environmentCollapser.addChooser(node);
+			console.log('Setting up environment filter');
+			var filterInput = environmentCollapser.createChooser();
+			commonpygmy.addFilterInput(filterInput, node.parentNode);
 		}
 	}
 }
