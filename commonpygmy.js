@@ -1,4 +1,5 @@
 var commonpygmy = {
+	allItemsValue: '~~all~~',
 
 	addFilterInput: function(inputNode, parentNode)
 	{
