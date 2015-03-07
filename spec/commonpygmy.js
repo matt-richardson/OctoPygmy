@@ -41,7 +41,6 @@ describe("commonpygmy", function() {
 		});
 
 		it("shows the specified items", function() {
-
 			commonpygmy.showItems(allIds, idsToShow, 'show', 'hide');
 
 			expect(allItems['2'].style.display).toEqual('show');
@@ -53,6 +52,24 @@ describe("commonpygmy", function() {
 
 			expect(allItems['1'].style.display).toEqual('hide');
 			expect(allItems['3'].style.display).toEqual('hide');
+		});
+
+		it ("shows all items when given the allspark", function() {
+			commonpygmy.showItems(allIds, '~all~', 'show', 'hide');
+
+			for (item in allItems) {
+				expect(allItems[item].style.display).toEqual('show');
+			}
+		});
+
+
+		it ("shows all items when given blank idsToShow", function() {
+			// This is for the text filtering inputs.
+			commonpygmy.showItems(allIds, '', 'show', 'hide');
+
+			for (item in allItems) {
+				expect(allItems[item].style.display).toEqual('show');
+			}
 		});
 	});
 });
