@@ -1,6 +1,5 @@
 var dashboardCollapser = {
 	chooserId: "project-chooser",
-	allGroupsValue: "~all~",
 	projectGroupIds: [],
 
 	groupingId: function(groupName) {
@@ -15,7 +14,7 @@ var dashboardCollapser = {
 		chooser.className = "grouping-chooser";
 		
 		var item = document.createElement("option");
-		item.value = this.allGroupsValue;
+		item.value = commonpygmy.allItemsValue;
 		item.innerHTML = "~ All ~";
 
 		chooser.appendChild(item);
@@ -42,19 +41,8 @@ var dashboardCollapser = {
 	},
 
 	showOnlygroup: function(event) {
-		var showGroups = [];
-
 		var groupingId = event.target.value;
-		if (groupingId == dashboardCollapser.projectGroupIds)
-		{
-			showGroups = dashboardCollapser.projectGroupIds;
-		}
-		else
-		{
-			showGroups.push(groupingId);
-		}
-
-		commonpygmy.showItems(dashboardCollapser.projectGroupIds, showGroups,
+		commonpygmy.showItems(dashboardCollapser.projectGroupIds, groupingId,
 			'block', 'none');
 	},
 

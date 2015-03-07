@@ -1,6 +1,5 @@
 var environmentCollapser = {
 	chooserId: "envrionment-chooser",
-	allGroupsValue: "~all~",
 	environmentGroupIds: [],
 
 	groupingId: function(groupName) {
@@ -15,7 +14,7 @@ var environmentCollapser = {
 		chooser.className = "grouping-chooser";
 
 		var item = document.createElement("option");
-		item.value = this.allGroupsValue;
+		item.value = commonpygmy.allItemsValue;
 		item.innerHTML = "~ All ~";
 
 		chooser.appendChild(item);
@@ -42,19 +41,8 @@ var environmentCollapser = {
 	},
 
 	showOnlygroup: function(event) {
-		var showGroups = [];
-
 		var groupingId = event.target.value;
-		if (groupingId == environmentCollapser.allGroupsValue)
-		{
-			showGroups = environmentCollapser.environmentGroupIds;
-		}
-		else
-		{
-			showGroups.push(groupingId);
-		}
-
-		commonpygmy.showItems(environmentCollapser.environmentGroupIds, showGroups,
+		commonpygmy.showItems(environmentCollapser.environmentGroupIds, groupingId,
 			'block', 'none');
 	},
 
