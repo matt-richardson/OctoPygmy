@@ -3,8 +3,8 @@
 
   "name": "OctoPygmy",
   "description": "Provides a number of modifications to the Octopus Deploy user interface.",
-  "version": "0.6.21",
-  "author": "David Roberts (davidroberts63)",
+  "version": "0.6.5",
+  "author": "David Roberts (@davidroberts63)",
   "homepage_url": "https://github.com/davidroberts63/OctoPygmy",
   "content_scripts": [
   {
@@ -24,5 +24,12 @@
     "48": "logo48.png",
     "64": "logo64.png",
     "128": "logo128.png"
-  }
+  },
+
+  "background": {
+    "scripts": ["metrics.js","mixpanel.js"],
+    "persistent": false
+  },
+
+  "content_security_policy": "script-src 'self' https://cdn.mxpnl.com; object-src 'self'"
 }

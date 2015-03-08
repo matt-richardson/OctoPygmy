@@ -14,6 +14,7 @@ var environmentRoleNameFilter = {
 		input.type = "text";
 		input.className = "grouping-chooser";
 		input.oninput = environmentRoleNameFilter.filterFor;
+		input.onblur = environmentRoleNameFilter.doneWithFilter;
 
 		return input;
 	},
@@ -83,6 +84,11 @@ var environmentRoleNameFilter = {
 
 		commonpygmy.showItems(environmentRoleNameFilter.machineIds, machineIdsToShow, 
 			'inline-block', 'none');
+	},
+
+	doneWithFilter: function(event) {
+		var filterMetric = event.srcElement.value == '' ? "all" : "specific"
+		chrome.runtime.sendMessage({ name: "used-role-name-filter", properties: { "filter": filterMetric  } });
 	},
 
 	nodeInsertion: function(event)

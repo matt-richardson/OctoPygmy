@@ -44,6 +44,9 @@ var dashboardCollapser = {
 		var groupingId = event.target.value;
 		commonpygmy.showItems(dashboardCollapser.projectGroupIds, groupingId,
 			'block', 'none');
+
+		var groupingMetric = groupingId == commonpygmy.allItemsValue ? "all" : "specific"
+		chrome.runtime.sendMessage({ name: "used-dashboard-collapser", properties: { "grouping": groupingMetric  } });
 	},
 
 	nodeInsertion: function(event)

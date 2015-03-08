@@ -44,6 +44,9 @@ var environmentCollapser = {
 		var groupingId = event.target.value;
 		commonpygmy.showItems(environmentCollapser.environmentGroupIds, groupingId,
 			'block', 'none');
+
+		var groupingMetric = groupingId == commonpygmy.allItemsValue ? "all" : "specific"
+		chrome.runtime.sendMessage({ name: "used-environment-collapser", properties: { "grouping": groupingMetric  } });
 	},
 
 	nodeInsertion: function(event)
