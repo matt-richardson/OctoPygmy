@@ -22,17 +22,15 @@ function save_options() {
 	});
 }
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
 function restore_options() {
-	// Use default value color = 'red' and likesColor = true.
-	chrome.storage.sync.get({
-	analytics: null,
-	dashboard: true,
-	environments: true,
-	machines: true
-	}, function(options) {
+	var defaults = {
+		analytics: null,
+		dashboard: true,
+		environments: true,
+		machines: true
+	};
 
+	chrome.storage.sync.get(defaults, function(options) {
 		console.debug("Got options:");
 		console.debug(options);
 
