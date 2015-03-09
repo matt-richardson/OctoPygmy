@@ -41,5 +41,16 @@ function restore_options() {
 	});
 }
 
+function pleaForAnalytics(event) {
+	if (event.srcElement.checked == false) {
+		document.getElementById('plea-for-analytics').style.display = "block";
+		document.getElementById('thanks-for-analytics').style.display = "none";
+	} else {
+		document.getElementById('plea-for-analytics').style.display = "none";
+		document.getElementById('thanks-for-analytics').style.display = "block";
+	}
+}
+
+document.getElementById('analytics').addEventListener('change', pleaForAnalytics);
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
