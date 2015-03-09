@@ -13,7 +13,9 @@ function save_options() {
     
     if (chrome.runtime.lastError) status.innerHTML = 'Error saving options';
     else status.innerHTML = 'Options saved.';
-
+    
+    chrome.runtime.sendMessage("reload-options");
+    
     setTimeout(function() {
       status.textContent = '';
     }, 1500);
