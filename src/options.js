@@ -4,6 +4,7 @@ function save_options() {
 	options.dashboard = document.getElementById('dashboard-collapser').checked;
 	options.environments = document.getElementById('environment-collapser').checked;
 	options.machines = document.getElementById('environment-machine-filter').checked;
+	options.hasSetOptions = chrome.runtime.getManifest().version.substring(0, chrome.runtime.getManifest().version.lastIndexOf('.')); // Just use major.minor.
 
 	console.debug("Options to save:");
 	console.debug(options);
@@ -24,7 +25,7 @@ function save_options() {
 
 function restore_options() {
 	var defaults = {
-		analytics: null,
+		analytics: true,
 		dashboard: true,
 		environments: true,
 		machines: true
