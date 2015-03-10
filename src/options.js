@@ -9,15 +9,15 @@ function save_options() {
 	console.debug(options);
 
 	chrome.storage.sync.set(options, function() {
-	var status = document.getElementById('status');
+		var status = document.getElementById('status');
 
-	if (chrome.runtime.lastError) status.innerHTML = 'Error saving options';
-	else status.innerHTML = 'Options saved.';
+		if (chrome.runtime.lastError) status.textContent = 'Error saving options';
+		else status.textContent = 'Options saved.';
 
-	chrome.runtime.sendMessage("reload-options");
+		chrome.runtime.sendMessage("reload-options");
 
-	setTimeout(function() {
-		status.textContent = '';
+		setTimeout(function() {
+			status.textContent = '';
 		}, 1500);
 	});
 }
@@ -38,6 +38,8 @@ function restore_options() {
 		document.getElementById('dashboard-collapser').checked = options.dashboard;
 		document.getElementById('environment-collapser').checked = options.environments;
 		document.getElementById('environment-machine-filter').checked = options.machines;
+
+		pleaForAnalytics({ srcElement: document.getElementById('analytics') });
 	});
 }
 
