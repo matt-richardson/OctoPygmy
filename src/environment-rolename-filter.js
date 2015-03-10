@@ -24,15 +24,20 @@ var environmentRoleNameFilter = {
 		console.debug("Adding machine to cache:");
 
 		var machineNode = node.parentNode.parentNode.parentNode.parentNode.parentNode; // Ernest P. Worrell goes 'Ewwwwwwww'
-		console.debug("Machine node:")
+		console.debug("Machine node:");
 		console.debug(machineNode);
 
+		var statusNode = machineNode.parentNode.parentNode.parentNode.getElementsByTagName('H5')[0];
+		var status = statusNode.innerText.toLowerCase();
+		console.debug("Status node: " + status);
+		console.debug(statusNode);
+
 		var machineNameNode = node.parentNode.parentNode.getElementsByTagName('H5')[0];
-		console.debug("Machine name:")
+		console.debug("Machine name:");
 		console.debug(machineNameNode);
 
 		var rolesNodes = node.parentNode.getElementsByTagName('SPAN');
-		console.debug("Roles:")
+		console.debug("Roles:");
 		console.debug(rolesNodes);
 
 		var machineName = machineNameNode.innerText.toLowerCase();
@@ -47,7 +52,7 @@ var environmentRoleNameFilter = {
 
 		machineNode.id = environmentRoleNameFilter.machineId(machineName);
 		
-		// The cache is machine/role -> [machineId, machineId, ...]
+		// The cache is machine/role/status -> [machineId, machineId, ...]
 		environmentRoleNameFilter.machines[machineName] = [machineNode.id]; // So we don't have to switch loading styles when finding machine ids later.
 		environmentRoleNameFilter.machineIds.push(machineNode.id);
 		for(var i = 0; i < roles.length; i++)
@@ -60,6 +65,12 @@ var environmentRoleNameFilter = {
 			environmentRoleNameFilter.machines[roles[i]].push(machineNode.id);
 		}
 
+		if(environmentRoleNameFilter.machines[status] == null)
+		{
+			environmentRoleNameFilter.machines[status] = [];
+		}
+		environmentRoleNameFilter.machines[status].push(machineNode.id);
+		
 		console.debug('Environment machine added: ' + machineName);
 		console.debug(environmentRoleNameFilter.machines);
 	},
