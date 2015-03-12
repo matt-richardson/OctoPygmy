@@ -10,6 +10,7 @@ Get it from the Chrome web store [OctoPygmy Extension]
  - Dashboard project collapser
  - [Environment collapser]
  - [Filter machines by role or name]
+ - Filter machines by state (online, offline, disabled, etc...)
 
 ##### Todo (not exhaustive list just some I like on the UserVoice site)
  - [Update step template across all projects]
