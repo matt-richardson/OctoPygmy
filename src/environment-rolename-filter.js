@@ -21,25 +21,12 @@ var environmentRoleNameFilter = {
 
 	addMachineToCache: function(node)
 	{
-		console.debug("Adding machine to cache:");
-
 		var machineNode = node.parentNode.parentNode.parentNode.parentNode.parentNode; // Ernest P. Worrell goes 'Ewwwwwwww'
-		console.debug("Machine node:");
-		console.debug(machineNode);
-
 		var statusNode = machineNode.parentNode.parentNode.parentNode.getElementsByTagName('H5')[0];
-		var status = statusNode.innerText.toLowerCase();
-		console.debug("Status node: " + status);
-		console.debug(statusNode);
-
 		var machineNameNode = node.parentNode.parentNode.getElementsByTagName('H5')[0];
-		console.debug("Machine name:");
-		console.debug(machineNameNode);
-
 		var rolesNodes = node.parentNode.getElementsByTagName('SPAN');
-		console.debug("Roles:");
-		console.debug(rolesNodes);
 
+		var status = statusNode.innerText.toLowerCase();
 		var machineName = machineNameNode.innerText.toLowerCase();
 		
 		// Get roles of server
@@ -48,7 +35,6 @@ var environmentRoleNameFilter = {
 		{
 			roles.push(rolesNodes[i].innerText.trim().toLowerCase());
 		}
-		console.debug(roles);
 
 		machineNode.id = environmentRoleNameFilter.machineId(machineName);
 		
@@ -71,14 +57,9 @@ var environmentRoleNameFilter = {
 		}
 		environmentRoleNameFilter.machines[status].push(machineNode.id);
 		
-		console.debug('Environment machine added: ' + machineName);
-		console.debug(environmentRoleNameFilter.machines);
 	},
 
 	filterFor: function(event) {
-		console.log("Filtering machines for " + event.srcElement.value.toLowerCase());
-		console.debug(environmentRoleNameFilter.machines);
-
 		var machineIdsToShow = [];
 		var filterText = event.srcElement.value.toLowerCase();
 		for(var rolename in environmentRoleNameFilter.machines)
@@ -87,7 +68,6 @@ var environmentRoleNameFilter = {
 			{
 				for(var id of environmentRoleNameFilter.machines[rolename])
 				{
-					console.debug("pushing " + id)
 					machineIdsToShow.push(id);
 				}
 			}
