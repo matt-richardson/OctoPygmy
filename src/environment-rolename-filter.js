@@ -36,11 +36,12 @@ var environmentRoleNameFilter = {
 			roles.push(rolesNodes[i].innerText.trim().toLowerCase());
 		}
 
-		commonpygmy.setNodePygmyId(machineNode, environmentRoleNameFilter.machineId(machineName));
+		pygmyId = environmentRoleNameFilter.machineId(machineName);
+		commonpygmy.setNodePygmyId(machineNode, pygmyId);
 		
 		// The cache is machine/role/status -> [machineId, machineId, ...]
-		environmentRoleNameFilter.machines[machineName] = [machineNode.id]; // So we don't have to switch loading styles when finding machine ids later.
-		environmentRoleNameFilter.machineIds.push(machineNode.id);
+		environmentRoleNameFilter.machines[machineName] = [pygmyId]; // So we don't have to switch loading styles when finding machine ids later.
+		environmentRoleNameFilter.machineIds.push(pygmyId);
 		for(var i = 0; i < roles.length; i++)
 		{
 			if(environmentRoleNameFilter.machines[roles[i]] == null)
@@ -48,14 +49,14 @@ var environmentRoleNameFilter = {
 				environmentRoleNameFilter.machines[roles[i]] = [];
 			}
 
-			environmentRoleNameFilter.machines[roles[i]].push(machineNode.id);
+			environmentRoleNameFilter.machines[roles[i]].push(pygmyId);
 		}
 
 		if(environmentRoleNameFilter.machines[status] == null)
 		{
 			environmentRoleNameFilter.machines[status] = [];
 		}
-		environmentRoleNameFilter.machines[status].push(machineNode.id);
+		environmentRoleNameFilter.machines[status].push(pygmyId);
 		
 	},
 

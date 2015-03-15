@@ -2,7 +2,7 @@ describe('environment-rolename-filter', function() {
 	var environmentHtml = '<div ng-show="machines[environment.Id][\'Offline\']" class="">' +
 '                  <h5 class="separator">Offline</h5>'+
 '                  <machine-list machines="machines[environment.Id][\'Offline\']" show="show" class="ng-isolate-scope"><ul class="octo-tiles">'+
-'  <!-- ngRepeat: machine in machines --><li ng-repeat="machine in machines" class="ng-scope" id="kpteched3-machine">'+
+'  <!-- ngRepeat: machine in machines --><li ng-repeat="machine in machines" class="ng-scope">'+
 '    <div class="container machine clickable" ng-click="show(machine)">'+
 '      <div class="row no-margin-left">'+
 '        <div class="span3 machine-status">'+
@@ -15,7 +15,7 @@ describe('environment-rolename-filter', function() {
 '        </div>'+
 '      </div>'+
 '    </div>'+
-'  </li><!-- end ngRepeat: machine in machines --><li ng-repeat="machine in machines" class="ng-scope" id="narrieta1-machine">'+
+'  </li><!-- end ngRepeat: machine in machines --><li ng-repeat="machine in machines" class="ng-scope">'+
 '    <div class="container machine clickable" ng-click="show(machine)">'+
 '      <div class="row no-margin-left">'+
 '        <div class="span3 machine-status">'+
