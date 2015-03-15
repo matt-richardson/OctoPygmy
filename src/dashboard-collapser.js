@@ -27,15 +27,16 @@ var dashboardCollapser = {
 		var projectHeader = node.getElementsByTagName("H3")[0];
 		var groupName = projectHeader.innerText;
 
-		node.id = this.groupingId(groupName);
+		pygmyId = this.groupingId(groupName);
+		commonpygmy.setNodePygmyId(node, pygmyId);
 		var item = document.createElement("option");
-		item.value = node.id;
+		item.value = pygmyId;
 		item.innerHTML = groupName;
 		
 		var chooser = document.getElementById(this.chooserId);
 		chooser.appendChild(item);
 
-		this.projectGroupIds.push(node.id);
+		this.projectGroupIds.push(pygmyId);
 
 		console.debug('Project group added: ' + groupName);
 	},

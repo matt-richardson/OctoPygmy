@@ -27,15 +27,16 @@ var environmentCollapser = {
 		var groupName = node.innerText;
 		var groupNode = node.parentNode.parentNode.parentNode; // Ernest P. Worrell goes 'Ewwwwwwww'
 
-		groupNode.id = environmentCollapser.groupingId(groupName);
+		pygmyId = environmentCollapser.groupingId(groupName);
+		commonpygmy.setNodePygmyId(groupNode, pygmyId);
 		var item = document.createElement("option");
-		item.value = groupNode.id;
+		item.value = pygmyId;
 		item.innerHTML = groupName;
 		
 		var chooser = document.getElementById(environmentCollapser.chooserId);
 		chooser.appendChild(item);
 
-		environmentCollapser.environmentGroupIds.push(groupNode.id);
+		environmentCollapser.environmentGroupIds.push(pygmyId);
 
 		console.debug('Environment group added: ' + groupName);
 	},
