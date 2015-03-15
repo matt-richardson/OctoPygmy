@@ -24,15 +24,17 @@ var commonpygmy = {
 
 		for(var id of allIds)
 		{
-			var item = commonpygmy.theDocument.querySelector('[' + commonpygmy.pygmyIdAttributeName + '=' + id + ']');
-			
-			if (showAll || idsToShow.indexOf(id) >= 0)
-			{
-				item.style.display = showStyle;
-			} 
-			else 
-			{
-				item.style.display = hideStyle;
+			var items = commonpygmy.theDocument.querySelectorAll('[' + commonpygmy.pygmyIdAttributeName + '=' + id + ']');
+			for(var index = 0; index < items.length; index++) {
+				var item = items[index];
+				if (showAll || idsToShow.indexOf(id) >= 0)
+				{
+					item.style.display = showStyle;
+				} 
+				else 
+				{
+					item.style.display = hideStyle;
+				}
 			}
 		}
 	},

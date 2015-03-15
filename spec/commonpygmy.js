@@ -29,7 +29,8 @@ describe("commonpygmy", function() {
 		var nodeHtml = '<div id="z" octopygmy-id="a">&nbsp;</div>' +
 						'<div id="x" octopygmy-id="b">&nbsp;</div>' +
 						'<div id="y" octopygmy-id="c">&nbsp;</div>' +
-						'<div id="w" octopygmy-id="d">&nbsp;</div>'
+						'<div id="w" octopygmy-id="d">&nbsp;</div>' +
+						'<div octopygmy-id="d">&nbsp;</div>';
 		var nodeSegment = '';
 
 		beforeEach(function() {
@@ -46,6 +47,7 @@ describe("commonpygmy", function() {
 			
 			expect(nodeSegment.childNodes[1].style.display).toEqual('block');
 			expect(nodeSegment.childNodes[3].style.display).toEqual('block');
+			expect(nodeSegment.childNodes[4].style.display).toEqual('block');
 		});
 
 		it("hides the items not specified", function() {
