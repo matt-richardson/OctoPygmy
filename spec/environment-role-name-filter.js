@@ -29,6 +29,20 @@ describe('environment-rolename-filter', function() {
 '      </div>'+
 '    </div>'+
 '  </li><!-- end ngRepeat: machine in machines -->'+
+'<!-- ngRepeat: machine in machines --><li ng-repeat="machine in machines" class="ng-scope">'+ // This is a dupe machine for testing
+'    <div class="container machine clickable" ng-click="show(machine)">'+
+'      <div class="row no-margin-left">'+
+'        <div class="span3 machine-status">'+
+'          <img alt="There was a problem communicating with this machine (last checked: Friday, March 13, 2015 4:23 AM)" title="There was a problem communicating with this machine (last checked: Friday, March 13, 2015 4:23 AM)" ng-src="img/machines/Server-Offline.png" for="machine" class="ng-isolate-scope" src="img/machines/Server-Offline.png"></div>'+
+'        <div class="span9 machine-summary tight">'+
+'          <h5 class="ng-binding">KPTECHED3</h5>'+
+'          <div class="subtle" ng-show="machine.CommunicationStyle == \'TentaclePassive\'"><span class="fixed smaller-fonts ng-binding">23.102.176.120</span></div>'+
+'          <div class="subtle ng-hide" ng-show="machine.CommunicationStyle == \'TentacleActive\'">Polling</div>'+
+'          <p>!-- ngRepeat: role in machine.Roles --><span class="label truncate ng-scope ng-binding" ng-repeat="role in machine.Roles" title="app-server">app-server </span><!-- end ngRepeat: role in machine.Roles --><span class="label truncate ng-scope ng-binding" ng-repeat="role in machine.Roles" title="web-server">web-server </span><!-- end ngRepeat: role in machine.Roles --></p>'+
+'        </div>'+
+'      </div>'+
+'    </div>'+
+'  </li>'+
 '</ul></machine-list>'+
 ''+
 '                  <div class="margin-bottom-20" ng-show="machines[environment.Id][\'Offline\'].length > 1">'+
@@ -60,17 +74,19 @@ describe('environment-rolename-filter', function() {
 			var element = document.createElement('div');
 			element.innerHTML = environmentHtml;
 			environmentNode = element.childNodes[0];
-			rolesTextNode = environmentNode.querySelector("P SPAN");
 
 			environmentRoleNameFilter.machineIds = [];
 			environmentRoleNameFilter.machines = {};
 
 			// ACTION!
-			environmentRoleNameFilter.addMachineToCache(rolesTextNode);
+			var machineNodes = environmentNode.querySelectorAll("div machine-list li");
+			for(var index = 0; index < machineNodes.length; index++) {
+				var rolesTextNode = machineNodes[index].querySelector("P SPAN");
+				environmentRoleNameFilter.addMachineToCache(rolesTextNode);
+			}
 		});
 
 		it('adds machine id to all machine id cache with id', function() {
-			expect(environmentRoleNameFilter.machineIds.length).toEqual(1);
 			expect(environmentRoleNameFilter.machineIds).toContain('kpteched3-machine');
 		});
 
