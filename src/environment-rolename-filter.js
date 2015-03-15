@@ -36,7 +36,7 @@ var environmentRoleNameFilter = {
 			roles.push(rolesNodes[i].innerText.trim().toLowerCase());
 		}
 
-		machineNode.id = environmentRoleNameFilter.machineId(machineName);
+		commonpygmy.setNodePygmyId(machineNode, environmentRoleNameFilter.machineId(machineName));
 		
 		// The cache is machine/role/status -> [machineId, machineId, ...]
 		environmentRoleNameFilter.machines[machineName] = [machineNode.id]; // So we don't have to switch loading styles when finding machine ids later.

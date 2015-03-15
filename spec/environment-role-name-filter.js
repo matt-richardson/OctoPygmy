@@ -95,7 +95,7 @@ describe('environment-rolename-filter', function() {
 
 		it('sets the machine node id to what is used in the cache', function() {
 			var machineNode = environmentNode.getElementsByTagName('LI')[0];
-			expect(machineNode.id).toEqual('kpteched3-machine');
+			expect(machineNode.getAttribute(commonpygmy.pygmyIdAttributeName)).toEqual('kpteched3-machine');
 		});
 	});
 });
