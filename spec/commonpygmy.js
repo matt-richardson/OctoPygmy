@@ -24,51 +24,51 @@ describe("commonpygmy", function() {
 	describe("showItems", function() {
 		var allIds = '';
 		var idsToShow = '';
-		var allItems = '';
+		// When setting the style.display. Be sure to use valid values.
+		// It runs against the XHTML parser.
+		var nodeHtml = '<div id="a">&nbsp;</div>' +
+						'<div id="b">&nbsp;</div>' +
+						'<div id="c">&nbsp;</div>' +
+						'<div id="d">&nbsp;</div>'
+		var nodeSegment = '';
 
 		beforeEach(function() {
-			allIds = ['1','2','3','4'];
-			idsToShow = ['2','4'];
-			allItems = {
-				'1': { style: { display: ''} },
-				'2': { style: { display: ''} },
-				'3': { style: { display: ''} },
-				'4': { style: { display: ''} }
-			}
-			spyOn(document,'getElementById').and.callFake(function(id) {
-				return allItems[id];
-			});
+			commonpygmy.theDocument = document.createElement('div');
+			commonpygmy.theDocument.innerHTML = nodeHtml;
+			nodeSegment = commonpygmy.theDocument;
+
+			allIds = ['a','b','c','d'];
+			idsToShow = ['b','d'];
 		});
 
 		it("shows the specified items", function() {
-			commonpygmy.showItems(allIds, idsToShow, 'show', 'hide');
-
-			expect(allItems['2'].style.display).toEqual('show');
-			expect(allItems['4'].style.display).toEqual('show');
+			commonpygmy.showItems(allIds, idsToShow, 'block', 'none');
+			
+			expect(nodeSegment.childNodes[1].style.display).toEqual('block');
+			expect(nodeSegment.childNodes[3].style.display).toEqual('block');
 		});
 
-		it ("hides the items not specified", function() {
-			commonpygmy.showItems(allIds, idsToShow, 'show', 'hide');
+		it("hides the items not specified", function() {
+			commonpygmy.showItems(allIds, idsToShow, 'block', 'none');
 
-			expect(allItems['1'].style.display).toEqual('hide');
-			expect(allItems['3'].style.display).toEqual('hide');
+			expect(nodeSegment.childNodes[0].style.display).toEqual('none');
+			expect(nodeSegment.childNodes[2].style.display).toEqual('none');
 		});
 
-		it ("shows all items when given the allspark", function() {
-			commonpygmy.showItems(allIds, '~all~', 'show', 'hide');
+		it("shows all items when given the allspark", function() {
+			commonpygmy.showItems(allIds, '~all~', 'block', 'none');
 
-			for (item in allItems) {
-				expect(allItems[item].style.display).toEqual('show');
+			for (var index = 0; index < nodeSegment.childNodes.length; index++) {
+				expect(nodeSegment.childNodes[index].style.display).toEqual('block');
 			}
 		});
 
-
-		it ("shows all items when given blank idsToShow", function() {
+		it("shows all items when given blank idsToShow", function() {
 			// This is for the text filtering inputs.
-			commonpygmy.showItems(allIds, '', 'show', 'hide');
+			commonpygmy.showItems(allIds, '', 'block', 'none');
 
-			for (item in allItems) {
-				expect(allItems[item].style.display).toEqual('show');
+			for (var index = 0; index < nodeSegment.childNodes.length; index++) {
+				expect(nodeSegment.childNodes[index].style.display).toEqual('block');
 			}
 		});
 	});

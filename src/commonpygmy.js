@@ -1,5 +1,6 @@
 var commonpygmy = {
 	allItemsValue: '~all~',
+	theDocument: window.document,
 
 	addFilterInput: function(inputNode, parentNode)
 	{
@@ -22,7 +23,8 @@ var commonpygmy = {
 
 		for(var id of allIds)
 		{
-			var item = document.getElementById(id);
+			var item = commonpygmy.theDocument.querySelector('#' + id);
+			
 			if (showAll || idsToShow.indexOf(id) >= 0)
 			{
 				item.style.display = showStyle;
