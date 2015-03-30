@@ -41,8 +41,10 @@ var integrateStepTemplateLibrary = {
 		console.debug('Adding templates to library listing');
 		
 		var templateHtml = '<a class="octo-list-group-item">' +
-			'<div class="action script template">' +
-			'<h4 class="octo-list-group-item-heading">@@TEMPLATENAME@@</h4>' +
+			'<div>' +
+			'<h4 class="octo-list-group-item-heading">' +
+			'<button type="button" class="btn-small btn-success"><i class="icon-arrow-down icon-white"></i></button>' +
+			' @@TEMPLATENAME@@</h4>' +
 			'<markdown text="st.Description || \'_No description provided._\'" class=""><p></p></markdown>' +
 			'</div>' +
 			'</a>'
