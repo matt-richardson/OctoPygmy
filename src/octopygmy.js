@@ -16,6 +16,7 @@ function startOctoPygmy()
 		if (options.dashboard)	dashboardCollapser.nodeInsertion(event);
 		if (options.environments) environmentCollapser.nodeInsertion(event);
 		if (options.machines) environmentRoleNameFilter.nodeInsertion(event);
+		integrateStepTemplateLibrary.nodeInsertion.call(integrateStepTemplateLibrary, event);
 	});
 }
 

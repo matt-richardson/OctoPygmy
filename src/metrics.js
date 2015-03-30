@@ -9,15 +9,43 @@ chrome.storage.sync.get(options, function(result)
 	displayOptionsPageIfNeeded();
 });
 
+function getLibraryTemplatesList(done)
+{
+	console.debug("Getting library template listing");
+	var templatesUrl = 'https://api.github.com/repos/OctopusDeploy/Library/contents/step-templates'
+
+	nanoajax.ajax(templatesUrl, function(status, response){
+		var templates = JSON.parse(response);
+		
+		templates = templates.map(function(template, index, all){
+			return {
+				name: template.name.slice(0,-5),
+				contentUrl: template.download_url,
+			};
+		});
+
+		console.debug('Received ' + templates.length + ' templates from Github');
+		done(templates);
+	});
+}
+
 function setupMetrics()
 {
 	var version = chrome.runtime.getManifest().version;
 
 	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
 	{
+		console.debug('Message received:');
+		console.debug(request);
+
 		if (request == 'reload-options') {
 			chrome.storage.sync.get(options, function(result) { options = result; });
 			return;
+		}
+
+		if (request == 'get-library-templates') {
+			getLibraryTemplatesList(sendResponse);
+			return true;
 		}
 
 		if (options.analytics) {
