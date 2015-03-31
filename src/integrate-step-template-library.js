@@ -53,6 +53,7 @@ var integrateStepTemplateLibrary = {
 		templates.map(function(item) {
 			var stub = document.createElement('div');
 			stub.innerHTML = templateHtml.replace('@@TEMPLATENAME@@', item.name);
+			stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: item.name }); };
 			library.appendChild(stub.childNodes[0]);
 			return;
 		});

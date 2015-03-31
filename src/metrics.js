@@ -29,14 +29,39 @@ function getLibraryTemplatesList(done)
 	});
 }
 
+function getLibraryTemplateContent(name, octopusRoot, done)
+{
+	console.debug('Getting content of library template: ' + name);
+	var downloadUrl = 'https://raw.githubusercontent.com/OctopusDeploy/Library/master/step-templates/'
+
+	nanoajax.ajax(downloadUrl + name + '.json', function(status, response){
+		console.debug('Received library template:' + name)
+		console.debug(response)
+		importLibraryTemplate(response, octopusRoot, done);
+	})
+}
+
+function importLibraryTemplate(templateContent, octopusRoot, done)
+{
+	console.debug('Importing library template content')
+	nanoajax.ajax({url: octopusRoot + '/api/actiontemplates',
+		method: 'POST',
+		body: templateContent
+	}, function(status, response){
+		console.debug('Response importing library template')
+		console.debug(response)
+		done()
+	})
+}
+
 function setupMetrics()
 {
 	var version = chrome.runtime.getManifest().version;
 
 	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
 	{
-		console.debug('Message received:');
-		console.debug(request);
+		console.debug('Message received: ')
+		console.debug(request)
 
 		if (request == 'reload-options') {
 			chrome.storage.sync.get(options, function(result) { options = result; });
@@ -46,6 +71,12 @@ function setupMetrics()
 		if (request == 'get-library-templates') {
 			getLibraryTemplatesList(sendResponse);
 			return true;
+		}
+
+		if (request.templateName) {
+			octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'))
+			getLibraryTemplateContent(request.templateName, octopusRoot);
+			return;
 		}
 
 		if (options.analytics) {
