@@ -2,6 +2,14 @@ var integrateStepTemplateLibrary = {
 	
 	libraryNodeId: 'library-templates',
 	theDocument: window.document,
+	errorNodeHtml: '<div class="alert alert-error">\
+<button type="button" class="close" data-dismiss="alert">&times;</button>\
+<strong>Problem!</strong> It seems you are not authorized to import templates.\
+</div>',
+	successNodeHtml: '<div class="alert alert-success">\
+<button type="button" class="close" data-dismiss="alert">&times;</button>\
+<strong>Success!</strong> The template has been imported.\
+</div>',
 
 	isStepTemplatesView: function(node)
 	{
@@ -34,7 +42,15 @@ var integrateStepTemplateLibrary = {
 
 	receiveMessage: function(message, sender)
 	{
-		this.addTemplateToListing(message)
+		if(message.templateImportUnauthorized) {
+			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
+			libraryNode.insertBefore(this.generateNodeFromHtml(this.errorNodeHtml), libraryNode.childNodes[1])
+		} else if (message.templateImportSuccessful) {
+			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
+			libraryNode.insertBefore(this.generateNodeFromHtml(this.successNodeHtml), libraryNode.childNodes[1])
+		} else {
+			this.addTemplateToListing(message)
+		}
 	},
 
 	addTemplateToListing: function(template)
@@ -54,7 +70,7 @@ var integrateStepTemplateLibrary = {
 		stub = document.createElement('div');
 		stub.innerHTML = templateHtml.replace('@@TEMPLATENAME@@', template.Name)
 			.replace('@@DESCRIPTION@@', template.Description);
-		stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: template.Name }); };
+		stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: template.DownloadUrl }); };
 		library.appendChild(stub.childNodes[0]);
 	},
 

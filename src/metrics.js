@@ -29,15 +29,14 @@ function getLibraryTemplatesList(done)
 	});
 }
 
-function getLibraryTemplateContent(name, octopusRoot, done)
+function getLibraryTemplateContent(tabId, downloadUrl, octopusRoot, done)
 {
-	console.debug('Getting content of library template: ' + name);
-	var downloadUrl = 'https://raw.githubusercontent.com/OctopusDeploy/Library/master/step-templates/'
+	console.debug('Getting content of library template: ' + downloadUrl);
 
-	nanoajax.ajax(downloadUrl + name + '.json', function(status, response){
-		console.debug('Received library template:' + name)
+	nanoajax.ajax(downloadUrl, function(status, response){
+		console.debug('Received library template:' + downloadUrl)
 		console.debug(response)
-		importLibraryTemplate(response, octopusRoot, done);
+		importLibraryTemplate(tabId, response, octopusRoot, done);
 	})
 }
 
@@ -47,20 +46,27 @@ function sendLibraryTemplate(downloadUrl, tabId, done)
 	nanoajax.ajax(downloadUrl, function(status, response){
 		var template = JSON.parse(response)
 
-		chrome.tabs.sendMessage(tabId, template)
+		chrome.tabs.sendMessage(tabId, { Name: template.Name, Description: template.Description, DownloadUrl: downloadUrl})
 		done()
 	})
 }
 
-function importLibraryTemplate(templateContent, octopusRoot, done)
+function importLibraryTemplate(tabId, templateContent, octopusRoot, done)
 {
 	console.debug('Importing library template content')
 	nanoajax.ajax({url: octopusRoot + '/api/actiontemplates',
 		method: 'POST',
 		body: templateContent
 	}, function(status, response){
-		console.debug('Response importing library template')
-		console.debug(response)
+		if(status == 401){
+			console.warn('Unauthorized for importing step template')
+			// Sending the message shouldn't be in here. Move it to somewhere that should have this responsibility.
+			chrome.tabs.sendMessage(tabId, { templateImportUnauthorized: true})
+		} else {
+			console.debug('Response importing library template')
+			console.debug(response)
+			chrome.tabs.sendMessage(tabId, { templateImportSuccessful: true})
+		}
 		done()
 	})
 }
@@ -90,7 +96,7 @@ function setupMetrics()
 
 		if (request.templateName) {
 			octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'))
-			getLibraryTemplateContent(request.templateName, octopusRoot);
+			getLibraryTemplateContent(sender.tab.id, request.templateName, octopusRoot);
 			return;
 		}
 

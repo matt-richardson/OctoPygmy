@@ -99,9 +99,54 @@ describe('background-template-library', function(){
       sendLibraryTemplate('https://some-valid-url', 0, done)
     })
 
-    it('sends a message with the template itself', function(){
-      var content = JSON.parse(downloadResponse)
-      expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(0, content);
+    it('sends a message with the template name', function(){
+      expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(0, jasmine.objectContaining({ Name: 'Wait'}));
+    })
+ 
+    it('sends a message with the template description', function(){
+      expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(0, jasmine.objectContaining({ Description: 'Pauses the process for a set duration'}));
+    })
+
+    it('sends a message with the template download url', function(){
+     expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(0, jasmine.objectContaining({ DownloadUrl: 'https://some-valid-url'}));
+    })
+  })
+
+  describe('importLibraryTemplate',function(){
+    beforeEach(function(){
+      this.content = '{ name: "Some name" }'
+      this.root = 'http://example.com'
+      
+      spyOn(chrome.tabs, 'sendMessage')
+    })
+
+    describe('when the POST is unauthorized', function(){
+      beforeEach(function(done){
+        spyOn(nanoajax,'ajax').and.callFake(function(settings, callback){
+          callback(401, 'NOT USED')
+        })
+
+        importLibraryTemplate(0, this.content, this.root, done)
+      })
+
+      it('sends a message indicating failure', function(){
+        expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(0, { templateImportUnauthorized: true})
+      })
+    })
+
+
+    describe('when the POST is authorized', function(){
+      beforeEach(function(done){
+        spyOn(nanoajax,'ajax').and.callFake(function(settings, callback){
+          callback(200, '{}')
+        })
+
+        importLibraryTemplate(0, this.content, this.root, done)
+      })
+
+      it('sends a message indicating success', function(){
+        expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(0, { templateImportSuccessful: true})
+      })
     })
   })
 })
