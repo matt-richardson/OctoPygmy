@@ -18,15 +18,11 @@ var integrateStepTemplateLibrary = {
 		existingTemplates.classList.add('span7')
 
 		viewRow = existingTemplates.parentNode;
-		
-		libraryNode = document.createElement("div");
-		libraryNode.id = this.libraryNodeId;
-		libraryNode.classList.add('span5');
-		libraryTitle = document.createElement('h3');
-		libraryTitle.innerText = 'Library';
-		libraryNode.appendChild(libraryTitle);
+		libraryNodeHtml = '<div id="' + this.libraryNodeId + '" class="span5">\
+<h3>Library</h3>\
+</div>';
 
-		viewRow.appendChild(libraryNode);
+		viewRow.appendChild(this.generateNodeFromHtml(libraryNodeHtml));
 
 		this.getLibraryTemplates();
 	},
@@ -60,6 +56,13 @@ var integrateStepTemplateLibrary = {
 			.replace('@@DESCRIPTION@@', template.Description);
 		stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: template.Name }); };
 		library.appendChild(stub.childNodes[0]);
+	},
+
+	generateNodeFromHtml: function(rawHtml)
+	{
+		stub = document.createElement('div');
+		stub.innerHTML = rawHtml;
+		return stub.childNodes[0];
 	},
 
 	nodeInsertion: function(event)
