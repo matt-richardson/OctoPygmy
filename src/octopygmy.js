@@ -5,7 +5,8 @@ function startOctoPygmy()
 	var options = { 
 		dashboard: true,
 		environments: true,
-		machines: true
+		machines: true,
+		libraryTemplate: true
 	};
 	chrome.storage.sync.get(options, function(result) { options = result; });
 
@@ -16,7 +17,7 @@ function startOctoPygmy()
 		if (options.dashboard)	dashboardCollapser.nodeInsertion(event);
 		if (options.environments) environmentCollapser.nodeInsertion(event);
 		if (options.machines) environmentRoleNameFilter.nodeInsertion(event);
-		integrateStepTemplateLibrary.nodeInsertion.call(integrateStepTemplateLibrary, event);
+		if (options.libraryTemplate) integrateStepTemplateLibrary.nodeInsertion.call(integrateStepTemplateLibrary, event);
 	});
 }
 

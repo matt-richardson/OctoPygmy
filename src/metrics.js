@@ -104,7 +104,7 @@ function setupMetrics()
 			console.debug("Message received: " + request.name);
 
 			request.properties.version = version;
-			mixpanel.track(request.name, request.properties);
+			//mixpanel.track(request.name, request.properties);
 		}
 	});
 

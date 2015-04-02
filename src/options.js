@@ -1,9 +1,14 @@
+//
+// Lot of DRY clean up to do here. Options, element IDs with checkboxes. ETC.
+//
+
 function save_options() {
 	var options = {};
 	options.analytics = document.getElementById('analytics').checked;
 	options.dashboard = document.getElementById('dashboard-collapser').checked;
 	options.environments = document.getElementById('environment-collapser').checked;
 	options.machines = document.getElementById('environment-machine-filter').checked;
+	options.libraryTemplate = document.getElementById('library-template-import').checked;
 	options.hasSetOptions = chrome.runtime.getManifest().version.substring(0, chrome.runtime.getManifest().version.lastIndexOf('.')); // Just use major.minor.
 
 	console.debug("Options to save:");
@@ -28,7 +33,8 @@ function restore_options() {
 		analytics: true,
 		dashboard: true,
 		environments: true,
-		machines: true
+		machines: true,
+		libraryTemplate: true,
 	};
 
 	chrome.storage.sync.get(defaults, function(options) {
@@ -39,6 +45,7 @@ function restore_options() {
 		document.getElementById('dashboard-collapser').checked = options.dashboard;
 		document.getElementById('environment-collapser').checked = options.environments;
 		document.getElementById('environment-machine-filter').checked = options.machines;
+		document.getElementById('library-template-import').checked = options.machines;
 
 		pleaForAnalytics({ srcElement: document.getElementById('analytics') });
 	});
