@@ -55,7 +55,59 @@ describe('background-template-library', function(){
 		})
 
 		it('returns the content url of the templates', function(){
-			expect(templatesResult[0].contentUrl).toEqual('https://raw.githubusercontent.com/OctopusDeploy/Library/master/step-templates/F5-Disable-Member-Wait-for%20connections-to-drop.json');
+			expect(templatesResult[0].downloadUrl).toEqual('https://raw.githubusercontent.com/OctopusDeploy/Library/master/step-templates/F5-Disable-Member-Wait-for%20connections-to-drop.json');
 		})
 	})
-});
+
+  describe('sendLibraryTemplate', function(){
+    var downloadResponse = '{\
+  "Id": "ActionTemplates-66",\
+  "Name": "Wait",\
+  "Description": "Pauses the process for a set duration",\
+  "ActionType": "Octopus.Script",\
+  "Version": 0,\
+  "Properties": {\
+    "Octopus.Action.Script.ScriptBody": "Start-Sleep $Seconds"\
+  },\
+  "SensitiveProperties": {},\
+  "Parameters": [\
+    {\
+      "Name": "Seconds",\
+      "Label": "Seconds",\
+      "HelpText": "Number of seconds to wait",\
+      "DefaultValue": "120",\
+      "DisplaySettings": {\
+        "Octopus.ControlType": "SingleLineText"\
+      }\
+    }\
+  ],\
+  "LastModifiedOn": "2014-08-15T06:44:24.762+00:00",\
+  "LastModifiedBy": "leeenglestone",\
+  "$Meta": {\
+    "ExportedAt": "2014-08-15T08:06:12.316Z",\
+    "OctopusVersion": "2.5.4.280",\
+    "Type": "ActionTemplate"\
+  }\
+}'
+
+    beforeEach(function(done){
+      spyOn(nanoajax, 'ajax').and.callFake(function(url, callback){
+        callback(200, downloadResponse);
+      })
+      spyOn(chrome.tabs, 'sendMessage')
+
+      sendLibraryTemplate('https://some-valid-url', 0, done)
+    })
+
+    it('sends a message with the template itself', function(){
+      var content = JSON.parse(downloadResponse)
+      expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(0, content);
+    })
+  })
+})
+
+var chrome = {
+  tabs: {
+    sendMessage: function(tabId, message) {}
+  }
+}

@@ -9,12 +9,13 @@ describe('integrate-step-template-library', function() {
 
 	describe('addTemplatesToListing', function() {
 		var items = [
-			{'name':'Test1'},
-			{'name':'Test2'}
+			{'Name':'Test1', 'Description': 'Some description'},
+			{'Name':'Test2', 'Description': 'Some other description'}
 		];
 
 		beforeEach(function() {
-			integrateStepTemplateLibrary.addTemplatesToListing(items);
+			integrateStepTemplateLibrary.addTemplateToListing(items[0]);
+			integrateStepTemplateLibrary.addTemplateToListing(items[1]);
 		})
 
 		it('adds each template to the library node', function() {
@@ -24,6 +25,10 @@ describe('integrate-step-template-library', function() {
 		it('puts the template name in the node', function() {
 			expect(libraryNode.childNodes[0].innerText).toContain('Test1');
 			expect(libraryNode.childNodes[1].innerText).toContain('Test2');
+		})
+
+		it('puts the description in the node', function() {
+			expect(libraryNode.childNodes[0].innerText).toContain('Some description')
 		})
 	})
 })

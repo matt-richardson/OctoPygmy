@@ -20,7 +20,7 @@ function getLibraryTemplatesList(done)
 		templates = templates.map(function(template, index, all){
 			return {
 				name: template.name.slice(0,-5),
-				contentUrl: template.download_url,
+				downloadUrl: template.download_url,
 			};
 		});
 
@@ -38,6 +38,17 @@ function getLibraryTemplateContent(name, octopusRoot, done)
 		console.debug('Received library template:' + name)
 		console.debug(response)
 		importLibraryTemplate(response, octopusRoot, done);
+	})
+}
+
+function sendLibraryTemplate(downloadUrl, tabId, done)
+{
+	console.debug('Sending library template ' + downloadUrl)
+	nanoajax.ajax(downloadUrl, function(status, response){
+		var template = JSON.parse(response)
+
+		chrome.tabs.sendMessage(tabId, template)
+		done()
 	})
 }
 
@@ -69,8 +80,12 @@ function setupMetrics()
 		}
 
 		if (request == 'get-library-templates') {
-			getLibraryTemplatesList(sendResponse);
-			return true;
+			getLibraryTemplatesList(function(templates){
+				for(var i = 0; i < templates.length; i++){
+					sendLibraryTemplate(templates[i].downloadUrl, sender.tab.id)
+				}
+			})
+			return;
 		}
 
 		if (request.templateName) {
