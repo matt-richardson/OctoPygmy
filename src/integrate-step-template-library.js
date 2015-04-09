@@ -10,6 +10,7 @@ var integrateStepTemplateLibrary = {
 <button type="button" class="close" data-dismiss="alert">&times;</button>\
 <strong>Success!</strong> The template has been imported.\
 </div>',
+	existingTemplateNames: [],
 
 	isStepTemplatesView: function(node)
 	{
@@ -31,8 +32,6 @@ var integrateStepTemplateLibrary = {
 </div>';
 
 		viewRow.appendChild(this.generateNodeFromHtml(libraryNodeHtml));
-
-		this.getLibraryTemplates();
 	},
 
 	getLibraryTemplates: function()
@@ -48,6 +47,11 @@ var integrateStepTemplateLibrary = {
 		} else if (message.templateImportSuccessful) {
 			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
 			libraryNode.insertBefore(this.generateNodeFromHtml(this.successNodeHtml), libraryNode.childNodes[1])
+		} else if (message.existingTemplateNames) {
+			console.debug('Received existing template names')
+			console.debug(message.existingTemplateNames)
+			this.existingTemplateNames = message.existingTemplateNames
+			this.getLibraryTemplates()
 		} else {
 			this.addTemplateToListing(message)
 		}
@@ -66,11 +70,29 @@ var integrateStepTemplateLibrary = {
 			'</div>' +
 			'</a>'
 
+		existingTemplateHtml = '<a class="octo-list-group-item">' +
+			'<div>' +
+			'<h4 class="octo-list-group-item-heading">' +
+			'<i class="icon-ok icon-white" style="background-color: #5bb75b; border-radius: 3px"></i>' +
+			' @@TEMPLATENAME@@</h4>' +
+			'<markdown text="st.Description || \'_No description provided._\'" class=""><p>@@DESCRIPTION@@</p></markdown>' +
+			'</div>' +
+			'</a>'
+
+		preexisting = this.existingTemplateNames.indexOf(template.Name) >= 0
+
 		library = this.theDocument.querySelector('#' + this.libraryNodeId);
 		stub = document.createElement('div');
-		stub.innerHTML = templateHtml.replace('@@TEMPLATENAME@@', template.Name)
-			.replace('@@DESCRIPTION@@', template.Description);
-		stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: template.DownloadUrl }); };
+		
+		if (preexisting) {
+			stub.innerHTML = existingTemplateHtml.replace('@@TEMPLATENAME@@', template.Name)
+				.replace('@@DESCRIPTION@@', template.Description);
+		} else {
+			stub.innerHTML = templateHtml.replace('@@TEMPLATENAME@@', template.Name)
+				.replace('@@DESCRIPTION@@', template.Description);
+			stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: template.DownloadUrl }); };
+		}
+		
 		library.appendChild(stub.childNodes[0]);
 	},
 
@@ -79,6 +101,27 @@ var integrateStepTemplateLibrary = {
 		stub = document.createElement('div');
 		stub.innerHTML = rawHtml;
 		return stub.childNodes[0];
+	},
+
+	getExistingTemplatesNames: function(done)
+	{
+		console.debug(chrome)
+		chrome.tabs.getCurrent(function(tab) {
+			octopusRoot = tab.url.substring(0, tab.url.indexOf('/app'))
+			nanoajax.ajax(octopusRoot + '/api/actiontemplates', function(status, response) {
+				templates = JSON.parse(response)
+				names = []
+
+				for(template in templates.Items) {
+					names.append(template.Name)
+				}
+
+				console.debug("Retrieved existing template names:")
+				console.debug(names)
+				this.existingTemplateNames = names
+				done()
+			})
+		})
 	},
 
 	nodeInsertion: function(event)
@@ -92,6 +135,8 @@ var integrateStepTemplateLibrary = {
 			this.addTemplateLibraryElements(node);
 
 			chrome.runtime.onMessage.addListener(this.receiveMessage.bind(this))
+
+			chrome.runtime.sendMessage('get-existing-template-names')
 		}
 	}
 };

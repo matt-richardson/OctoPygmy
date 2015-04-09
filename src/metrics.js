@@ -71,6 +71,31 @@ function importLibraryTemplate(tabId, templateContent, octopusRoot, done)
 	})
 }
 
+function sendExistingTemplateNames(names, tabId)
+{
+	console.debug('Sending existing template names ')
+	chrome.tabs.sendMessage(tabId, { existingTemplateNames: names })
+}
+
+function getExistingTemplateNames(octopusRoot, done)
+{
+	nanoajax.ajax(octopusRoot + '/api/actiontemplates', function(status, response) {
+		templates = JSON.parse(response)
+		names = []
+		console.debug('Response for existing templates')
+		console.debug(templates)
+
+		for(i = 0; i < templates.Items.length; i++) {
+			console.debug('Existing template: ' + templates.Items[i].Name)
+			names.push(templates.Items[i].Name)
+		}
+
+		console.debug("Retrieved existing template names:")
+		console.debug(names)
+		done(names)
+	})
+}
+
 function setupMetrics()
 {
 	var version = chrome.runtime.getManifest().version;
@@ -92,6 +117,11 @@ function setupMetrics()
 				}
 			})
 			return;
+		}
+
+		if (request == 'get-existing-template-names') {
+			octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'))
+			getExistingTemplateNames(octopusRoot, function(names) { sendExistingTemplateNames(names, sender.tab.id) })
 		}
 
 		if (request.templateName) {

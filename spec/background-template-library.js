@@ -149,6 +149,52 @@ describe('background-template-library', function(){
       })
     })
   })
+
+  describe('getExistingTemplateNames',function(){
+    var existingTemplatesResponse = '{\
+  "ItemType": "ActionTemplate",\
+  "IsStale": false,\
+  "TotalResults": 2,\
+  "ItemsPerPage": 30,\
+  "Items": [\
+    {\
+      "Id": "ActionTemplates-65",\
+      "Name": "Deploy a Red Gate database package"\
+    },\
+    {\
+      "Id": "ActionTemplates-97",\
+      "Name": "SQL - Backup Database"\
+    }\
+  ],\
+  "Links": {\
+    "Self": "/api/actiontemplates",\
+    "Template": "/api/actiontemplates{?skip}",\
+    "Page.Current": "/api/actiontemplates?skip=0",\
+    "Page.0": "/api/actiontemplates?skip=0"\
+  }\
+}'
+    var result = []
+
+    beforeEach(function(done){
+      spyOn(nanoajax, 'ajax').and.callFake(function(settings, callback){
+        callback(200, existingTemplatesResponse)
+      })
+
+      getExistingTemplateNames('root', function(names){
+        result = names
+        done();
+      })
+    })
+
+    it('returns all the existing templates',function(){
+      expect(result.length).toEqual(2)
+    })
+
+    it('returns the names of the templates', function(){
+      expect(result).toContain('SQL - Backup Database')
+      expect(result).toContain('Deploy a Red Gate database package')
+    })
+  })
 })
 
 var chrome = {

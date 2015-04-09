@@ -3,7 +3,7 @@
 
   "name": "OctoPygmy",
   "description": "Provides a number of modifications to the Octopus Deploy user interface.",
-  "version": "0.6.54",
+  "version": "0.6.58",
   "author": "David Roberts (@davidroberts63)",
   "homepage_url": "https://github.com/davidroberts63/OctoPygmy",
   "content_scripts": [
@@ -15,11 +15,12 @@
       "dashboard-collapser.js",
       "environment-collapser.js",
       "environment-rolename-filter.js",
-      "integrate-step-template-library.js"
+      "integrate-step-template-library.js",
+      "nanoajax.min.js"
     ],
     "css": ["style.css"]
   }],
-  "permissions": ["https://*/app","http://*/app","storage"],
+  "permissions": ["tabs", "storage"],
 
   "icons": {
     "48": "logo48.png",
