@@ -10,25 +10,36 @@ describe('integrate-step-template-library', function() {
 	describe('addTemplatesToListing', function() {
 		var items = [
 			{'Name':'Test1', 'Description': 'Some description'},
-			{'Name':'Test2', 'Description': 'Some other description'}
+			{'Name':'Test2', 'Description': 'Some other description'},
+			{'Name':'Common', 'Description': 'This one is pre-existing'}
 		];
+		var result = []
 
 		beforeEach(function() {
+			var fakeListAdder = function(item) {
+				result.push(item)
+			}
+			integrateStepTemplateLibrary.libraryList.add = fakeListAdder.bind(this)
+			integrateStepTemplateLibrary.libraryList.sort = function() {}
+			integrateStepTemplateLibrary.existingTemplateNames = ['Common']
+
 			integrateStepTemplateLibrary.addTemplateToListing(items[0]);
 			integrateStepTemplateLibrary.addTemplateToListing(items[1]);
+			integrateStepTemplateLibrary.addTemplateToListing(items[2]);
 		})
 
 		it('adds each template to the library node', function() {
-			expect(libraryNode.childNodes.length).toEqual(2);
+			expect(result.length).toEqual(2)
 		})
 
 		it('puts the template name in the node', function() {
-			expect(libraryNode.childNodes[0].innerText).toContain('Test1');
-			expect(libraryNode.childNodes[1].innerText).toContain('Test2');
+			expect(result[0]['template-name']).toEqual('Test1')
+			expect(result[1]['template-name']).toEqual('Test2')
 		})
 
 		it('puts the description in the node', function() {
-			expect(libraryNode.childNodes[0].innerText).toContain('Some description')
+			expect(result[0]['description']).toEqual('Some description')
+			expect(result[1]['description']).toEqual('Some other description')
 		})
 	})
 })

@@ -10,7 +10,16 @@ var integrateStepTemplateLibrary = {
 <button type="button" class="close" data-dismiss="alert">&times;</button>\
 <strong>Success!</strong> The template has been imported.\
 </div>',
+	templateHtml: '<li class="octo-list-group-item">' +
+			'<div>' +
+			'<h4 class="octo-list-group-item-heading">' +
+			'<button type="button" class="btn-small btn-success"><i class="icon-arrow-down icon-white"></i></button>' +
+			' <span class="template-name"></span></h4>' +
+			'<markdown text="st.Description || \'_No description provided._\'" class="description"><p></p></markdown>' +
+			'</div>' +
+			'</li>',
 	existingTemplateNames: [],
+	libraryList: {},
 
 	isStepTemplatesView: function(node)
 	{
@@ -29,9 +38,12 @@ var integrateStepTemplateLibrary = {
 		viewRow = existingTemplates.parentNode;
 		libraryNodeHtml = '<div id="' + this.libraryNodeId + '" class="span5">\
 <h3>Library</h3>\
+<ul id="' + this.libraryNodeId + '-list' + '" class="list">\
+</ul>\
 </div>';
 
 		viewRow.appendChild(this.generateNodeFromHtml(libraryNodeHtml));
+		this.libraryList = new List(this.libraryNodeId, { item: this.templateHtml })
 	},
 
 	getLibraryTemplates: function()
@@ -60,28 +72,10 @@ var integrateStepTemplateLibrary = {
 	addTemplateToListing: function(template)
 	{
 		console.debug('Adding template to library listing');
-		
-		templateHtml = '<a class="octo-list-group-item">' +
-			'<div>' +
-			'<h4 class="octo-list-group-item-heading">' +
-			'<button type="button" class="btn-small btn-success"><i class="icon-arrow-down icon-white"></i></button>' +
-			' @@TEMPLATENAME@@</h4>' +
-			'<markdown text="st.Description || \'_No description provided._\'" class=""><p>@@DESCRIPTION@@</p></markdown>' +
-			'</div>' +
-			'</a>'
-
-		existingTemplateHtml = '<a class="octo-list-group-item">' +
-			'<div>' +
-			'<h4 class="octo-list-group-item-heading">' +
-			'<i class="icon-ok icon-white" style="background-color: #5bb75b; border-radius: 3px"></i>' +
-			' @@TEMPLATENAME@@</h4>' +
-			'<markdown text="st.Description || \'_No description provided._\'" class=""><p>@@DESCRIPTION@@</p></markdown>' +
-			'</div>' +
-			'</a>'
 
 		preexisting = this.existingTemplateNames.indexOf(template.Name) >= 0
-
-		library = this.theDocument.querySelector('#' + this.libraryNodeId);
+		//library = this.theDocument.querySelector('#' + this.libraryNodeId + '-list');
+		/*
 		stub = document.createElement('div');
 		
 		if (preexisting) {
@@ -92,8 +86,11 @@ var integrateStepTemplateLibrary = {
 				.replace('@@DESCRIPTION@@', template.Description);
 			stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: template.DownloadUrl }); };
 		}
-		
-		library.appendChild(stub.childNodes[0]);
+		*/
+		if (!preexisting) {
+			this.libraryList.add({'template-name': template.Name, 'description': template.Description})
+			this.libraryList.sort('template-name')
+		}
 	},
 
 	generateNodeFromHtml: function(rawHtml)
