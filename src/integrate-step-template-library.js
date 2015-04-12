@@ -2,9 +2,13 @@ var integrateStepTemplateLibrary = {
 	
 	libraryNodeId: 'library-templates',
 	theDocument: window.document,
-	errorNodeHtml: '<div class="alert alert-error">\
+	unauthorizedNodeHtml: '<div class="alert alert-error">\
 <button type="button" class="close" data-dismiss="alert">&times;</button>\
 <strong>Problem!</strong> It seems you are not authorized to import templates.\
+</div>',
+	errorNodeHtml: '<div class="alert alert-error">\
+<button type="button" class="close" data-dismiss="alert">&times;</button>\
+<strong>Problem!</strong> There was a problem processing the library templates.\
 </div>',
 	successNodeHtml: '<div class="alert alert-success">\
 <button type="button" class="close" data-dismiss="alert">&times;</button>\
@@ -54,6 +58,9 @@ var integrateStepTemplateLibrary = {
 	receiveMessage: function(message, sender)
 	{
 		if(message.templateImportUnauthorized) {
+			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
+			libraryNode.insertBefore(this.generateNodeFromHtml(this.unauthorizedNodeHtml), libraryNode.childNodes[1])
+		} else if (message.templateImportFailed) {
 			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
 			libraryNode.insertBefore(this.generateNodeFromHtml(this.errorNodeHtml), libraryNode.childNodes[1])
 		} else if (message.templateImportSuccessful) {

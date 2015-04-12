@@ -15,6 +15,12 @@ function getLibraryTemplatesList(done)
 	var templatesUrl = 'https://api.github.com/repos/OctopusDeploy/Library/contents/step-templates'
 
 	nanoajax.ajax(templatesUrl, function(status, response){
+		if (status != 200) {
+			console.warn('Problem getting library template listing: ' + response)
+			done(false)
+			return
+		}
+
 		var templates = JSON.parse(response);
 		
 		templates = templates.map(function(template, index, all){
@@ -57,11 +63,13 @@ function importLibraryTemplate(tabId, templateContent, octopusRoot, done)
 	nanoajax.ajax({url: octopusRoot + '/api/actiontemplates',
 		method: 'POST',
 		body: templateContent
-	}, function(status, response){
-		if(status == 401){
+	}, function(status, response) {
+		if(status == 401) {
 			console.warn('Unauthorized for importing step template')
-			// Sending the message shouldn't be in here. Move it to somewhere that should have this responsibility.
 			chrome.tabs.sendMessage(tabId, { templateImportUnauthorized: true})
+		} else if (status != 200) {
+			console.warn('Problem importing template: ' + response)
+			chrome.tabs.sendMessage(tabId, {templateImportFailed: true})
 		} else {
 			console.debug('Response importing library template')
 			console.debug(response)
@@ -112,8 +120,12 @@ function setupMetrics()
 
 		if (request == 'get-library-templates') {
 			getLibraryTemplatesList(function(templates){
-				for(var i = 0; i < templates.length; i++){
-					sendLibraryTemplate(templates[i].downloadUrl, sender.tab.id)
+				if (templates === false) {
+					chrome.tabs.sendMessage(sender.tab.id, {templateImportFailed: true})
+				} else {
+					for(var i = 0; i < templates.length; i++){
+						sendLibraryTemplate(templates[i].downloadUrl, sender.tab.id)
+					}
 				}
 			})
 			return;
