@@ -9,18 +9,30 @@ describe('integrate-step-template-library', function() {
 
 	describe('addTemplatesToListing', function() {
 		var items = [
-			{'Name':'Test1', 'Description': 'Some description'},
-			{'Name':'Test2', 'Description': 'Some other description'},
+			{'Name':'Test1', 'Description': 'Some description', DownloadUrl: 'test1-url'},
+			{'Name':'Test2', 'Description': 'Some other description', DownloadUrl: 'test2-url'},
 			{'Name':'Common', 'Description': 'This one is pre-existing'}
 		];
 		var result = []
+		var fakeLibrary = {}
 
 		beforeEach(function() {
-			var fakeListAdder = function(item) {
-				result.push(item)
+			fakeLibrary = {
+				add: function(item) { result.push(item) },
+				sort: function() {},
+				items: [ 
+					{ 
+						elm: {},
+						values: function() { return {'template-name': 'Test2'} }
+					},
+					{ 
+						elm: {},
+						values: function() { return {'template-name': 'Test1'} }
+					}
+				]
 			}
-			integrateStepTemplateLibrary.libraryList.add = fakeListAdder.bind(this)
-			integrateStepTemplateLibrary.libraryList.sort = function() {}
+			integrateStepTemplateLibrary.libraryList = fakeLibrary
+			//integrateStepTemplateLibrary.libraryList.sort = function() {}
 			integrateStepTemplateLibrary.existingTemplateNames = ['Common']
 
 			integrateStepTemplateLibrary.addTemplateToListing(items[0]);
@@ -40,6 +52,24 @@ describe('integrate-step-template-library', function() {
 		it('puts the description in the node', function() {
 			expect(result[0]['description']).toEqual('Some description')
 			expect(result[1]['description']).toEqual('Some other description')
+		})
+
+		it('sets the onlcick function', function() {
+			expect(fakeLibrary.items[0].elm.onclick).toBeDefined();
+			expect(fakeLibrary.items[0].elm.onclick).not.toBeNull();
+
+			expect(fakeLibrary.items[1].elm.onclick).toBeDefined();
+			expect(fakeLibrary.items[1].elm.onclick).not.toBeNull();
+		})
+
+		it('sets a function that sends a message', function() {
+			spyOn(chrome.runtime, 'sendMessage')
+			fakeLibrary.items[0].elm.onclick()
+			fakeLibrary.items[1].elm.onclick()
+
+			expect(chrome.runtime.sendMessage).toHaveBeenCalled()
+			expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({ templateName: 'test1-url' })
+			expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({ templateName: 'test2-url' })
 		})
 	})
 })

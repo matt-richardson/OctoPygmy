@@ -198,6 +198,10 @@ describe('background-template-library', function(){
 })
 
 var chrome = {
+  runtime: {
+    sendMessage: function() {}
+  },
+  
   tabs: {
     sendMessage: function(tabId, message) {}
   }

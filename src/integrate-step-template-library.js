@@ -74,22 +74,14 @@ var integrateStepTemplateLibrary = {
 		console.debug('Adding template to library listing');
 
 		preexisting = this.existingTemplateNames.indexOf(template.Name) >= 0
-		//library = this.theDocument.querySelector('#' + this.libraryNodeId + '-list');
-		/*
-		stub = document.createElement('div');
-		
-		if (preexisting) {
-			stub.innerHTML = existingTemplateHtml.replace('@@TEMPLATENAME@@', template.Name)
-				.replace('@@DESCRIPTION@@', template.Description);
-		} else {
-			stub.innerHTML = templateHtml.replace('@@TEMPLATENAME@@', template.Name)
-				.replace('@@DESCRIPTION@@', template.Description);
-			stub.querySelector('button').onclick = function() { chrome.runtime.sendMessage({ templateName: template.DownloadUrl }); };
-		}
-		*/
 		if (!preexisting) {
 			this.libraryList.add({'template-name': template.Name, 'description': template.Description})
 			this.libraryList.sort('template-name')
+			for(i = 0; i < this.libraryList.items.length; i++) {
+				if(this.libraryList.items[i].values()['template-name'] == template.Name) {
+					this.libraryList.items[i].elm.onclick = function() { chrome.runtime.sendMessage({templateName: template.DownloadUrl}) }
+				}
+			}
 		}
 	},
 
