@@ -17,7 +17,7 @@ var integrateStepTemplateLibrary = {
 	templateHtml: '<li class="octo-list-group-item">' +
 			'<div>' +
 			'<h4 class="octo-list-group-item-heading">' +
-			'<button type="button" class="btn-small btn-success"><i class="icon-arrow-down icon-white"></i></button>' +
+			'<button type="button" class="btn-small btn-success template-import"><i class="icon-arrow-down icon-white"></i></button>' +
 			' <span class="template-name"></span></h4>' +
 			'<markdown text="st.Description || \'_No description provided._\'" class="description"><p></p></markdown>' +
 			'</div>' +
@@ -86,7 +86,7 @@ var integrateStepTemplateLibrary = {
 			this.libraryList.sort('template-name')
 			for(i = 0; i < this.libraryList.items.length; i++) {
 				if(this.libraryList.items[i].values()['template-name'] == template.Name) {
-					this.libraryList.items[i].elm.onclick = function() { chrome.runtime.sendMessage({templateName: template.DownloadUrl}) }
+					this.libraryList.items[i].elm.getElementsByClassName('template-import')[0].onclick = function() { chrome.runtime.sendMessage({templateName: template.DownloadUrl}) }
 				}
 			}
 		}

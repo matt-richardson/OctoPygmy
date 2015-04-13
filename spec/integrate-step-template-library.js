@@ -22,11 +22,11 @@ describe('integrate-step-template-library', function() {
 				sort: function() {},
 				items: [ 
 					{ 
-						elm: {},
+						elm: integrateStepTemplateLibrary.generateNodeFromHtml(integrateStepTemplateLibrary.templateHtml),
 						values: function() { return {'template-name': 'Test2'} }
 					},
 					{ 
-						elm: {},
+						elm: integrateStepTemplateLibrary.generateNodeFromHtml(integrateStepTemplateLibrary.templateHtml),
 						values: function() { return {'template-name': 'Test1'} }
 					}
 				]
@@ -55,17 +55,17 @@ describe('integrate-step-template-library', function() {
 		})
 
 		it('sets the onlcick function', function() {
-			expect(fakeLibrary.items[0].elm.onclick).toBeDefined();
-			expect(fakeLibrary.items[0].elm.onclick).not.toBeNull();
+			expect(fakeLibrary.items[0].elm.getElementsByClassName('template-import')[0].onclick).toBeDefined();
+			expect(fakeLibrary.items[0].elm.getElementsByClassName('template-import')[0].onclick).not.toBeNull();
 
-			expect(fakeLibrary.items[1].elm.onclick).toBeDefined();
-			expect(fakeLibrary.items[1].elm.onclick).not.toBeNull();
+			expect(fakeLibrary.items[1].elm.getElementsByClassName('template-import')[0].onclick).toBeDefined();
+			expect(fakeLibrary.items[1].elm.getElementsByClassName('template-import')[0].onclick).not.toBeNull();
 		})
 
 		it('sets a function that sends a message', function() {
 			spyOn(chrome.runtime, 'sendMessage')
-			fakeLibrary.items[0].elm.onclick()
-			fakeLibrary.items[1].elm.onclick()
+			fakeLibrary.items[0].elm.getElementsByClassName('template-import')[0].onclick()
+			fakeLibrary.items[1].elm.getElementsByClassName('template-import')[0].onclick()
 
 			expect(chrome.runtime.sendMessage).toHaveBeenCalled()
 			expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({ templateName: 'test1-url' })
