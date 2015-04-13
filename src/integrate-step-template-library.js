@@ -58,21 +58,21 @@ var integrateStepTemplateLibrary = {
 	receiveMessage: function(message, sender)
 	{
 		if(message.templateImportUnauthorized) {
-			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
-			libraryNode.insertBefore(this.generateNodeFromHtml(this.unauthorizedNodeHtml), libraryNode.childNodes[1])
+			libraryNode = integrateStepTemplateLibrary.theDocument.querySelector('#' + integrateStepTemplateLibrary.libraryNodeId)
+			libraryNode.insertBefore(integrateStepTemplateLibrary.generateNodeFromHtml(integrateStepTemplateLibrary.unauthorizedNodeHtml), libraryNode.childNodes[1])
 		} else if (message.templateImportFailed) {
-			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
-			libraryNode.insertBefore(this.generateNodeFromHtml(this.errorNodeHtml), libraryNode.childNodes[1])
+			libraryNode = integrateStepTemplateLibrary.theDocument.querySelector('#' + integrateStepTemplateLibrary.libraryNodeId)
+			libraryNode.insertBefore(integrateStepTemplateLibrary.generateNodeFromHtml(integrateStepTemplateLibrary.errorNodeHtml), libraryNode.childNodes[1])
 		} else if (message.templateImportSuccessful) {
-			libraryNode = this.theDocument.querySelector('#' + this.libraryNodeId)
-			libraryNode.insertBefore(this.generateNodeFromHtml(this.successNodeHtml), libraryNode.childNodes[1])
+			libraryNode = integrateStepTemplateLibrary.theDocument.querySelector('#' + integrateStepTemplateLibrary.libraryNodeId)
+			libraryNode.insertBefore(integrateStepTemplateLibrary.generateNodeFromHtml(integrateStepTemplateLibrary.successNodeHtml), libraryNode.childNodes[1])
 		} else if (message.existingTemplateNames) {
 			console.debug('Received existing template names')
 			console.debug(message.existingTemplateNames)
-			this.existingTemplateNames = message.existingTemplateNames
-			this.getLibraryTemplates()
+			integrateStepTemplateLibrary.existingTemplateNames = message.existingTemplateNames
+			integrateStepTemplateLibrary.getLibraryTemplates()
 		} else {
-			this.addTemplateToListing(message)
+			integrateStepTemplateLibrary.addTemplateToListing(message)
 		}
 	},
 
@@ -130,7 +130,10 @@ var integrateStepTemplateLibrary = {
 			console.log('Setting up step templates library listing');
 			this.addTemplateLibraryElements(node);
 
-			chrome.runtime.onMessage.addListener(this.receiveMessage.bind(this))
+			// The real problem I think here is that I'm adding a listener upon each node insertion.
+			// Look into putting this somewhere else, maybe in the initial startup of octopygmy.
+			chrome.runtime.onMessage.removeListener(this.receiveMessage)
+			chrome.runtime.onMessage.addListener(this.receiveMessage)
 
 			chrome.runtime.sendMessage('get-existing-template-names')
 		}

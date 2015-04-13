@@ -15,8 +15,8 @@ function getLibraryTemplatesList(done)
 	var templatesUrl = 'https://api.github.com/repos/OctopusDeploy/Library/contents/step-templates'
 
 	nanoajax.ajax(templatesUrl, function(status, response){
-		if (status != 200) {
-			console.warn('Problem getting library template listing: ' + response)
+		if (status - 200 >= 100) { // If it's in the 200 'It went okay in some fashion' response codes.
+			console.warn('Problem getting library template listing (' + status + '): ' + response)
 			done(false)
 			return
 		}
@@ -67,8 +67,8 @@ function importLibraryTemplate(tabId, templateContent, octopusRoot, done)
 		if(status == 401) {
 			console.warn('Unauthorized for importing step template')
 			chrome.tabs.sendMessage(tabId, { templateImportUnauthorized: true})
-		} else if (status != 200) {
-			console.warn('Problem importing template: ' + response)
+		} else if (status - 200 >= 100) { // If it's in the 200 'It went okay in some fashion' response codes.
+			console.warn('Problem importing template (' + status + '): ' + response)
 			chrome.tabs.sendMessage(tabId, {templateImportFailed: true})
 		} else {
 			console.debug('Response importing library template')
