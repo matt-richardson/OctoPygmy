@@ -42,7 +42,7 @@ var integrateStepTemplateLibrary = {
 		viewRow = existingTemplates.parentNode;
 		libraryNodeHtml = '<div id="' + this.libraryNodeId + '" class="span5">\
 <h3>Library</h3>\
-<ul id="' + this.libraryNodeId + '-list' + '" class="list">\
+<ul id="' + this.libraryNodeId + '-list' + '" class="list" style="margin: 0px">\
 </ul>\
 </div>';
 
