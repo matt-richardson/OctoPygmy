@@ -18,13 +18,13 @@ function save_options() {
 		var status = document.getElementById('status');
 
 		if (chrome.runtime.lastError) status.textContent = 'Error saving options';
-		else status.textContent = 'Options saved.';
+		else status.textContent = 'Options saved, reload your Octopus Deploy tabs.';
 
 		chrome.runtime.sendMessage("reload-options");
 
 		setTimeout(function() {
 			status.textContent = '';
-		}, 1500);
+		}, 3000);
 	});
 }
 

@@ -137,6 +137,7 @@ function setupMetrics()
 		}
 
 		if (request.templateName) {
+			chrome.runtime.sendMessage({ name: "imported-template", properties: { } });
 			octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'))
 			getLibraryTemplateContent(sender.tab.id, request.templateName, octopusRoot);
 			return;
