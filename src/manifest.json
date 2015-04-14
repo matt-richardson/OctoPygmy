@@ -3,7 +3,7 @@
 
   "name": "OctoPygmy",
   "description": "Provides a number of modifications to the Octopus Deploy user interface.",
-  "version": "0.62.2",
+  "version": "0.63.0",
   "author": "David Roberts (@davidroberts63)",
   "homepage_url": "https://github.com/davidroberts63/OctoPygmy",
   "content_scripts": [
