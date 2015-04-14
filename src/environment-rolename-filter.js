@@ -102,7 +102,7 @@ var environmentRoleNameFilter = {
 		}
 
 		if (node.tagName == 'H1' && node.innerText == 'Environments') {
-			console.log('Setting up environment role/name filter');
+			console.info('Setting up environment role/name filter');
 			
 			var filterInput = environmentRoleNameFilter.createFilterInput();
 			commonpygmy.addFilterInput(filterInput, node.parentNode);

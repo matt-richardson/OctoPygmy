@@ -66,7 +66,7 @@ var environmentCollapser = {
 		}
 
 		if (node.tagName == 'H1' && node.innerText == 'Environments') {
-			console.log('Setting up environment filter');
+			console.info('Setting up environment filter');
 			var filterInput = environmentCollapser.createChooser();
 			commonpygmy.addFilterInput(filterInput, node.parentNode);
 		}

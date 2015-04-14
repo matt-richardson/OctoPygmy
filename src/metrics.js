@@ -151,7 +151,7 @@ function setupMetrics()
 		}
 	});
 
-	console.log("OnMessage listener added for OctoPygmy");
+	console.info("OnMessage listener added for OctoPygmy");
 }
 
 function displayOptionsPageIfNeeded()

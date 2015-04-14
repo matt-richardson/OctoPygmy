@@ -62,7 +62,7 @@ var dashboardCollapser = {
 		}
 		
 		if (node.tagName == 'H1' && node.innerText == 'Dashboard') {
-			console.log('Setting up dashboard filter');
+			console.info('Setting up dashboard filter');
 			var filterInput = dashboardCollapser.createChooser();
 			commonpygmy.addFilterInput(filterInput, node.parentNode);
 		}

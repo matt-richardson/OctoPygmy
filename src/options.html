@@ -849,6 +849,12 @@ there.
 
 /* Larger than Desktop HD */
 @media (min-width: 1200px) {}
+
+
+/* Custom Octopygmy CSS */
+#logging-options label {
+	display: inline-block;
+}
 	</style>
 </head>
 <body>
@@ -904,6 +910,26 @@ there.
 		<div class="one column"></div>
 		<div class="eleven columns">Provides the community library of step templates located at <a href="https://library.octopusdeploy.com">https://library.octopusdeploy.com</a> in the step templates view. Clicking the import button on each template will automatically import the template.
 		</div>
+	</div>
+
+	<div class="row" id="logging-options">
+		<span class="label-body">Logging</span>
+		<label>
+			<input type="checkbox" id="debug-logging">
+			<span class="label-body">Debug</span>
+		</label>
+		<label>
+			<input type="checkbox" id="warn-logging">
+			<span class="label-body">Warnings</span>
+		</label>
+		<label>
+			<input type="checkbox" id="information-logging">
+			<span class="label-body">Informational</span>
+		</label>
+	</div>
+	<div class="row">
+		<div class="one column"></div>
+		<div class="eleven columns">Turns the respective logging levels on/off. Error are always logged. Turning on debug logging may affect the performance of your Octopus Deploy website in your instance only.</div>
 	</div>
 
 	<div class="row u-">

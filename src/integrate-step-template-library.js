@@ -127,7 +127,7 @@ var integrateStepTemplateLibrary = {
 			return;
 		
 		if (this.isStepTemplatesView(node)) {
-			console.log('Setting up step templates library listing');
+			console.info('Setting up step templates library listing');
 			this.addTemplateLibraryElements(node);
 
 			// The real problem I think here is that I'm adding a listener upon each node insertion.

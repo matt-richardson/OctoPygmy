@@ -10,7 +10,10 @@ function save_options() {
 	options.machines = document.getElementById('environment-machine-filter').checked;
 	options.libraryTemplate = document.getElementById('library-template-import').checked;
 	options.hasSetOptions = chrome.runtime.getManifest().version.substring(0, chrome.runtime.getManifest().version.lastIndexOf('.')); // Just use major.minor.
-
+	options.debugLogging = document.getElementById('debug-logging').checked;
+	options.warnLogging = document.getElementById('warn-logging').checked;
+	options.informationLogging = document.getElementById('information-logging').checked;
+	
 	console.debug("Options to save:");
 	console.debug(options);
 
@@ -35,6 +38,9 @@ function restore_options() {
 		environments: true,
 		machines: true,
 		libraryTemplate: true,
+		debugLogging: false,
+		warnLogging: false,
+		informationLogging: true
 	};
 
 	chrome.storage.sync.get(defaults, function(options) {
@@ -46,7 +52,10 @@ function restore_options() {
 		document.getElementById('environment-collapser').checked = options.environments;
 		document.getElementById('environment-machine-filter').checked = options.machines;
 		document.getElementById('library-template-import').checked = options.machines;
-
+		document.getElementById('debug-logging').checked = options.debugLogging;
+		document.getElementById('warn-logging').checked = options.warnLogging;
+		document.getElementById('information-logging').checked = options.informationLogging;
+		
 		pleaForAnalytics({ srcElement: document.getElementById('analytics') });
 	});
 }
