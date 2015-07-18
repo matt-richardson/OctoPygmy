@@ -1,20 +1,27 @@
 function startOctoPygmy()
 {
-	if (window.location.pathname.indexOf('/app') < 0 || document.title.indexOf("Octopus Deploy") < 0) return; // Only run for Octopus Deploy
-	
-	var defaults = { 
-		dashboard: true,
-		environments: true,
-		machines: true,
-		libraryTemplate: true,
-		debugLogging: false,
-		warnLogging: false,
-		informationLogging: null
-	};
-	chrome.storage.sync.get(defaults, function(options) { 
-		setupLogging(options)
-		setupFeatures(options)
-	});
+	if (pygmy3_0.worksWithPage())
+	{
+		pygmy3_0.setup()
+	}
+	else
+	{
+		if (window.location.pathname.indexOf('/app') < 0 || document.title.indexOf("Octopus Deploy") < 0) return; // Only run for Octopus Deploy
+
+		var defaults = {
+			dashboard: true,
+			environments: true,
+			machines: true,
+			libraryTemplate: true,
+			debugLogging: false,
+			warnLogging: false,
+			informationLogging: null
+		};
+		chrome.storage.sync.get(defaults, function(options) {
+			setupLogging(options)
+			setupFeatures(options)
+		});
+	}
 }
 
 function setupLogging(options)

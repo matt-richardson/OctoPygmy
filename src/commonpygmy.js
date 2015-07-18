@@ -2,6 +2,8 @@ var commonpygmy = {
 	allItemsValue: '~all~',
 	pygmyIdAttributeName: 'octopygmy-id',
 	theDocument: window.document,
+	location: function() { return window.location; },
+	document: function() { return window.document; },
 
 	addFilterInput: function(inputNode, parentNode)
 	{

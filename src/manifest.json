@@ -10,6 +10,7 @@
   {
     "matches": ["https://*/app","http://*/app"],
     "js": [
+      "3.0/pygmy.js",
       "octopygmy.js",
       "commonpygmy.js",
       "dashboard-collapser.js",
