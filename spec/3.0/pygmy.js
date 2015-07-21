@@ -1,7 +1,5 @@
 describe("pygmy3_0", function() {
 	describe("worksWithPage", function() {
-		
-		//if (window.location.pathname.indexOf('/app') >= 0 && document.title.indexOf("Octopus Deploy") >= 0) {
 
 		it("returns false for non angular app path", function() {
 			spyOn(commonpygmy, 'location').and.returnValue({ pathname: '/index.html' });

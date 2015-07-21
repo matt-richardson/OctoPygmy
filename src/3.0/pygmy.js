@@ -1,5 +1,6 @@
 var pygmy3_0 = (function() {
-	
+	var contentElementId = "main-wrapper";	
+
 	function worksWithPage() {
 		console.debug("Checking for version 3.0 of Octopus Deploy");
 		console.debug("   path: " + commonpygmy.location().pathname);
@@ -7,13 +8,16 @@ var pygmy3_0 = (function() {
 
 		if (commonpygmy.location().pathname.indexOf('/app') < 0) return false;
 		if (commonpygmy.document().title.indexOf("Octopus Deploy") < 0) return false;
-		if (!commonpygmy.document().getElementById("main-wrapper")) return false;
+		if (!commonpygmy.document().getElementById(contentElementId)) return false;
 
 		return true;
 	}
 
 	function setup() {
 		console.info("Setting up OctoPygmy for Octopus Deploy 3.0");
+		
+		var content = document.getElementById(contentElementId);
+		this.dashboardCollapser.observe(content);
 	}
 
 	return {
