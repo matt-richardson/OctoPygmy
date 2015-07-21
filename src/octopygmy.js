@@ -18,8 +18,8 @@ function startOctoPygmy()
 			informationLogging: null
 		};
 		chrome.storage.sync.get(defaults, function(options) {
-			//setupLogging(options)
-			//setupFeatures(options)
+			setupLogging(options)
+			setupFeatures(options)
 		});
 	}
 }
