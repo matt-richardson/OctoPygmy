@@ -18,6 +18,7 @@ var pygmy3_0 = (function() {
 		
 		var content = document.getElementById(contentElementId);
 		this.dashboardCollapser.observe(content);
+		this.environmentCollapser.observe(content);
 	}
 
 	return {
