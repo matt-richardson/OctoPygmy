@@ -80,7 +80,6 @@ pygmy3_0.dashboardCollapser = (function() {
 	function observe(content)
 	{
 		var observer = new MutationObserver(function(records) { 
-			console.debug("Observing " + records.length + " mutations");
 			for (var i = 0; i < records.length; i++) {
 				nodeInsertion(records[i].addedNodes);
 			}

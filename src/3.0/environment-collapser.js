@@ -69,8 +69,8 @@ pygmy3_0.environmentCollapser = (function() {
 			}
 
 			// This is just like the dashboard collapser. Refactor to a common method?
-			if (node.tagName == 'UL' && node.innerText == 'Environments') {
-				console.info('Setting up environment filter');
+			if (node.tagName == 'UL' && node.innerText.trim() == 'Environments') {
+				console.info('Setting up environment collapser');
 				var filterInput = createChooser();
 				commonpygmy.addFilterInput(filterInput, node.parentNode);
 			}
@@ -80,7 +80,6 @@ pygmy3_0.environmentCollapser = (function() {
 	// Copy and pasted from dashboard collapser. Refactor to common method?
 	function observe(content) {
 		var observer = new MutationObserver(function(records) { 
-			console.debug("Observing " + records.length + " mutations");
 			for (var i = 0; i < records.length; i++) {
 				nodeInsertion(records[i].addedNodes);
 			}

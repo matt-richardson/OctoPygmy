@@ -14,6 +14,7 @@
       "3.0/pygmy.js",
       "3.0/dashboard-collapser.js",
       "3.0/environment-collapser.js",
+      "3.0/environment-filter.js",
       "octopygmy.js",      
       "dashboard-collapser.js",
       "environment-collapser.js",
