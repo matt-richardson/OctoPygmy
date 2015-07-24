@@ -20,6 +20,7 @@ var pygmy3_0 = (function() {
 		this.dashboardCollapser.observe(content);
 		this.environmentCollapser.observe(content);
 		this.environmentFilter.observe(content);
+		this.integrateStepTemplateLibrary.observe(content);
 	}
 
 	return {

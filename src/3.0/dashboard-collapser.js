@@ -64,7 +64,15 @@ pygmy3_0.dashboardCollapser = (function() {
 			var node = nodes[i];
 			if (node.nodeType != 1) return; // Not an element just ignore.
 
-			if (node.parentNode.tagName == 'FASTBOARD')
+			if (!node.parentNode)
+			{
+				// WAT! Apparently the <p><em>No description provided<em><p> node on the step template library has no parent.
+				// Which when lookin at in developer tools is actually a <markdown> element. But it's not in the JS DOM?
+				console.debug(node.outerHTML);
+				console.debug(node);
+			}
+
+			if (node.parentNode && node.parentNode.tagName == 'FASTBOARD')
 			{
 				console.debug("Found an inserted project grouping");
 				addGroupToChooser(node);

@@ -6,6 +6,8 @@ function startOctoPygmy()
 	}
 	else
 	{
+		console.log("Setting up OctoPygmy for Octopus Deploy 2.x");
+		
 		if (window.location.pathname.indexOf('/app') < 0 || document.title.indexOf("Octopus Deploy") < 0) return; // Only run for Octopus Deploy
 
 		var defaults = {

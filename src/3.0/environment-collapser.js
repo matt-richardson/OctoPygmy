@@ -63,7 +63,7 @@ pygmy3_0.environmentCollapser = (function() {
 			var node = nodes[i];
 			if (node.nodeType != 1) return; // Not an element just ignore.
 			
-			if (node.parentNode.tagName == 'DIV' && node.getAttribute("ng-repeat") == "environment in environments") {
+			if (node.parentNode && node.parentNode.tagName == 'DIV' && node.getAttribute("ng-repeat") == "environment in environments") {
 				console.debug("Found an inserted environment");
 				addGroupToChooser(node);
 			}
