@@ -2,6 +2,8 @@ var commonpygmy = {
 	allItemsValue: '~all~',
 	pygmyIdAttributeName: 'octopygmy-id',
 	theDocument: window.document,
+	location: function() { return window.location; },
+	document: function() { return window.document; },
 
 	addFilterInput: function(inputNode, parentNode)
 	{
@@ -22,8 +24,9 @@ var commonpygmy = {
 	{
 		var showAll = idsToShow == commonpygmy.allItemsValue || idsToShow == ''
 
-		for(var id of allIds)
+		for(var i = 0; i < allIds.length; i++)
 		{
+			var id = allIds[i];
 			var items = commonpygmy.theDocument.querySelectorAll('[' + commonpygmy.pygmyIdAttributeName + '=' + id + ']');
 			for(var index = 0; index < items.length; index++) {
 				var item = items[index];
