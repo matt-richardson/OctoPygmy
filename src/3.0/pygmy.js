@@ -13,14 +13,15 @@ var pygmy3_0 = (function() {
 		return true;
 	}
 
-	function setup() {
+	function setup(options) {
 		console.info("Setting up OctoPygmy for Octopus Deploy 3.0");
 		
 		var content = document.getElementById(contentElementId);
-		this.dashboardCollapser.observe(content);
-		this.environmentCollapser.observe(content);
-		this.environmentFilter.observe(content);
-		this.integrateStepTemplateLibrary.observe(content);
+		
+		if(options.dashboard) this.dashboardCollapser.observe(content);
+		if(options.environments) this.environmentCollapser.observe(content);
+		if(options.machines) this.environmentFilter.observe(content);
+		if(options.libraryTemplate) this.integrateStepTemplateLibrary.observe(content);
 	}
 
 	return {

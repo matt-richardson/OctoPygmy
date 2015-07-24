@@ -55,7 +55,7 @@ pygmy3_0.environmentCollapser = (function() {
 		commonpygmy.showItems(environmentGroupIds, groupingId, 'block', 'none');
 
 		var groupingMetric = groupingId == commonpygmy.allItemsValue ? "all" : "specific"
-		//chrome.runtime.sendMessage({ name: "used-environment-collapser", properties: { "grouping": groupingMetric  } });
+		chrome.runtime.sendMessage({ name: "used-environment-collapser", properties: { "grouping": groupingMetric  } });
 	}
 
 	function nodeInsertion(nodes) {

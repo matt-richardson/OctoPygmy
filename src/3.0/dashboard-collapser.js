@@ -55,7 +55,7 @@ pygmy3_0.dashboardCollapser = (function() {
 		commonpygmy.showItems(projectGroupIds, groupingId, 'block', 'none');
 
 		var groupingMetric = groupingId == commonpygmy.allItemsValue ? "all" : "specific"
-		//chrome.runtime.sendMessage({ name: "used-dashboard-collapser", properties: { "grouping": groupingMetric  } });
+		chrome.runtime.sendMessage({ name: "used-dashboard-collapser", properties: { "grouping": groupingMetric  } });
 	}
 
 	function nodeInsertion(nodes)
@@ -64,13 +64,16 @@ pygmy3_0.dashboardCollapser = (function() {
 			var node = nodes[i];
 			if (node.nodeType != 1) return; // Not an element just ignore.
 
+			/* Just going to leave this here in case anyone else want's to see what I'm talking about. Just turn on debug logs
 			if (!node.parentNode)
 			{
-				// WAT! Apparently the <p><em>No description provided<em><p> node on the step template library has no parent.
-				// Which when lookin at in developer tools is actually a <markdown> element. But it's not in the JS DOM?
+				// WAT! Apparently the <p><em>[first line of template description]<em><p> node on the step template library has no parent.
+				// Which when looking at in developer tools is actually a <markdown> element. But it's not in the JS DOM?
+				console.debug("~~ Node with no parent WAT?! ~~")
 				console.debug(node.outerHTML);
 				console.debug(node);
 			}
+			*/
 
 			if (node.parentNode && node.parentNode.tagName == 'FASTBOARD')
 			{

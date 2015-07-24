@@ -88,7 +88,7 @@ pygmy3_0.environmentFilter = (function () {
 
 	function doneWithFilter(event) {
 		var filterMetric = event.srcElement.value == '' ? "all" : "specific"
-		//chrome.runtime.sendMessage({ name: "used-role-name-filter", properties: { "filter": filterMetric  } });
+		chrome.runtime.sendMessage({ name: "used-role-name-filter", properties: { "filter": filterMetric  } });
 	}
 
 	function nodeInsertion(nodes) {
