@@ -28,9 +28,9 @@
   "permissions": ["tabs", "storage"],
 
   "icons": {
-    "48": "logo48.png",
-    "64": "logo64.png",
-    "128": "logo128.png"
+    "48": "bluefinlogo48.png",
+    "64": "bluefinlogo64.png",
+    "128": "bluefinlogo128.png"
   },
 
   "background": {
