@@ -209,6 +209,8 @@ section.success a.active {
 #portfolio .portfolio-item {
     right: 0;
     margin: 0 0 15px;
+    background: #2c3e50;
+    color: white;
 }
 
 #portfolio .portfolio-item .portfolio-link {
