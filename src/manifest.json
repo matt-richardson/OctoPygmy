@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
 
-  "name": "OctoPygmy",
-  "description": "Provides a number of modifications to the Octopus Deploy user interface.",
-  "version": "0.65.1",
+  "name": "Blue fin",
+  "description": "Eases the management of large installations of targets and projects in Octopus Deploy",
+  "version": "1.0.0",
   "author": "David Roberts (@davidroberts63)",
-  "homepage_url": "https://github.com/davidroberts63/OctoPygmy",
+  "homepage_url": "https://davidroberts63.github.io/OctoPygmy",
   "content_scripts": [
   {
     "matches": ["https://*/app","http://*/app"],
