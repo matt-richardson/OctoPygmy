@@ -16,6 +16,7 @@
       "3.0/environment-collapser.js",
       "3.0/environment-filter.js",
       "3.0/integrate-step-template-library.js",
+      "3.0/step-template-updater.js",
       "octopygmy.js",      
       "dashboard-collapser.js",
       "environment-collapser.js",

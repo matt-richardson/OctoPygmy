@@ -22,6 +22,7 @@ var pygmy3_0 = (function() {
 		if(options.environments) this.environmentCollapser.observe(content);
 		if(options.machines) this.environmentFilter.observe(content);
 		if(options.libraryTemplate) this.integrateStepTemplateLibrary.observe(content);
+		this.stepTemplateUpdater.observe(content);
 	}
 
 	return {
