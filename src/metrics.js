@@ -7,6 +7,8 @@ chrome.storage.sync.get(options, function(result)
 	options = result;
 	setupMetrics();
 	displayOptionsPageIfNeeded();
+	
+	pygmy3_0.setup();
 });
 
 function getLibraryTemplatesList(done)

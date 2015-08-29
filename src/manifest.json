@@ -35,7 +35,7 @@
   },
 
   "background": {
-    "scripts": ["metrics.js","mixpanel.js","nanoajax.min.js"],
+    "scripts": ["3.0/background/pygmy.js", "3.0/background/step-template-update.js", "metrics.js","mixpanel.js","nanoajax.min.js"],
     "persistent": false
   },
 

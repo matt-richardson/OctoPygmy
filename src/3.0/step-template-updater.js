@@ -14,6 +14,7 @@ pygmy3_0.stepTemplateUpdater = (function() {
 		if(paneNode.querySelector("#" + buttonId)) return; // Already added.
 
 		var button = createUpdaterButton();
+		button.onclick = requestUpdateAll;
 		var table = paneNode.querySelector("table");
 		var view = table.parentNode;
 		view.insertBefore(button, table);
@@ -30,6 +31,12 @@ pygmy3_0.stepTemplateUpdater = (function() {
 		var stub = document.createElement('div');
 		stub.innerHTML = rawHtml;
 		return stub.childNodes[0];
+	}
+
+	function requestUpdateAll()
+	{
+		console.log("Updating all usage ");
+		chrome.runtime.sendMessage({message: "update-template-usage"});
 	}
 
 	function nodeInsertion(nodes)
@@ -57,7 +64,6 @@ pygmy3_0.stepTemplateUpdater = (function() {
 	function observe(content)
 	{
 		var observer = new MutationObserver(function(records) { 
-			console.debug("Observing " + records.length + " mutations.");
 			for (var i = 0; i < records.length; i++) {
 				nodeInsertion(records[i].addedNodes);
 			}
