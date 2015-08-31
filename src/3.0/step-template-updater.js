@@ -35,7 +35,7 @@ pygmy3_0.stepTemplateUpdater = (function() {
 
 	function requestUpdateAll()
 	{
-		console.log("Updating all usage ");
+		console.log("Updating all usage");
 		chrome.runtime.sendMessage({message: "update-template-usage"});
 	}
 
@@ -61,6 +61,22 @@ pygmy3_0.stepTemplateUpdater = (function() {
 		}
 	}
 
+	function receiveMessage(message, sender) {
+		if(message.message == "process-updated"){
+			console.log("Received message of updated process:" + message.process.Id);
+			console.log(message.actionIdsUpdated);
+			var actionLinks = usagePane.querySelectorAll("table tbody tr td:nth-child(2) a");
+			for(var i = 0; i < actionLinks.length; i++) {
+				if(actionLinks[i].href.indexOf(message.actionIdsUpdated[0]) > 0) {
+					var version = actionLinks[i].parentNode.nextElementSibling.querySelector("span");
+					version.innerHTML = "Updated";
+					version.classList.remove("label-warning");
+					version.classList.add("label-success");
+				}
+			}
+		}
+	}	
+	
 	function observe(content)
 	{
 		var observer = new MutationObserver(function(records) { 
@@ -69,6 +85,10 @@ pygmy3_0.stepTemplateUpdater = (function() {
 			}
 		});
 		observer.observe(content, { childList: true, subtree: true, attributes: false, characterData: false});
+		
+		//chrome.runtime.onMessage.removeListener(receiveMessage)
+		chrome.runtime.onMessage.addListener(receiveMessage);
+
 	}
 
 	return {

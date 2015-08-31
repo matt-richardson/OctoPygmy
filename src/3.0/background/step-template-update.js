@@ -4,13 +4,121 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	{
 		if (request.message == 'update-template-usage')
 		{
-			console.log("Updating step template usage");
+			console.log("Updating step template usage");			
+			var octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'));
+			var templateId = sender.url.split("/").slice(-1)[0];			
+			console.debug("  Step template id updating: " + templateId);
 			
-			//var template = getStepTemplate(request.templateId);
-			//var usage = getStepTemplateUsage(request.templateId);
+			getStepTemplate(octopusRoot, templateId, function receiveTemplate(template){
+				getStepTemplateUsage(octopusRoot, template, function receiveUsage(usage){
+					for(var i = 0; i < usage.length; i++){
+						
+						getDeploymentProcess(octopusRoot, usage[i].Links.DeploymentProcess, function(process){
+							updateDeploymentProcessTemplate(octopusRoot, process, template, sender);
+						});
+					}
+				});
+			});
+
 		}
 	}
 
+	function getStepTemplate(octopusRoot, templateId, handle)
+	{	
+		var templateUrl = octopusRoot + "/api/actiontemplates/" + templateId;	
+		console.debug("Getting step template: " + templateUrl);
+		nanoajax.ajax(templateUrl, function(status, response){
+				console.debug('Received step template:' + templateUrl);
+				console.debug(response);
+				
+				var template = JSON.parse(response);
+				
+				handle(template);
+		});		
+	}
+	
+	function getStepTemplateUsage(octopusRoot, template, handle)
+	{
+		var usageUrl = octopusRoot + "/api/actiontemplates/" + template.Id + "/usage";
+		console.debug("Getting step template usage: " + usageUrl);	
+		nanoajax.ajax(usageUrl, function(status, response){
+				console.debug('Received step template usage:' + usageUrl);
+				console.debug(response);
+				
+				var usage = JSON.parse(response);
+				
+				handle(usage);
+		});
+	}
+
+	function getDeploymentProcess(octopusRoot, processUrl, handle)
+	{
+		var url = octopusRoot + processUrl;
+		console.debug("Getting deployment process: " + url);	
+		nanoajax.ajax(url, function(status, response){
+				console.debug("Received deployment process:" + url);
+				console.debug(response);
+				
+				var result = JSON.parse(response);
+				
+				handle(result);
+		});
+	}
+	
+	function postUpdatedDeploymentProcess(octopusRoot, process, handle)
+	{
+		var url = octopusRoot + process.Links.Self;
+		console.debug("Posting updated deployment process: " + url);	
+		nanoajax.ajax(url, function(status, response){
+				//console.debug("Received update reponse:" + url);
+				//console.debug(response);
+				
+				//var result = JSON.parse(response);
+				
+				handle({});
+		});
+	}
+	
+	function notifyProcessUpdated(process, actionsUpdated, sender)
+	{
+		console.debug("Notifying tab of updated process");
+		console.debug(sender);
+		chrome.tabs.sendMessage(sender.tab.id, {message: "process-updated", process: process, actionIdsUpdated: actionsUpdated});
+		// Send message to tab.
+	}
+	
+	function updateDeploymentProcessTemplate(octopusRoot, process, template, sender)
+	{
+		console.debug("Updating deployment process template");
+		var actionIdsUpdated = [];
+		
+		for (var i = 0; i < process.Steps.length; i++)
+		{
+			if (process.Steps[i].Actions[0].Properties["Octopus.Action.Template.Id"] == template.Id)
+			{
+				console.debug("Found template in deployment process");
+				actionIdsUpdated.push(process.Steps[i].Actions[0].Id);
+			}
+		}
+		
+		postUpdatedDeploymentProcess(octopusRoot, process, function(result){
+			notifyProcessUpdated(process, actionIdsUpdated, sender);
+		});
+/*
+When they click 'Update All':
+For each project that uses the template (/api/actiontemplates/[templateid]/usage
+Get the deployment process (usage[x].Links.DeploymentProcess)
+Get the template (api/actiontemplates/[templateid])
+Find the matching step based on 'Octopus.Action.Template.Id' (process.steps[x].Actions[0].Properties['Octopus.Action.Template.Id'])
+Copy all the actionTemplate.Propertties to the Process setp Actions properties (process.steps[x].Actions[0].Properties = template.Properties)
+Same for sensitive properties (process.steps[x].Actions[0].SensitiveProperties = template.SensitiveProperties)
+Update the TargetRoles and MaxParallelism if available in the original step (in the Properties).
+Add new step template parameters that have a default value. (template.Parameters | Where p.DefaultValue Is not null, empty, or undefined)
+IF a parameter does NOT have a default value, mark as not auto-updatedable.
+Set the Template Id and Version (in the Properties)
+*/		
+	}
+	
 	function setup()
 	{
 		chrome.runtime.onMessage.addListener(requestUpdateAllTemplateUsage);
