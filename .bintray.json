@@ -1,0 +1,23 @@
+{
+    "package": {
+        "name": "bluefin",
+        "repo": "BlueFin",
+        "subject": "davidroberts63"
+    },
+
+    /* Package version information.
+       In case the version already exists on Bintray, only the name fields is mandatory. */
+
+    "version": {
+        "name": "{{version}}.{{patch}}-{{branch}}",
+        "desc": "Trial of Travis CI build to Bintray",
+        "released": "{{releasedate}}",
+        "vcs_tag": "{{version}}.{{patch}}-{{branch}}",
+        "gpgSign": false
+    },
+
+    "files":
+        [ {"includePattern": "bluefin.zip", 
+           "uploadPattern": "builds/{{version}}.{{patch}}-{{branch}}/chrome-extension.zip"} ],
+    "publish": true
+}
