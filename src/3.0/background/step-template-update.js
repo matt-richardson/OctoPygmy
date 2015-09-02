@@ -4,11 +4,16 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	{
 		if (request.message == 'update-template-usage')
 		{
-			console.log("Updating step template usage");			
+			console.log("Updating step template usage");
 			var octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'));
 			var templateId = sender.url.split("/").slice(-1)[0];			
 			console.debug("  Step template id updating: " + templateId);
 			
+			if (templateId === null || templateId == ""){
+				console.debug("No template id found, skipping");
+				return;
+			}
+
 			getStepTemplate(octopusRoot, templateId, function receiveTemplate(template){
 				getStepTemplateUsage(octopusRoot, template, function receiveUsage(usage){
 					for(var i = 0; i < usage.length; i++){
