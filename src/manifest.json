@@ -22,7 +22,8 @@
       "environment-collapser.js",
       "environment-rolename-filter.js",
       "integrate-step-template-library.js",
-      "list.min.js"
+      "list.min.js",
+      "underscore-min.js"
     ],
     "css": ["style.css"]
   }],
@@ -35,7 +36,7 @@
   },
 
   "background": {
-    "scripts": ["3.0/background/pygmy.js", "3.0/background/step-template-update.js", "metrics.js","mixpanel.js","nanoajax.min.js"],
+    "scripts": ["underscore-min.js", "3.0/background/pygmy.js", "3.0/background/step-template-update.js", "metrics.js","mixpanel.js","nanoajax.min.js"],
     "persistent": false
   },
 

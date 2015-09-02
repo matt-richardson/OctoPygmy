@@ -65,13 +65,40 @@ pygmy3_0.stepTemplateUpdater = (function() {
 		if(message.message == "process-updated"){
 			console.log("Received message of updated process:" + message.process.Id);
 			console.log(message.actionIdsUpdated);
+			
 			var actionLinks = usagePane.querySelectorAll("table tbody tr td:nth-child(2) a");
+			
 			for(var i = 0; i < actionLinks.length; i++) {
-				if(actionLinks[i].href.indexOf(message.actionIdsUpdated[0]) > 0) {
-					var version = actionLinks[i].parentNode.nextElementSibling.querySelector("span");
-					version.innerHTML = "Updated";
-					version.classList.remove("label-warning");
-					version.classList.add("label-success");
+				var actionId = _.find(message.actionIdsUpdated, function(id){
+					return actionLinks[i].href.indexOf(id) > 0;
+				});
+				var manualId = _.find(message.actionsNotUpdated,function(id){
+					return actionLinks[i].href.indexOf(id) > 0;
+				});
+				
+				if((typeof actionId) != "undefined"){
+					console.log("Action was updated: " + actionId);
+					
+					var stepAction = _.find(message.process.Steps, function(step){
+						return step.Actions[0].Id == actionId;
+					}).Actions[0];
+					
+					var status = actionLinks[i].parentNode.nextElementSibling.querySelector("span");
+					var version = status.previousSibling;
+					
+					status.innerHTML = "Updated";
+					status.classList.remove("label-warning");
+					status.classList.add("label-success");
+					version.nodeValue = stepAction.Properties["Octopus.Action.Template.Version"];
+										
+				} else if((typeof manualId) != "undefined"){
+					console.log("Action requires manual update: " + manualId);
+					
+					var status = actionLinks[i].parentNode.nextElementSibling.querySelector("span");
+
+					status.innerHTML = "Update Manually";
+					status.classList.remove("label-warning");
+					status.classList.add("label-info");					
 				}
 			}
 		}

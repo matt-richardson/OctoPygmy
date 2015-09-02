@@ -69,54 +69,85 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	{
 		var url = octopusRoot + process.Links.Self;
 		console.debug("Posting updated deployment process: " + url);	
-		nanoajax.ajax(url, function(status, response){
-				//console.debug("Received update reponse:" + url);
-				//console.debug(response);
+		nanoajax.ajax({url: url, method: "PUT", body: JSON.stringify(process)}, function(status, response){
+				console.debug("Received update reponse:" + url);
+				console.debug(response);
 				
-				//var result = JSON.parse(response);
+				var result = JSON.parse(response);
 				
-				handle({});
+				handle(result);
 		});
 	}
 	
-	function notifyProcessUpdated(process, actionsUpdated, sender)
+	function notifyProcessUpdated(process, actionsUpdated, manualUpdates, sender)
 	{
 		console.debug("Notifying tab of updated process");
 		console.debug(sender);
-		chrome.tabs.sendMessage(sender.tab.id, {message: "process-updated", process: process, actionIdsUpdated: actionsUpdated});
+		chrome.tabs.sendMessage(sender.tab.id, {message: "process-updated", process: process, actionIdsUpdated: actionsUpdated, actionsNotUpdated: manualUpdates});
 		// Send message to tab.
+	}
+	
+	function parameterHasDefaultValue(parameter)
+	{
+		return (typeof parameter.DefaultValue) != "undefined"
+			&& parameter.DefaultValue !== null
+			&& parameter.DefaultValue !== "";	
+	}
+	
+	function isNewParameterWithNoDefaultValue(parameter, action)
+	{
+		return !parameterHasDefaultValue(parameter)
+			&& !(parameter.Name in action.Properties);
 	}
 	
 	function updateDeploymentProcessTemplate(octopusRoot, process, template, sender)
 	{
 		console.debug("Updating deployment process template");
 		var actionIdsUpdated = [];
+		var manualUpdates = [];
 		
-		for (var i = 0; i < process.Steps.length; i++)
-		{
-			if (process.Steps[i].Actions[0].Properties["Octopus.Action.Template.Id"] == template.Id)
-			{
-				console.debug("Found template in deployment process");
-				actionIdsUpdated.push(process.Steps[i].Actions[0].Id);
+		for (var i = 0; i < process.Steps.length; i++){
+			if (process.Steps[i].Actions[0].Properties["Octopus.Action.Template.Id"] == template.Id){
+				var action = process.Steps[i].Actions[0];
+				console.debug("Found template in deployment process: " + action.Name);
+				
+				if (_.some(template.Parameters, function(p){
+					return isNewParameterWithNoDefaultValue(p, action); }))
+				{
+					console.debug("Template action requires new parameter that has no default value.");
+					manualUpdates.push(action.Id);
+					continue;
+				}
+				
+				var previous = _.clone(action.Properties);
+				
+				action.Properties = _.clone(template.Properties);
+				action.SensitiveProperties = _.clone(template.SensitiveProperties);
+
+				_.each(["Octopus.Action.TargetRoles", "Octopus.Action.MaxParallelism"], function(key){
+					if(_.contains(previous, key)){
+						action.Properties[key] = previous[key];
+					}
+				});
+
+				_.each(template.Parameters, function(parameter){
+					if(parameter.Name in previous){
+						action.Properties[parameter.Name] = previous[parameter.Name];
+					} else if(parameterHasDefaultValue(parameter)){
+						action.Properties[parameter.Name] = parameter.DefaultValue;
+					}
+				});
+
+				action.Properties["Octopus.Action.Template.Id"] = template.Id;
+				action.Properties["Octopus.Action.Template.Version"] = template.Version;
+				
+				actionIdsUpdated.push(action.Id);
 			}
 		}
 		
 		postUpdatedDeploymentProcess(octopusRoot, process, function(result){
-			notifyProcessUpdated(process, actionIdsUpdated, sender);
+			notifyProcessUpdated(result, actionIdsUpdated, manualUpdates, sender);
 		});
-/*
-When they click 'Update All':
-For each project that uses the template (/api/actiontemplates/[templateid]/usage
-Get the deployment process (usage[x].Links.DeploymentProcess)
-Get the template (api/actiontemplates/[templateid])
-Find the matching step based on 'Octopus.Action.Template.Id' (process.steps[x].Actions[0].Properties['Octopus.Action.Template.Id'])
-Copy all the actionTemplate.Propertties to the Process setp Actions properties (process.steps[x].Actions[0].Properties = template.Properties)
-Same for sensitive properties (process.steps[x].Actions[0].SensitiveProperties = template.SensitiveProperties)
-Update the TargetRoles and MaxParallelism if available in the original step (in the Properties).
-Add new step template parameters that have a default value. (template.Parameters | Where p.DefaultValue Is not null, empty, or undefined)
-IF a parameter does NOT have a default value, mark as not auto-updatedable.
-Set the Template Id and Version (in the Properties)
-*/		
 	}
 	
 	function setup()
@@ -128,58 +159,3 @@ Set the Template Id and Version (in the Properties)
 		setup: setup
 	}
 })();
-
-
-/*
-mergeLatest = function()
-{
-// Temporary save the current step's properties (previous): DeploymentProcess[-ACTION-].Actions[0].Properties
-// Copy the Step template properties to the current step action properties: ActionTemplates[-TEMPLATE-].Properties
-// Copy the Step template sensitive properties to the current step action sensitive properties: ActionTemplates[-TEMPLATE-].SensitiveProperties
-
-// Copy the original action properties for TargetRoles and MaxParallelism from the original step: DeploymentProcess[-ACTION-].Actions[0].Properties[~TargetRoels~|MaxParallelism] = Previous[~TargetRoels~|MaxParallelism]
-
-// Copy the original action properties for each parameter in the template that has the same name as the steps properties.
-// If an existing current step property doesn't exist:
-// Add the new DeploymentProcess[...].Actions[0].Properties[NAME] with the ActionTemplates[...].Parameter.DefaultValue
-
-// Set the Template.ID and Template.Version in the action properties to that of the template.
-
-var previous=_.clone($scope.action.Properties);
-$scope.action.Properties = _.clone($scope.actionTemplate.Properties),
-$scope.action.SensitiveProperties=_.clone($scope.actionTemplate.SensitiveProperties),
-
-_.each(previous,function(v,k)
-{
-_.contains(["Octopus.Action.TargetRoles","Octopus.Action.MaxParallelism"],k) && ($scope.action.Properties[k]=v)
-}),
-
-_.each($scope.actionTemplate.Parameters,function(parameter)
-{
-parameter.Name in previous
-? $scope.action.Properties[parameter.Name] = previous[parameter.Name] 
-: "undefined" != typeof parameter.DefaultValue
-&& null !== parameter.DefaultValue 
-&& "" !== parameter.DefaultValue
-&& ($scope.action.Properties[parameter.Name]=parameter.DefaultValue)
-}),
-
-$scope.action.Properties["Octopus.Action.Template.Id"] = $scope.actionTemplate.Id,
-$scope.action.Properties["Octopus.Action.Template.Version"]=$scope.actionTemplate.Version
-}
-*/
-
-// So for Blue fin:
-/*
-When they click 'Update All':
-For each project that uses the template (/api/actiontemplates/[templateid]/usage
-Get the deployment process (usage[x].Links.DeploymentProcess)
-Get the template (api/actiontemplates/[templateid])
-Find the matching step based on 'Octopus.Action.Template.Id' (process.steps[x].Actions[0].Properties['Octopus.Action.Template.Id'])
-Copy all the actionTemplate.Propertties to the Process setp Actions properties (process.steps[x].Actions[0].Properties = template.Properties)
-Same for sensitive properties (process.steps[x].Actions[0].SensitiveProperties = template.SensitiveProperties)
-Update the TargetRoles and MaxParallelism if available in the original step (in the Properties).
-Add new step template parameters that have a default value. (template.Parameters | Where p.DefaultValue Is not null, empty, or undefined)
-IF a parameter does NOT have a default value, mark as not auto-updatedable.
-Set the Template Id and Version (in the Properties)
-*/
