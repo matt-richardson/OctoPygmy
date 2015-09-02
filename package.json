@@ -1,0 +1,17 @@
+  {
+  "name": "BlueFin",
+  "version": "1.0.0",
+  "description": "Extension for Octopus Deploy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidroberts63/OctoPygmy.git"
+  },
+  "author": "davidroberts63",
+  "license": "Apache 2.0",
+  "readmeFilename": "README.md",
+  "gitHead": "9f47bf95f8e1cf3ca9985dcced309a83bb5302c0"
+}

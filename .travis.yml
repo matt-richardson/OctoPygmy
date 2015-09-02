@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+- stable
+
+env:
+  global:
+    - VERSION=1.2
+
+before_deploy:
+- zip -r bluefin.zip src/*
+- sed -i -e "s/{{version}}/${VERSION}/" .bintray.json
+- sed -i -e "s/{{patch}}/${TRAVIS_BUILD_NUMBER}/" .bintray.json
+- sed -i -e "s/{{branch}}/${TRAVIS_BRANCH}/" .bintray.json
+- build_date=`date +%Y-%m-%d`
+- sed -i -e "s/{{releasedate}}/${build_date}/" .bintray.json
+
+deploy:
+  provider: bintray
+  file: ".bintray.json"
+  user: davidroberts63
+  key:
+    secure: XzfDrm01xN+qPkjS/7wKJPt9NkeKooLeLEUfPU+MwQj5ClWz3vl7LGuZ8uy5Aw+aSxEFhi0e+NjRcLaiBtu1Nmla9c0tMiZn9w6RFnuVWMJ6CWYpZwSOtnVZg8hDAxtV6sIM/75rVTLKyYuYtxAuXN5U00IIPcvkvZqgb/Wwcmg=
+  on:
+    all_branches: 'true'
