@@ -38,6 +38,7 @@ var octopygmy = (function() {
 				if (options.environments) environmentCollapser.nodeInsertion(event)
 				if (options.machines) environmentRoleNameFilter.nodeInsertion(event)
 				if (options.libraryTemplate) integrateStepTemplateLibrary.nodeInsertion.call(integrateStepTemplateLibrary, event)
+				stepTemplateUpdater.nodeInsertion(event)
 			});
 		}
 

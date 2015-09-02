@@ -3,7 +3,7 @@
 
   "name": "Blue fin",
   "description": "Eases the management of large installations of targets and projects in Octopus Deploy",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "author": "David Roberts (@davidroberts63)",
   "homepage_url": "https://davidroberts63.github.io/OctoPygmy",
   "content_scripts": [
@@ -17,11 +17,12 @@
       "3.0/environment-filter.js",
       "3.0/integrate-step-template-library.js",
       "3.0/step-template-updater.js",
-      "octopygmy.js",      
+      "octopygmy.js",
       "dashboard-collapser.js",
       "environment-collapser.js",
       "environment-rolename-filter.js",
       "integrate-step-template-library.js",
+      "step-template-updater.js",
       "list.min.js",
       "underscore-min.js"
     ],
