@@ -5,8 +5,8 @@ pygmy3_0.stepTemplateUpdate = (function() {
 		if (request.message == 'update-template-usage')
 		{
 			console.log("Updating step template usage");
-			var octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'));
-			var templateId = sender.url.split("/").slice(-1)[0];			
+			var octopusRoot = sender.tab.url.substring(0,sender.url.indexOf('/app'));
+			var templateId = sender.tab.url.split("/").slice(-1)[0];			
 			console.info("Step template id updating: " + templateId);
 			
 			if (templateId === null || templateId == ""){
