@@ -15,14 +15,25 @@ pygmy3_0.stepTemplateUpdater = (function() {
 
 		var button = createUpdaterButton();
 		button.onclick = requestUpdateAll;
+
+		var currentVersion = _.find(paneNode.querySelectorAll("p"), function(node){
+			return node.innerText.indexOf("Current version:") == 0;
+		});
+
+		if((typeof currentVersion) != "undefined"){
+			console.debug("Found current version paragraph.");
+			currentVersion.appendChild(button);
+		}
+/*
 		var table = paneNode.querySelector("table");
 		var view = table.parentNode;
 		view.insertBefore(button, table);
+*/
 	}
 
 	function createUpdaterButton()
 	{
-		var raw = '<button type="button" class="btn btn-lg btn-warning" id="' + buttonId + '">Update All</button>';
+		var raw = '<button type="button" class="btn btn-sm btn-warning" style="margin-left: 10px;" id="' + buttonId + '">Update All</button>';
 		return generateNodeFromHtml(raw);
 	}
 
@@ -50,14 +61,7 @@ pygmy3_0.stepTemplateUpdater = (function() {
 				console.debug("Viewing step template usage, adding update all button");
 				usagePane = node.querySelector(usageSelector);
 				addUpaterButton(usagePane);
-			}			
-			/*
-			if (node.tagName == 'UL' && node.innerText == 'Dashboard') {
-				console.info('Setting up dashboard filter');
-				var filterInput = createChooser();
-				commonpygmy.addFilterInput(filterInput, node.parentNode);
 			}
-			*/
 		}
 	}
 
@@ -113,9 +117,7 @@ pygmy3_0.stepTemplateUpdater = (function() {
 		});
 		observer.observe(content, { childList: true, subtree: true, attributes: false, characterData: false});
 		
-		//chrome.runtime.onMessage.removeListener(receiveMessage)
 		chrome.runtime.onMessage.addListener(receiveMessage);
-
 	}
 
 	return {

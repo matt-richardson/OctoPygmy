@@ -28,7 +28,7 @@ var stepTemplateUpdater = (function() {
 
 	function createUpdaterButton()
 	{
-		var raw = '<button type="button" class="btn btn-lg btn-warning" style="margin-left: 10px;" id="' + buttonId + '">Update All</button>';
+		var raw = '<button type="button" class="btn btn-sm btn-warning" style="margin-left: 10px;" id="' + buttonId + '">Update All</button>';
 		return generateNodeFromHtml(raw);
 	}
 

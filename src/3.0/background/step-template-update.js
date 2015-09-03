@@ -7,7 +7,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 			console.log("Updating step template usage");
 			var octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'));
 			var templateId = sender.url.split("/").slice(-1)[0];			
-			console.debug("  Step template id updating: " + templateId);
+			console.info("Step template id updating: " + templateId);
 			
 			if (templateId === null || templateId == ""){
 				console.debug("No template id found, skipping");
@@ -17,7 +17,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 			getStepTemplate(octopusRoot, templateId, function receiveTemplate(template){
 				getStepTemplateUsage(octopusRoot, template, function receiveUsage(usage){
 					for(var i = 0; i < usage.length; i++){
-						
+
 						getDeploymentProcess(octopusRoot, usage[i].Links.DeploymentProcess, function(process){
 							updateDeploymentProcessTemplate(octopusRoot, process, template, sender);
 						});
@@ -73,7 +73,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	function postUpdatedDeploymentProcess(octopusRoot, process, handle)
 	{
 		var url = octopusRoot + process.Links.Self;
-		console.debug("Posting updated deployment process: " + url);	
+		console.info("Posting updated deployment process: " + url);	
 		nanoajax.ajax({url: url, method: "PUT", body: JSON.stringify(process)}, function(status, response){
 				console.debug("Received update reponse:" + url);
 				console.debug(response);
@@ -89,7 +89,6 @@ pygmy3_0.stepTemplateUpdate = (function() {
 		console.debug("Notifying tab of updated process");
 		console.debug(sender);
 		chrome.tabs.sendMessage(sender.tab.id, {message: "process-updated", process: process, actionIdsUpdated: actionsUpdated, actionsNotUpdated: manualUpdates});
-		// Send message to tab.
 	}
 	
 	function parameterHasDefaultValue(parameter)
@@ -115,6 +114,11 @@ pygmy3_0.stepTemplateUpdate = (function() {
 			if (process.Steps[i].Actions[0].Properties["Octopus.Action.Template.Id"] == template.Id){
 				var action = process.Steps[i].Actions[0];
 				console.debug("Found template in deployment process: " + action.Name);
+				
+				if (action.Properties["Octopus.Action.Template.Version"] == template.Version){
+					console.debug("The " + action.Name + " is already up to date skipping.");
+					continue;
+				}
 				
 				if (_.some(template.Parameters, function(p){
 					return isNewParameterWithNoDefaultValue(p, action); }))
@@ -150,9 +154,13 @@ pygmy3_0.stepTemplateUpdate = (function() {
 			}
 		}
 		
-		postUpdatedDeploymentProcess(octopusRoot, process, function(result){
-			notifyProcessUpdated(result, actionIdsUpdated, manualUpdates, sender);
-		});
+		if(actionIdsUpdated.length > 0){
+			postUpdatedDeploymentProcess(octopusRoot, process, function(result){
+				notifyProcessUpdated(result, actionIdsUpdated, manualUpdates, sender);
+			});
+		} else {
+			console.info("Deployment process for " + process.ProjectId + " was already up to date.");
+		}
 	}
 	
 	function setup()
