@@ -12,9 +12,9 @@ Get it from the Chrome web store [OctoPygmy Extension]
  - [Filter machines by role or name]
  - Filter machines by state (online, offline, disabled, etc...)
  - [Community Library integrated into step template library view]
+ - [Update step template across all projects]
 
 ##### Todo (not exhaustive list just some I like on the UserVoice site)
- - [Update step template across all projects]
  - Projects collapser (just the projects page, dashboard already done)
 
 #### Development note
