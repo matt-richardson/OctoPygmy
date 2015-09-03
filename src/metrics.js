@@ -145,8 +145,8 @@ function setupMetrics()
 			return;
 		}
 
-		if (options.analytics) {
-			console.debug("Message received: " + request.name);
+		if (options.analytics && request.name && request.properties) {
+			console.debug("Analytics message received: " + request.name);
 
 			request.properties.version = version;
 			mixpanel.track(request.name, request.properties);

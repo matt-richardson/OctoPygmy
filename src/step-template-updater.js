@@ -43,6 +43,7 @@ var stepTemplateUpdater = (function() {
 	{
 		console.log("Updating all usage");
 		chrome.runtime.sendMessage({message: "update-template-usage"});
+		chrome.runtime.sendMessage({name: "update-template-usage", properties: {}});
 	}
 
 	function nodeInsertion(event)

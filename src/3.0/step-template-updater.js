@@ -48,6 +48,7 @@ pygmy3_0.stepTemplateUpdater = (function() {
 	{
 		console.log("Updating all usage");
 		chrome.runtime.sendMessage({message: "update-template-usage"});
+		chrome.runtime.sendMessage({name: "update-template-usage", properties: {}});
 	}
 
 	function nodeInsertion(nodes)

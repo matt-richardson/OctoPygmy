@@ -13,6 +13,7 @@ function save_options() {
 	options.debugLogging = document.getElementById('debug-logging').checked;
 	options.warnLogging = document.getElementById('warn-logging').checked;
 	options.informationLogging = document.getElementById('information-logging').checked;
+	options.updateAllTemplate = document.getElementById('update-all-template').checked;
 	
 	console.debug("Options to save:");
 	console.debug(options);
@@ -40,7 +41,8 @@ function restore_options() {
 		libraryTemplate: true,
 		debugLogging: false,
 		warnLogging: false,
-		informationLogging: true
+		informationLogging: true,
+		updateAllTemplate: true,
 	};
 
 	chrome.storage.sync.get(defaults, function(options) {
@@ -55,6 +57,7 @@ function restore_options() {
 		document.getElementById('debug-logging').checked = options.debugLogging;
 		document.getElementById('warn-logging').checked = options.warnLogging;
 		document.getElementById('information-logging').checked = options.informationLogging;
+		document.getElementById('update-all-template').checked = options.updateAllTemplate;
 		
 		pleaForAnalytics({ srcElement: document.getElementById('analytics') });
 	});
