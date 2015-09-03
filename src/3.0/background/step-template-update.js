@@ -158,6 +158,8 @@ pygmy3_0.stepTemplateUpdate = (function() {
 			postUpdatedDeploymentProcess(octopusRoot, process, function(result){
 				notifyProcessUpdated(result, actionIdsUpdated, manualUpdates, sender);
 			});
+		} else if (manualUpdates.length > 0){
+			notifyProcessUpdated(process, actionIdsUpdated, manualUpdates, sender);
 		} else {
 			console.info("Deployment process for " + process.ProjectId + " was already up to date.");
 		}
