@@ -9,7 +9,8 @@ var octopygmy = (function() {
 			libraryTemplate: true,
 			debugLogging: false,
 			warnLogging: false,
-			informationLogging: null
+			informationLogging: null,
+			updateAllTemplate: true
 		};
 
 		chrome.storage.sync.get(defaultOptions, function(options) {
@@ -38,7 +39,7 @@ var octopygmy = (function() {
 				if (options.environments) environmentCollapser.nodeInsertion(event)
 				if (options.machines) environmentRoleNameFilter.nodeInsertion(event)
 				if (options.libraryTemplate) integrateStepTemplateLibrary.nodeInsertion.call(integrateStepTemplateLibrary, event)
-				stepTemplateUpdater.nodeInsertion(event)
+				if (options.updateAllTemplate) stepTemplateUpdater.nodeInsertion(event)
 			});
 		}
 
