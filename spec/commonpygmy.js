@@ -18,7 +18,6 @@ describe("commonpygmy", function() {
 			commonpygmy.addFilterInput(input, parent);
 			expect(parent.appendChild).not.toHaveBeenCalled();
 		});
-
 	});
 
 	describe("showItems", function() {

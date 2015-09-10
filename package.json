@@ -1,10 +1,10 @@
-  {
+{
   "name": "BlueFin",
   "version": "1.0.0",
   "description": "Extension for Octopus Deploy",
   "main": "index.js",
   "scripts": {
-    "test": "echo 0"
+    "test": "phantomjs spec/run-jasmine.js SpecRunner.html"
   },
   "repository": {
     "type": "git",

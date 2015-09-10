@@ -24,11 +24,6 @@ pygmy3_0.stepTemplateUpdater = (function() {
 			console.debug("Found current version paragraph.");
 			currentVersion.appendChild(button);
 		}
-/*
-		var table = paneNode.querySelector("table");
-		var view = table.parentNode;
-		view.insertBefore(button, table);
-*/
 	}
 
 	function createUpdaterButton()
@@ -56,7 +51,7 @@ pygmy3_0.stepTemplateUpdater = (function() {
 		for (var i = 0; i < nodes.length; i++) {
 			var node = nodes[i];
 			if (node.nodeType != 1) return; // Not an element just ignore.
-
+			
 			if (isStepTemplateUsageView(node))
 			{
 				console.debug("Viewing step template usage, adding update all button");
@@ -103,7 +98,7 @@ pygmy3_0.stepTemplateUpdater = (function() {
 
 					status.innerHTML = "Update Manually";
 					status.classList.remove("label-warning");
-					status.classList.add("label-info");					
+					status.classList.add("label-info");
 				}
 			}
 		}

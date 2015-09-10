@@ -1,31 +1,27 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Jasmine Spec Runner v2.2.0</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Jasmine Spec Runner v2.0.0</title>
 
-  <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.2.0/jasmine_favicon.png">
-  <link rel="stylesheet" href="lib/jasmine-2.2.0/jasmine.css">
+  <link rel="shortcut icon" type="image/png" href="lib/jasmine/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="lib/jasmine/jasmine.css">
 
-  <script src="lib/jasmine-2.2.0/jasmine.js"></script>
-  <script src="lib/jasmine-2.2.0/jasmine-html.js"></script>
-  <script src="lib/jasmine-2.2.0/boot.js"></script>
+  <script type="text/javascript" src="lib/jasmine/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine/jasmine-html.js"></script>
+  <script type="text/javascript" src="lib/jasmine/console.js"></script>
+  <script type="text/javascript" src="lib/jasmine/boot.js"></script>
 
   <!-- include source files here... -->
-  <script src="src/3.0/pygmy.js"></script>
-  <script src="src/commonpygmy.js"></script>
-  <script src="src/environment-rolename-filter.js"></script>
-  <script src="src/integrate-step-template-library.js"></script>
-  <script src="src/nanoajax.min.js"></script>
-  <script src="src/metrics.js"></script>
-  <script src="src/list.min.js"></script>
-
+  <script src="src/underscore-min.js"></script>
+  <script src="src/3.0/background/pygmy.js"></script>
+  <script src="src/3.0/background/step-template-update.js"></script>
+  
   <!-- include spec files here... -->
-  <script src="spec/3.0/pygmy.js"></script>
-  <script src="spec/commonpygmy.js"></script>
-  <script src="spec/environment-role-name-filter.js"></script>
-  <script src="spec/integrate-step-template-library.js"></script>
-  <script src="spec/background-template-library.js"></script>
+  <script src="spec/3.0/background/step-template-update.js"></script>
+  
+  <!-- Wire up ConsoleReporter -->
+  <script type="text/javascript" src="spec/SpecRunner.js"></script>
 </head>
 
 <body>

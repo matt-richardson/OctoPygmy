@@ -6,7 +6,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 		{
 			console.log("Updating step template usage");
 			var octopusRoot = sender.tab.url.substring(0,sender.url.indexOf('/app'));
-			var templateId = sender.tab.url.split("/").slice(-1)[0];			
+			var templateId = sender.tab.url.split("/").slice(-1)[0];
 			console.info("Step template id updating: " + templateId);
 			
 			if (templateId === null || templateId == ""){
@@ -19,55 +19,61 @@ pygmy3_0.stepTemplateUpdate = (function() {
 					for(var i = 0; i < usage.length; i++){
 
 						getDeploymentProcess(octopusRoot, usage[i].Links.DeploymentProcess, function(process){
-							updateDeploymentProcessTemplate(octopusRoot, process, template, sender);
+							updateDeploymentProcessTemplate(octopusRoot, process, template, sender,
+								_.partial(processUpdated, octopusRoot, sender),
+								_.partial(processManual, octopusRoot, sender),
+								processNoUpdate
+								);
 						});
 					}
 				});
 			});
-
 		}
 	}
+	
+	function processUpdated(octopusRoot, sender, process, actionIdsUpdated, manualUpdates)
+	{
+		postUpdatedDeploymentProcess(octopusRoot, process, function(result){
+			notifyProcessUpdated(result, actionIdsUpdated, manualUpdates, sender);
+		});
+	}
 
+	function processManual(octopusRoot, sender, process, manualUpdates )
+	{
+		notifyProcessUpdated(process, [], manualUpdates, sender);
+	}
+	
+	function processNoUpdate(process)
+	{
+		console.info("Deployment process for " + process.ProjectId + " was already up to date.");
+	}
+	
+	function getJsonResponse(url, handle)
+	{
+		nanoajax.ajax(url, function(status, response){
+			console.debug("Received " + status + " response from " + url);
+			console.debug(response);
+			var result = JSON.parse(response);
+			handle(result);
+		});
+	}
+	
 	function getStepTemplate(octopusRoot, templateId, handle)
-	{	
-		var templateUrl = octopusRoot + "/api/actiontemplates/" + templateId;	
-		console.debug("Getting step template: " + templateUrl);
-		nanoajax.ajax(templateUrl, function(status, response){
-				console.debug('Received step template:' + templateUrl);
-				console.debug(response);
-				
-				var template = JSON.parse(response);
-				
-				handle(template);
-		});		
+	{
+		var templateUrl = octopusRoot + "/api/actiontemplates/" + templateId;
+		getJsonResponse(templateUrl, handle);
 	}
 	
 	function getStepTemplateUsage(octopusRoot, template, handle)
 	{
 		var usageUrl = octopusRoot + "/api/actiontemplates/" + template.Id + "/usage";
-		console.debug("Getting step template usage: " + usageUrl);	
-		nanoajax.ajax(usageUrl, function(status, response){
-				console.debug('Received step template usage:' + usageUrl);
-				console.debug(response);
-				
-				var usage = JSON.parse(response);
-				
-				handle(usage);
-		});
+		getJsonResponse(usageUrl, handle);
 	}
 
 	function getDeploymentProcess(octopusRoot, processUrl, handle)
 	{
 		var url = octopusRoot + processUrl;
-		console.debug("Getting deployment process: " + url);	
-		nanoajax.ajax(url, function(status, response){
-				console.debug("Received deployment process:" + url);
-				console.debug(response);
-				
-				var result = JSON.parse(response);
-				
-				handle(result);
-		});
+		getJsonResponse(url, handle);
 	}
 	
 	function postUpdatedDeploymentProcess(octopusRoot, process, handle)
@@ -87,7 +93,6 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	function notifyProcessUpdated(process, actionsUpdated, manualUpdates, sender)
 	{
 		console.debug("Notifying tab of updated process");
-		console.debug(sender);
 		chrome.tabs.sendMessage(sender.tab.id, {message: "process-updated", process: process, actionIdsUpdated: actionsUpdated, actionsNotUpdated: manualUpdates});
 	}
 	
@@ -95,7 +100,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	{
 		return (typeof parameter.DefaultValue) != "undefined"
 			&& parameter.DefaultValue !== null
-			&& parameter.DefaultValue !== "";	
+			&& parameter.DefaultValue !== "";
 	}
 	
 	function isNewParameterWithNoDefaultValue(parameter, action)
@@ -104,7 +109,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 			&& !(parameter.Name in action.Properties);
 	}
 	
-	function updateDeploymentProcessTemplate(octopusRoot, process, template, sender)
+	function updateDeploymentProcessTemplate(octopusRoot, process, template, sender, updated, updateManually, noUpdate)
 	{
 		console.debug("Updating deployment process template");
 		var actionIdsUpdated = [];
@@ -155,13 +160,11 @@ pygmy3_0.stepTemplateUpdate = (function() {
 		}
 		
 		if(actionIdsUpdated.length > 0){
-			postUpdatedDeploymentProcess(octopusRoot, process, function(result){
-				notifyProcessUpdated(result, actionIdsUpdated, manualUpdates, sender);
-			});
+			updated(process, actionIdsUpdated, manualUpdates);
 		} else if (manualUpdates.length > 0){
-			notifyProcessUpdated(process, actionIdsUpdated, manualUpdates, sender);
+			updateManually(process, manualUpdates);
 		} else {
-			console.info("Deployment process for " + process.ProjectId + " was already up to date.");
+			noUpdate(process);
 		}
 	}
 	
@@ -171,6 +174,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	}
 
 	return {
-		setup: setup
+		setup: setup,
+		updateDeploymentProcessTemplate: updateDeploymentProcessTemplate
 	}
 })();

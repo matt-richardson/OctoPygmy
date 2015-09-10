@@ -6,6 +6,9 @@ env:
   global:
     - VERSION=1.2
 
+before_script:
+- phantomjs -v
+
 before_deploy:
 - zip -r bluefin.zip src/*
 - sed -i -e "s/{{version}}/${VERSION}/" .bintray.json
@@ -21,4 +24,4 @@ deploy:
   key:
     secure: XzfDrm01xN+qPkjS/7wKJPt9NkeKooLeLEUfPU+MwQj5ClWz3vl7LGuZ8uy5Aw+aSxEFhi0e+NjRcLaiBtu1Nmla9c0tMiZn9w6RFnuVWMJ6CWYpZwSOtnVZg8hDAxtV6sIM/75rVTLKyYuYtxAuXN5U00IIPcvkvZqgb/Wwcmg=
   on:
-    all_branches: 'true'
+    branch: 'master'

@@ -18,6 +18,7 @@ var pygmy3_0 = (function() {
 		
 		var content = document.getElementById(contentElementId);
 		
+		console.debug("Initializing features based upon options");
 		if(options.dashboard) this.dashboardCollapser.observe(content);
 		if(options.environments) this.environmentCollapser.observe(content);
 		if(options.machines) this.environmentFilter.observe(content);
