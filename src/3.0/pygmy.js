@@ -24,6 +24,7 @@ var pygmy3_0 = (function() {
 		if(options.machines) this.environmentFilter.observe(content);
 		if(options.libraryTemplate) this.integrateStepTemplateLibrary.observe(content);
 		if(options.updateAllTemplate) this.stepTemplateUpdater.observe(content);
+		this.stepVariablesViewer.observe(content);
 	}
 
 	return {

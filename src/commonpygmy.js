@@ -45,5 +45,12 @@ var commonpygmy = {
 	setNodePygmyId: function(node, pygmyId)
 	{
 		node.setAttribute(commonpygmy.pygmyIdAttributeName, pygmyId);
+	},
+	
+	generateNodeFromHtml: function(rawHtml)
+	{
+		var stub = document.createElement('div');
+		stub.innerHTML = rawHtml;
+		return stub.childNodes[0];
 	}
 }
