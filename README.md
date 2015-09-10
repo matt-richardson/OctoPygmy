@@ -1,4 +1,5 @@
-# OctoPygmy
+# Bluefin
+###(formerly OctoPygmy)
 
 A small Chrome extension for Octopus Deploy to provide some additional functions to the user interface.
 
