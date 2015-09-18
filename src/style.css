@@ -34,3 +34,8 @@ table.process-step-variables tbody tr {
 table.process-step-variables tbody tr.even {
 	background: #f4f4f4;
 }
+
+i.view-process-variables {
+	padding-left: 4px;
+	cursor: pointer;
+}

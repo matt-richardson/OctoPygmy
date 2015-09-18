@@ -10,14 +10,24 @@ pygmy3_0.stepVariablesViewer = (function() {
 		// node.querySelector("div[action-template=\"actionTemplate\"]");
 	}
 
-	function getTemplatParametersNode(node)
+	function getTemplatParametersNodes(node)
 	{
-		return node.querySelector("div[ng-repeat=\"parameter in actionTemplate.Parameters\"] div.controls");
+		return node.querySelectorAll("div[ng-repeat=\"parameter in actionTemplate.Parameters\"] div.controls");
 	}
 	
-	function generateTestTable()
+	function getTemplateParameterLabelNodes(node)
 	{
-		var raw = "<table class='process-step-variables' width='100%'>" +
+		return node.querySelectorAll("div[ng-repeat=\"parameter in actionTemplate.Parameters\"] label.control-label");
+	}
+	
+	function parameterIdentifier(text)
+	{
+		return text.toLowerCase().replace(/\W/,'-') + "-var-view";
+	}
+	
+	function generateTestTable(parameterId)
+	{
+		var raw = "<table class='process-step-variables " + parameterId + "' width='100%' style='display: none;'>" +
 			"<thead><tr>" +
 				"<td>Value</td>" +
 				"<td>Scope</td>" +
@@ -31,6 +41,24 @@ pygmy3_0.stepVariablesViewer = (function() {
 		return commonpygmy.generateNodeFromHtml(raw);
 	}
 	
+	function toggleVariablesView(e)
+	{
+		console.log("Toggle variables view...");
+		var parameterId = e.srcElement.attributes["parameter-id"].value;
+		var view = document.querySelector("table." + parameterId);
+		view.style.display = view.style.display == 'none' ? 'table' : 'none'
+	}
+	
+	function generateVariableViewButton(parameterId)
+	{
+		var raw = '<i parameter-id="' + parameterId + '" class="fa fa-cogs view-process-variables"></i>'
+		
+		var node = commonpygmy.generateNodeFromHtml(raw);
+		node.onclick = toggleVariablesView;
+		
+		return node;
+	}
+	
 	function nodeInsertion(nodes)
 	{
 		for (var i = 0; i < nodes.length; i++) {
@@ -42,7 +70,16 @@ pygmy3_0.stepVariablesViewer = (function() {
 				console.debug("Found step action template details section...");
 				console.debug(node);
 				
-				getTemplatParametersNode(node).appendChild(generateTestTable());
+				_.each(getTemplatParametersNodes(node), function(section) {
+					var parameterId = parameterIdentifier(section.parentElement.attributes["label"].value);
+					section.appendChild(generateTestTable(parameterId))
+				});
+				
+				_.each(getTemplateParameterLabelNodes(node), function(label) {
+					var parameterId = parameterIdentifier(label.parentElement.attributes["label"].value);
+					label.appendChild(generateVariableViewButton(parameterId));
+				});
+				
 				//node.firstElementChild.insertBefore(generateTestTable(), node.firstElementChild.firstElementChild.nextSibling);
 			}
 		}
