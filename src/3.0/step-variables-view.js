@@ -17,32 +17,16 @@ pygmy3_0.stepVariablesViewer = (function() {
 	
 	function generateTestTable()
 	{
-		var raw = "<table width='100%' style='font-size: 9pt'>" +
-			"<thead><tr style='background: #f4f4f4;'>" +
-				"<td style='padding: 8px; border-right: 1px solid silver'>Value</td>" +
-				"<td style='padding: 8px; border-right: 1px solid silver'>Scope</td>" +
+		var raw = "<table class='process-step-variables' width='100%'>" +
+			"<thead><tr>" +
+				"<td>Value</td>" +
+				"<td>Scope</td>" +
 			"</tr></thead>" +
 			"<tbody>" +
-			"<tr style='height: 28px; line-height: 20px'><td>A value</td><td>Scope,Scope2</td></tr>" +
-			"<tr style='background: #f4f4f4;'><td style='padding:4px'>A value</td><td>Scope,Scope2</td></tr>" +
+			"<tr><td>A value</td><td>Scope,Scope2</td></tr>" +
+			"<tr class='even'><td>A value</td><td>Scope,Scope2</td></tr>" +
 			"</tbody>" +
 			"</table>";
-		/*
-		var raw = "<div id='stepVariablesInUse'>" +
-				"<div class='slick-header-columns'>" +
-					"<div class='slick-header-column col-sm-4'><span class='slick-column-name'>Name</span></div>" +
-					"<div class='slick-header-column col-sm-4'><span class='slick-column-name'>Value</span></div>" +
-					"<div class='slick-header-column col-sm-4'><span class='slick-column-name'>Scope</span></div>" +
-				"</div>" +
-				"<div class='slick-viewport'>" +
-					"<div class='slick-row even'>" +
-						"<div class='slick-cell'>A name</div>" +
-						"<div class='slick-cell'>The value</div>" +
-						"<div class='slick-cell'>Scope,Scope2</div>" +
-					"</div>" +
-				"</div>" +
-			"</div>";
-		*/
 		
 		return commonpygmy.generateNodeFromHtml(raw);
 	}
