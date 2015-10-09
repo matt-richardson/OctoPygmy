@@ -62,7 +62,13 @@ Onc you have the feature fully developed then you will add the feature to the op
 	if(options.someFeature) this.someFeature.observe(content);
 ```
 
-Every feature must operate in this manner. This give's the user control over how much of Blue fin they will want to use.
+Every feature must operate in this manner. This give's the user control over how much of Blue fin they will want to use. Also, currently there are three `pygmy.js` files.
+
+* src/3.0/pygmy.js for features in Octopus Deploy 3.0
+* src/3.0/background/pygmy.js for background functionality in 3.0
+* src/octopygmy.js for features in Octopus Deploy 2.x
+
+I'd focus on 3.0 for now since that is the latest release. I don't have analytics on 2.x/3.0 usage of Blue fin yet.
 
 ###### Feature Options
 ###### Feature Analytics
