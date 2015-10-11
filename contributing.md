@@ -3,75 +3,30 @@
 Thank you for wanting to contribute. I'm sure we all have full time work and taking time out of your day to assist in the development of Blue fin is greatly appreciated.
 
 ### Creating features
-Every Blue fin feature is a separate javascript file pulled in via the manifest.js file. This allows the users to enable/disable each feature separately and for contributors to work on different things at the same time easily. The general pattern for each feature is the following:
+Every Blue fin feature is a separate javascript file pulled in via the manifest.js file. This allows the users to enable/disable each feature separately and for contributors to work on different things at the same time easily. The general pattern for each feature is the following (assuming for Octopus 3.x+):
 
-###### Feature file (some-feature.js)
-```
-pygmy3_0.someFeature = (function() {
-	/*
-		You're feature's variables and functions.
-	*/
+##### Feature logic
+* src/3.0/some-feature.js [Feature UI][]
+  * This is the content script portion that affects the UI
+* src/3.0/background/some-feature.js
+  * This is the background script part of the same feature if needed.
+* src/3.0/pygmy.js
+  * This file is where you hookup your new feature to the extension. You do not create this, just update it accordingly.
 
-	function nodeInsertion(nodes) {
-		for (var i = 0; i < nodes.length; i++) {
-			var node = nodes[i];
-			if (node.nodeType != 1) return; // Not an element just ignore.
+##### Feature Options
+So far all features have either been enabled/disabled. Having no individual options to set for a single feature. I hope that continues but if a feature does require individual options for the user then we can chat about how to handle it.
 
-			if (isAppropriateElementForFeature(node))
-			{
-				console.debug("Some message indicating you're loading the feature");
-				// Things here to start adding your feature.
-			}
-		}
-	}
+For now just be sure to update the `options.html` and `options.js` files to include your feature within them.
 
-	function observe(content) {
-		var observer = new MutationObserver(function(records) {
-			for (var i = 0; i < records.length; i++) {
-				nodeInsertion(records[i].addedNodes);
-			}
-		});
-		observer.observe(content, { childList: true, subtree: true, attributes: false, characterData: false});
+[Feature Options][not-done-yet]
 
-		chrome.runtime.onMessage.addListener(receiveMessage);
-	}
+##### Feature Analytics
+Analytics are processed by the background script messaging handler. If you send a message with a `name` property and a `properties` property then the background script will use the `name` as the event name and the `properties` as additional information for that event. **Do not** send personally identifiable information through analytics. No names of servers, environments, projects, etc. **Do** send the fact your feature was used and if you want in a specific way that helps understand usage.
 
-	return {
-		observe: observe
-	};
-})();
-```
-The `observe` function is called by Blue fin at startup for any page that is determined to be Octopus Deploy. The `content` parameter is the `#main-wrapper` element in Octopus Deploy 3.0. When you setup the `MutationObserver` on that element be aware that you are going to get events for everything that happens within Octopus Deploy. So your `nodeInsertion` needs to operate quickly. That is why the first thing done is to skip any non element nodes `node.nodeType != 1`. You are welcome to observe some other element if you want. However Octopus Deploy is an Angular app and so most of what you see on the web UI is not available at startup time.
+Since you won't have access to the analytics (since I stated I don't share the information on the options screen) you can skip this part if you want. I can fill it in. I may mention usage online from time to time but it's extremely vague using terms such as 'a lot', 'country x', etc. Not enough to identify anyone.
 
-The most difficult thing of any new feature will be figuring out the correct element to look for during the `nodeInsertion` process. It depends on how the Angular views are setup. So you will experience a **lot** of experimentation to find the correct node to test for. You will most likely then have to traverse the node tree a bit to get to the node you want to manipulate for your feature. I highly recommend checking the existing features to see what they look for. Don't be afraid to use console.debug a lot. There is an option in Blue fin that will turn that off for the users so debug logging won't affect performance during real usage.
-
-###### Main feature hookup
-Each feature file is independent of all the others, the `pygmy.js` file is how they all get hooked up into Octopus Deploy.
-
-While initially developing your feature just add the following to the end of the `setup` function in `pygmy.js`
-
-```
-	this.someFeature.observe(content);
-```
-
-You won't need to mess with anything else in the `pymgy.js` file as it's only checking for the existence of Octopus Deploy.
-
-Onc you have the feature fully developed then you will add the feature to the options page (see next section) but in `pygmy.js` you will need to put that above statement inside an if.
-
-```
-	if(options.someFeature) this.someFeature.observe(content);
-```
-
-Every feature must operate in this manner. This give's the user control over how much of Blue fin they will want to use. Also, currently there are three `pygmy.js` files.
-
-* src/3.0/pygmy.js for features in Octopus Deploy 3.0
-* src/3.0/background/pygmy.js for background functionality in 3.0
-* src/octopygmy.js for features in Octopus Deploy 2.x
-
-I'd focus on 3.0 for now since that is the latest release. I don't have analytics on 2.x/3.0 usage of Blue fin yet.
-
-###### Feature Options
-###### Feature Analytics
 
 ### Inconsistencies
 This project (like many) was started because I needed to solve a problem (many projects/machines). I was not as consistent as I have been in the naming and code style. If you find an inconsistency try to find the other examples and go with the style that is used most, try to focus on the style used in the 3.0 folder. Or just ask a question on the github issue.
+
+[Feature UI]: contributing-feature-ui.md
