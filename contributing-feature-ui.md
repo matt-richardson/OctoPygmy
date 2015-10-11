@@ -18,7 +18,7 @@ pygmy3_0.someFeature = (function() {
 			var node = nodes[i];
 			if (node.nodeType != 1) return; // Not an element just ignore.
 
-			if (isAppropriateElementForFeature(node))
+			if (yourFunctionToDetermineIfThisIsTheNodeForYourFeature(node))
 			{
 				console.debug("Some message indicating you're loading the feature");
 				// Things here to start adding your feature.
