@@ -17,6 +17,7 @@
       "3.0/environment-filter.js",
       "3.0/integrate-step-template-library.js",
       "3.0/step-template-updater.js",
+      "3.0/clone-step.js",
       "octopygmy.js",
       "dashboard-collapser.js",
       "environment-collapser.js",
@@ -37,7 +38,7 @@
   },
 
   "background": {
-    "scripts": ["underscore-min.js", "3.0/background/pygmy.js", "3.0/background/step-template-update.js", "metrics.js","mixpanel.js","nanoajax.min.js"],
+    "scripts": ["underscore-min.js", "3.0/background/pygmy.js", "3.0/background/step-template-update.js", "3.0/background/clone-step-handler.js", "metrics.js","mixpanel.js","nanoajax.min.js"],
     "persistent": false
   },
 
