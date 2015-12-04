@@ -22,16 +22,23 @@ pygmy3_0.cloneStepHandler = (function() {
 				response.Steps.push(newStep);
 
 				nanoajax.ajax({url: url, method: "PUT", body: JSON.stringify(response)}, function(status, response){
-					console.debug("Received update reponse:" + url);
+					console.debug("Received put reponse:" + url);
 					console.debug(response);
 
 					var result = JSON.parse(response);
-					debugger;
-					//handle(result);
+					var response;
+					if (status == 200 ) {
+						response = { message: 'clone-step-response', properties: { status: 'success', stepId: stepId, deploymentProcessId: deploymentProcessId }};
+					}
+					else {
+						response = { message: 'clone-step-response', properties: { status: 'failure', errorMessage: result.ErrorMessage, errors: result.Errors }}
+					}
+					console.log('sending clone-step-response: ' + response);
+					sendResponse(response);
 				});
 			});
 
-
+			return true; // see https://developer.chrome.com/extensions/runtime#event-onMessageExternal
 		}
 	}
 

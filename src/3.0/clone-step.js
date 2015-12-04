@@ -1,8 +1,23 @@
 pygmy3_0.cloneStep = (function() {
-    var cloneStepMetaDataAdded = false;
+    function receiveMessage(response) {
+        if (response.message == 'clone-step-response') {
+            console.log('got a clone-step-response message');
 
-    function receiveMessage(message) {
-        // Handle the message from the background script here
+            var refreshHandler = document.querySelector("#bluefin-clonestep-refreshbutton");
+            refreshHandler.attributes['status'].value = response.properties.status;
+
+            if (response.properties.status == 'success') {
+                message = '';
+            }
+            else {
+                message = 'Failed to clone the step. ' + response.properties.errorMessage + " ";
+                for(var i = 0; i < response.properties.errors.length; i++) {
+                    message += response.properties.errors[i];
+                }
+            }
+            refreshHandler.attributes['message'].value = message;
+            refreshHandler.click();
+        }
     }
 
     function isProcessEditDropdown(node) {
@@ -13,8 +28,8 @@ pygmy3_0.cloneStep = (function() {
         var menuItem = this;
         var stepId = this.parentElement.attributes["data-step-id"].value;
         var deploymentProcessId = this.parentElement.attributes["data-deployment-process-id"].value;
-        console.debug("sending clone-step message for " + stepId);
-        chrome.runtime.sendMessage({ message: 'clone-step', properties: { stepId: stepId, deploymentProcessId: deploymentProcessId }});
+        console.debug("sending clone-step message for step " + stepId);
+        chrome.runtime.sendMessage({ message: 'clone-step', properties: { stepId: stepId, deploymentProcessId: deploymentProcessId }}, receiveMessage);
     }
 
     function addCloneStepMenuItem() {
@@ -32,26 +47,54 @@ pygmy3_0.cloneStep = (function() {
     }
 
     function addCloneStepMetaData() {
-        console.debug("Adding step id to dropdown template")
+        console.debug(" - adding step id and deploymentprocess id to dropdown template")
         var template = document.getElementById('processEditDropdown');
         template.text = template.text.replace(
           '<ul class="dropdown-menu" role="menu">',
           '<ul class="dropdown-menu" role="menu" data-step-id="{{step.Id}}" data-deployment-process-id="{{project.DeploymentProcessId}}">');
     }
 
-    function nodeMutated(node) {
-        if (!cloneStepMetaDataAdded && node.querySelector("#processEditDropdown")) {
-            console.debug("Loading Blue fin feature 'clone step'");
-            addCloneStepMetaData();
-            cloneStepMetaDataAdded = true;
-        }
+    function addCloneStepRefreshHandler() {
+        if (!document.getElementById('bluefin-clonestep-refreshbutton')) {
+            console.debug(" - creating refresh handler element")
+            var span = document.createElement('span');
+            span.id = 'bluefin-clonestep-refreshbutton';
 
+            var attribute = document.createAttribute("status");
+            attribute.value = "";
+            span.setAttributeNode(attribute);
+
+            attribute = document.createAttribute("message");
+            attribute.value = "";
+            span.setAttributeNode(attribute);
+
+            document.body.appendChild(span);
+
+            console.debug(" - creating refresh handler script")
+            var script = document.createElement("script");
+            script.id = 'bluefin-clonestep-refreshhandler';
+            script.type = 'text/javascript';
+            script.text = "document.querySelector('#bluefin-clonestep-refreshbutton').onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Clone Step Failed', this.attributes['message'].value, [{label: 'ok'}]);} } "
+            document.body.appendChild(script);
+        }
+    }
+
+    function addCloneStepMenuItems(node) {
         var nodes = node.querySelectorAll("DIV.menu-button A[external-dropdown]");
         for(i = 0; i < nodes.length; i++ ) {
             if (nodes[i].attributes['external-dropdown'].value == "{id: 'processEditDropdown', scope: { step: step, action: step.Actions[0] } }") {
-              nodes[i].onclick = addCloneStepMenuItem;
+                nodes[i].onclick = addCloneStepMenuItem;
             }
         }
+    }
+
+    function nodeMutated(node) {
+        if (node.querySelector("#processEditDropdown")) {
+            console.debug("Loading Blue fin feature 'clone step'");
+            addCloneStepMetaData();
+            addCloneStepRefreshHandler();
+        }
+        addCloneStepMenuItems(node);
     }
 
     function nodesMutated(nodes) {
@@ -65,22 +108,15 @@ pygmy3_0.cloneStep = (function() {
     function observe(content) {
         var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
-                if (mutation.type == 'childList') {
-                    nodesMutated(mutation.addedNodes);
-                }
-                else {
-                    console.error("Unexpected node mutation type '" + mutation.type + "'")
-                }
+                nodesMutated(mutation.addedNodes);
             });
         });
         observer.observe(content, { childList: true, subtree: true, attributes: false, characterData: false});
 
-        // Only use this if you have a background script that will process messages and respond to this content script.
         chrome.runtime.onMessage.addListener(receiveMessage);
     }
 
     return {
-        // This is the only function that is required of all features. It's what is used in pygmy.js upon startup.
         observe: observe
     };
 })();
