@@ -1,4 +1,18 @@
 describe("clone-step-handler", function() {
+	var originalConsoleDebug;
+	var originalConsoleLog;
+
+	beforeEach(function () {
+		originalConsoleDebug = console.debug;
+		originalConsoleLog = console.log;
+		console.debug = function() {};
+		console.log = function() {};
+	});
+
+	afterEach(function() {
+		console.debug = originalConsoleDebug;
+		console.log = originalConsoleLog
+	});
 
 	describe("cloneStep", function () {
 
