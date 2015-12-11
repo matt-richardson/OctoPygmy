@@ -24,7 +24,7 @@ pygmy3_0.cloneStep = (function() {
         return (node.tagName == 'SCRIPT' && node.id == 'processEditDropdown');
     }
 
-    function cloneStep(sendMessageHandler, receiveMessageHandler) {
+    function cloneStep(sender, sendMessageHandler, receiveMessageHandler) {
         var menuItem = this;
         var stepId = this.parentElement.attributes["data-step-id"].value;
         var deploymentProcessId = this.parentElement.attributes["data-deployment-process-id"].value;
