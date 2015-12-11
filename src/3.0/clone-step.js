@@ -3,16 +3,16 @@ pygmy3_0.cloneStep = (function() {
         if (response.message == 'clone-step-response') {
             console.log('got a clone-step-response message');
 
-            var refreshHandler = document.querySelector("#bluefin-clonestep-refreshbutton");
+            var refreshHandler = document.getElementById("bluefin-clonestep-refreshbutton");
             refreshHandler.attributes['status'].value = response.properties.status;
 
             if (response.properties.status == 'success') {
                 message = '';
             }
             else {
-                message = 'Failed to clone the step. ' + response.properties.errorMessage + " ";
+                message = 'Failed to clone the step. ' + response.properties.errorMessage;
                 for(var i = 0; i < response.properties.errors.length; i++) {
-                    message += response.properties.errors[i];
+                    message += ' ' + response.properties.errors[i];
                 }
             }
             refreshHandler.attributes['message'].value = message;
@@ -24,12 +24,16 @@ pygmy3_0.cloneStep = (function() {
         return (node.tagName == 'SCRIPT' && node.id == 'processEditDropdown');
     }
 
-    function cloneStep() {
+    function cloneStep(sendMessageHandler, receiveMessageHandler) {
         var menuItem = this;
         var stepId = this.parentElement.attributes["data-step-id"].value;
         var deploymentProcessId = this.parentElement.attributes["data-deployment-process-id"].value;
         console.debug("sending clone-step message for step " + stepId);
-        chrome.runtime.sendMessage({ message: 'clone-step', properties: { stepId: stepId, deploymentProcessId: deploymentProcessId }}, receiveMessage);
+
+        sendMessageHandler = sendMessageHandler || chrome.runtime.sendMessage;
+        receiveMessageHandler = receiveMessageHandler || receiveMessage;
+
+        sendMessageHandler({ message: 'clone-step', properties: { stepId: stepId, deploymentProcessId: deploymentProcessId }}, receiveMessageHandler);
     }
 
     function addCloneStepMenuItem() {
@@ -74,7 +78,7 @@ pygmy3_0.cloneStep = (function() {
             var script = document.createElement("script");
             script.id = 'bluefin-clonestep-refreshhandler';
             script.type = 'text/javascript';
-            script.text = "document.querySelector('#bluefin-clonestep-refreshbutton').onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Clone Step Failed', this.attributes['message'].value, [{label: 'ok'}]);} } "
+            script.text = "document.querySelector('#bluefin-clonestep-refreshbutton').onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Clone Step Failed', this.attributes['message'].value, [{label: 'ok'}]);} }";
             document.body.appendChild(script);
         }
     }
@@ -117,6 +121,12 @@ pygmy3_0.cloneStep = (function() {
     }
 
     return {
-        observe: observe
+        observe: observe,
+        receiveMessage: receiveMessage,
+        cloneStep: cloneStep,
+        addCloneStepMetaData: addCloneStepMetaData,
+        addCloneStepMenuItem: addCloneStepMenuItem,
+        addCloneStepRefreshHandler: addCloneStepRefreshHandler,
+        addCloneStepMenuItems : addCloneStepMenuItems
     };
 })();
