@@ -16,7 +16,10 @@ pygmy3_0.cloneStep = (function() {
                 }
             }
             refreshHandler.attributes['message'].value = message;
-            refreshHandler.click();
+            if (refreshHandler.onClick)
+                refreshHandler.onClick();
+            else
+                refreshHandler.click();
         }
     }
 
@@ -46,7 +49,7 @@ pygmy3_0.cloneStep = (function() {
 
         newMenuItem = document.createElement('li')
         newMenuItem.innerHTML = '<a tabindex="-1">Clone</a>'
-        newMenuItem.onclick = cloneStep;
+        newMenuItem.onClick = newMenuItem.onclick =cloneStep;
         menu.appendChild(newMenuItem);
     }
 
@@ -78,7 +81,7 @@ pygmy3_0.cloneStep = (function() {
             var script = document.createElement("script");
             script.id = 'bluefin-clonestep-refreshhandler';
             script.type = 'text/javascript';
-            script.text = "document.querySelector('#bluefin-clonestep-refreshbutton').onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Clone Step Failed', this.attributes['message'].value, [{label: 'ok'}]);} }";
+            script.text = "var button = document.querySelector('#bluefin-clonestep-refreshbutton'); button.onClick = button.onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Clone Step Failed', this.attributes['message'].value, [{label: 'ok'}]);} }";
             document.body.appendChild(script);
         }
     }
@@ -87,7 +90,7 @@ pygmy3_0.cloneStep = (function() {
         var nodes = node.querySelectorAll("DIV.menu-button A[external-dropdown]");
         for(i = 0; i < nodes.length; i++ ) {
             if (nodes[i].attributes['external-dropdown'].value == "{id: 'processEditDropdown', scope: { step: step, action: step.Actions[0] } }") {
-                nodes[i].onclick = addCloneStepMenuItem;
+                nodes[i].onClick = nodes[i].onclick = addCloneStepMenuItem;
             }
         }
     }

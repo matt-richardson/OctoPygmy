@@ -32,14 +32,16 @@ describe("clone-step", function() {
     afterEach(function() {
       span = document.getElementById('bluefin-clonestep-refreshbutton');
       if (span) {
+        if (span.remove)
           span.remove();
+        else
+          span.parentNode.removeChild(span);
       }
     });
 
     it("calls the refresh handler, and sets message to blank if status is successful", function() {
-      
       var called = false;
-      span.onclick = function() { called = true; };
+      span.onClick = function() { called = true; };
 
       var response = { 'message': 'clone-step-response',  'properties': { 'status': 'success' } };
 
@@ -53,7 +55,7 @@ describe("clone-step", function() {
     it("calls the refresh handler, and sets message if status is not successful", function() {
       
       var called = false;
-      span.onclick = function() { called = true; };
+      span.onClick = function() { called = true; };
 
       var response = { 'message': 'clone-step-response',  'properties': { 'status': 'failure', 'errorMessage': 'the error message', 'errors': [ "error1", "error2" ] } };
 
@@ -104,7 +106,10 @@ describe("clone-step", function() {
       expect(ul.children[1].className).toEqual('divider');
       expect(ul.children[2].innerHTML).toEqual('<a tabindex="-1">Clone</a>');
 
-      ul.remove();
+      if (ul.remove) 
+        ul.remove();
+      else
+        ul.parentNode.removeChild(ul);
     });
   });
 
@@ -135,7 +140,7 @@ describe("clone-step", function() {
       var script = document.querySelector('#bluefin-clonestep-refreshhandler');
       expect(script).not.toBe(null);
       expect(script.type).toEqual("text/javascript");
-      expect(script.text).toEqual("document.querySelector('#bluefin-clonestep-refreshbutton').onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Clone Step Failed', this.attributes['message'].value, [{label: 'ok'}]);} }");
+      expect(script.text).toEqual("var button = document.querySelector('#bluefin-clonestep-refreshbutton'); button.onClick = button.onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Clone Step Failed', this.attributes['message'].value, [{label: 'ok'}]);} }");
     });
 
     it("doesn't add the handler twice", function() {
