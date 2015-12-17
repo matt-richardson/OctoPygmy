@@ -48,7 +48,7 @@ pygmy3_0.cloneStep = (function() {
         menu.appendChild(newMenuItem);
 
         newMenuItem = document.createElement('li')
-        newMenuItem.innerHTML = '<a tabindex="-1">Clone</a>'
+        newMenuItem.innerHTML = '<a tabindex="-1" href="">Clone</a>'
         newMenuItem.onClick = newMenuItem.onclick =cloneStep;
         menu.appendChild(newMenuItem);
     }
