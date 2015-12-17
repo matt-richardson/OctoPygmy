@@ -104,7 +104,7 @@ describe("clone-step", function() {
       ul = document.querySelector("ul.dropdown-menu[role='menu']");
       expect(ul.children.length).toEqual(3);
       expect(ul.children[1].className).toEqual('divider');
-      expect(ul.children[2].innerHTML).toEqual('<a tabindex="-1">Clone</a>');
+      expect(ul.children[2].innerHTML).toEqual('<a tabindex="-1" href="">Clone</a>');
 
       if (ul.remove) 
         ul.remove();
