@@ -9,6 +9,10 @@ describe("step-template-update", function() {
     process = {};
   });
 
+  afterEach(function() {
+    console.debug = originalDebug;
+  })
+
   describe("when updating the actions", function() {
     var template;
     
