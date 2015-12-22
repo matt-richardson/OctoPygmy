@@ -36,6 +36,7 @@ pygmy3_0.cloneStep = (function() {
         sendMessageHandler = sendMessageHandler || chrome.runtime.sendMessage;
         receiveMessageHandler = receiveMessageHandler || receiveMessage;
 
+        sendMessageHandler({ name: 'clone-step', properties: {} }); // Analytics
         sendMessageHandler({ message: 'clone-step', properties: { stepId: stepId, deploymentProcessId: deploymentProcessId }}, receiveMessageHandler);
         return false;
     }

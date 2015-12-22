@@ -3,7 +3,7 @@
 
   "name": "Blue fin",
   "description": "Eases the management of large installations of targets and projects in Octopus Deploy",
-  "version": "1.2.2",
+  "version": "1.3.4",
   "author": "David Roberts (@davidroberts63)",
   "homepage_url": "https://davidroberts63.github.io/OctoPygmy",
   "content_scripts": [
