@@ -37,6 +37,7 @@ pygmy3_0.cloneStep = (function() {
         receiveMessageHandler = receiveMessageHandler || receiveMessage;
 
         sendMessageHandler({ message: 'clone-step', properties: { stepId: stepId, deploymentProcessId: deploymentProcessId }}, receiveMessageHandler);
+        return false;
     }
 
     function addCloneStepMenuItem() {

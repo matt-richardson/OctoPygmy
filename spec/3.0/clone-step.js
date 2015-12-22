@@ -80,10 +80,11 @@ describe("clone-step", function() {
       attributes['data-deployment-process-id'] = { 'value': '456' };
       var scope = { 'parentElement': { 'attributes' : attributes }};
 
-      pygmy3_0.cloneStep.cloneStep.apply(scope, [{}, sendMessage, receiveMessage]);
+      var result = pygmy3_0.cloneStep.cloneStep.apply(scope, [{}, sendMessage, receiveMessage]);
       expect(actualMessage.message).toBe('clone-step');
       expect(actualMessage.properties.stepId).toBe('123');
       expect(actualMessage.properties.deploymentProcessId).toBe('456');
+      expect(result).toBe(false); //needs to be false to prevent browser navigate
     });      
   });
 
