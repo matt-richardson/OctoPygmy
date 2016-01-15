@@ -56,8 +56,8 @@ describe("clone-step-handler", function() {
 	});
 
 	describe("handleCloneStepRequest", function () {
-		it("extracts parameters, requests json, then calls handleGetResponse function", function() {
-			var request = { "properties": { "stepId" : "123", "deploymentProcessId" : "456"}}
+		it("when cloning a step, it extracts parameters, requests json, then calls handleGetResponse function", function() {
+			var request = { "properties": { "stepId" : "123", "actionId": "789", "deploymentProcessId" : "456"}}
 			var octopusRoot = "http://baseUrl";
 			var sendResponse = "sendResponse";
 			var expectedUrl = "http://baseUrl/api/deploymentprocesses/456";
@@ -65,10 +65,34 @@ describe("clone-step-handler", function() {
 				expect(url).toEqual(expectedUrl);
 				responseFunc("response");
 			}
-			function fakeHandleGetResponse(response, sendResponse, stepId, deploymentProcessId, url, putJsonRequest) {
+			function fakeHandleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, url, putJsonRequest) {
 				expect(response).toEqual("response");
 				expect(sendResponse).toEqual("sendResponse");
 				expect(stepId).toEqual("123");
+				expect(actionId).toEqual("789")
+				expect(deploymentProcessId).toEqual("456");
+				expect(url).toEqual(expectedUrl);
+				expect(putJsonRequest).toEqual(fakePutJsonRequest);
+			 }
+			 function fakePutJsonRequest() { }
+
+			pygmy3_0.cloneStepHandler.handleCloneStepRequest(request, sendResponse, octopusRoot, fakeGetJsonResponse, fakeHandleGetResponse, fakePutJsonRequest);
+		});
+
+		it("when cloning a child step, it extracts parameters, requests json, then calls handleGetResponse function", function() {
+			var request = { "properties": { "stepId" : "123", "actionId": undefined, "deploymentProcessId" : "456"}}
+			var octopusRoot = "http://baseUrl";
+			var sendResponse = "sendResponse";
+			var expectedUrl = "http://baseUrl/api/deploymentprocesses/456";
+			function fakeGetJsonResponse(url, responseFunc) {
+				expect(url).toEqual(expectedUrl);
+				responseFunc("response");
+			}
+			function fakeHandleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, url, putJsonRequest) {
+				expect(response).toEqual("response");
+				expect(sendResponse).toEqual("sendResponse");
+				expect(stepId).toEqual("123");
+				expect(actionId).toEqual(undefined);
 				expect(deploymentProcessId).toEqual("456");
 				expect(url).toEqual(expectedUrl);
 				expect(putJsonRequest).toEqual(fakePutJsonRequest);
@@ -97,20 +121,25 @@ describe("clone-step-handler", function() {
 			};
 			var sendResponse = "";
 			var stepId = "123";
+			var actionId = undefined;
 			var deploymentProcessId = "456";
 			var theUrl = "http://octopus.example.org"
 			function fakePutJsonRequestHandler(url, putResponse, putJsonRequestHandler) {
 				expect(url).toEqual(theUrl);
 				expect(putResponse.Steps.length).toEqual(3);
+				expect(putResponse.Steps[0].Actions.length).toEqual(1);
+				expect(putResponse.Steps[1].Actions.length).toEqual(1);
+				expect(putResponse.Steps[2].Actions.length).toEqual(1);
+
 				expect(putResponse.Steps[2].Id).toEqual("");
 				expect(putResponse.Steps[2].Name).toEqual("Step 1 - clone");
 				expect(putResponse.Steps[2].Actions[0].Id).toEqual("");
 				expect(putResponse.Steps[2].Actions[0].Name).toEqual("Action 1 - clone");
 			}
-			pygmy3_0.cloneStepHandler.handleGetResponse(response, sendResponse, stepId, deploymentProcessId, theUrl, fakePutJsonRequestHandler);
+			pygmy3_0.cloneStepHandler.handleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, theUrl, fakePutJsonRequestHandler);
 		});
 
-		it("handles naming clash", function () {
+		it("handles step naming clash", function () {
 			var response = {
 				'Steps': [
 					{
@@ -127,17 +156,83 @@ describe("clone-step-handler", function() {
 			};
 			var sendResponse = "";
 			var stepId = "123";
+			var actionId = undefined;			
 			var deploymentProcessId = "456";
 			var theUrl = "http://octopus.example.org"
 			function fakePutJsonRequestHandler(url, putResponse, putJsonRequestHandler) {
 				expect(url).toEqual(theUrl);
 				expect(putResponse.Steps.length).toEqual(3);
+				expect(putResponse.Steps[0].Actions.length).toEqual(1);
+				expect(putResponse.Steps[1].Actions.length).toEqual(1);
+				expect(putResponse.Steps[2].Actions.length).toEqual(1);
 				expect(putResponse.Steps[2].Id).toEqual("");
 				expect(putResponse.Steps[2].Name).toEqual("Step 1 - clone (1)");
 				expect(putResponse.Steps[2].Actions[0].Id).toEqual("");
 				expect(putResponse.Steps[2].Actions[0].Name).toEqual("Action 1 - clone (1)");
 			}
-			pygmy3_0.cloneStepHandler.handleGetResponse(response, sendResponse, stepId, deploymentProcessId, theUrl, fakePutJsonRequestHandler);
+			pygmy3_0.cloneStepHandler.handleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, theUrl, fakePutJsonRequestHandler);
+		});
+
+		it("adds new acton, and calls put handler", function() {
+			var response = {
+				'Steps': [
+					{
+						'Id': '123',
+						'Name': 'Step 1',
+						'Actions': [ { 'Id': '111',  'Name': 'Action 1' } ]
+					},
+					{
+						'Id': '124',
+						'Name': 'Step 2',
+						'Actions': [ { 'Id': '222', 'Name': 'Action 2' } ]
+					}
+				]
+			};
+			var sendResponse = "";
+			var stepId = "123";
+			var actionId = "111";
+			var deploymentProcessId = "456";
+			var theUrl = "http://octopus.example.org"
+			function fakePutJsonRequestHandler(url, putResponse, putJsonRequestHandler) {
+				expect(url).toEqual(theUrl);
+				expect(putResponse.Steps.length).toEqual(2);
+				expect(putResponse.Steps[0].Actions.length).toEqual(2);
+				expect(putResponse.Steps[1].Actions.length).toEqual(1);
+				expect(putResponse.Steps[0].Actions[1].Id).toEqual("");
+				expect(putResponse.Steps[0].Actions[1].Name).toEqual("Action 1 - clone");
+			}
+			pygmy3_0.cloneStepHandler.handleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, theUrl, fakePutJsonRequestHandler);
+		});
+
+		it("handles action naming clash", function () {
+			var response = {
+				'Steps': [
+					{
+						'Id': '123',
+						'Name': 'Step 1',
+						'Actions': [ { 'Id': '111',  'Name': 'Action 1' } ]
+					},
+					{
+						'Id': '124',
+						'Name': 'Step 1 - clone',
+						'Actions': [ { 'Id': '222', 'Name': 'Action 1 - clone' } ]
+					}
+				]
+			};
+			var sendResponse = "";
+			var stepId = "123";
+			var actionId = "111";
+			var deploymentProcessId = "456";
+			var theUrl = "http://octopus.example.org"
+			function fakePutJsonRequestHandler(url, putResponse, putJsonRequestHandler) {
+				expect(url).toEqual(theUrl);
+				expect(putResponse.Steps.length).toEqual(2);
+				expect(putResponse.Steps[0].Actions.length).toEqual(2);
+				expect(putResponse.Steps[1].Actions.length).toEqual(1);
+				expect(putResponse.Steps[0].Actions[1].Id).toEqual("");
+				expect(putResponse.Steps[0].Actions[1].Name).toEqual("Action 1 - clone (1)");
+			}
+			pygmy3_0.cloneStepHandler.handleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, theUrl, fakePutJsonRequestHandler);
 		});
 	});
 
