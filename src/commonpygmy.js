@@ -27,7 +27,7 @@ var commonpygmy = {
 		for(var i = 0; i < allIds.length; i++)
 		{
 			var id = allIds[i];
-			var items = commonpygmy.theDocument.querySelectorAll('[' + commonpygmy.pygmyIdAttributeName + '=' + id + ']');
+			var items = commonpygmy.theDocument.querySelectorAll('[' + commonpygmy.pygmyIdAttributeName + '=z' + id + ']');
 			for(var index = 0; index < items.length; index++) {
 				var item = items[index];
 				if (showAll || idsToShow.indexOf(id) >= 0)
@@ -44,6 +44,6 @@ var commonpygmy = {
 
 	setNodePygmyId: function(node, pygmyId)
 	{
-		node.setAttribute(commonpygmy.pygmyIdAttributeName, pygmyId);
+		node.setAttribute(commonpygmy.pygmyIdAttributeName, "z" + pygmyId);
 	}
 }
