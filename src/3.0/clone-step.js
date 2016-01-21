@@ -30,14 +30,17 @@ pygmy3_0.cloneStep = (function() {
     function cloneStep(sender, sendMessageHandler, receiveMessageHandler) {
         var menuItem = this;
         var stepId = this.parentElement.attributes["data-step-id"].value;
+
+        var isAction = this.parentElement.attributes["data-is-child"].value == 'true';
+        var actionId = isAction ? this.parentElement.attributes["data-action-id"].value : undefined;
         var deploymentProcessId = this.parentElement.attributes["data-deployment-process-id"].value;
-        console.debug("sending clone-step message for step " + stepId);
+        console.debug("sending clone-step message for stepId '" + stepId + "', actionId = '" + actionId + "'");
 
         sendMessageHandler = sendMessageHandler || chrome.runtime.sendMessage;
         receiveMessageHandler = receiveMessageHandler || receiveMessage;
 
         sendMessageHandler({ name: 'clone-step', properties: {} }); // Analytics
-        sendMessageHandler({ message: 'clone-step', properties: { stepId: stepId, deploymentProcessId: deploymentProcessId }}, receiveMessageHandler);
+        sendMessageHandler({ message: 'clone-step', properties: { stepId: stepId, actionId: actionId, deploymentProcessId: deploymentProcessId }}, receiveMessageHandler);
         return false;
     }
 
@@ -45,13 +48,19 @@ pygmy3_0.cloneStep = (function() {
         console.debug("Adding clone menu item to dropdown menu")
         var menu = document.querySelector("ul.dropdown-menu[role='menu']");
 
+        //ensure we dont add the menu twice
+        for(i = 0; i < menu.children.length; i++ ) {
+            if (menu.children[i].innerText == 'Clone')
+                return;
+        }
+
         var newMenuItem = document.createElement('li')
         newMenuItem.className = 'divider';
         menu.appendChild(newMenuItem);
 
         newMenuItem = document.createElement('li')
         newMenuItem.innerHTML = '<a tabindex="-1" href="">Clone</a>'
-        newMenuItem.onClick = newMenuItem.onclick =cloneStep;
+        newMenuItem.onClick = newMenuItem.onclick = cloneStep;
         menu.appendChild(newMenuItem);
     }
 
@@ -60,7 +69,7 @@ pygmy3_0.cloneStep = (function() {
         var template = document.getElementById('processEditDropdown');
         template.text = template.text.replace(
           '<ul class="dropdown-menu" role="menu">',
-          '<ul class="dropdown-menu" role="menu" data-step-id="{{step.Id}}" data-deployment-process-id="{{project.DeploymentProcessId}}">');
+          '<ul class="dropdown-menu" role="menu" data-step-id="{{step.Id}}" data-deployment-process-id="{{project.DeploymentProcessId}}" data-action-id="{{action.Id}}" data-is-child="{{isChild}}">');
     }
 
     function addCloneStepRefreshHandler() {
@@ -89,10 +98,16 @@ pygmy3_0.cloneStep = (function() {
     }
 
     function addCloneStepMenuItems(node) {
+        var normalStep = "{id: 'processEditDropdown', scope: { step: step, action: step.Actions[0] } }";
+        var parentStep = "{id: 'processEditDropdown', scope: { step: step } }";
+        var childStep = "{id: 'processEditDropdown', scope: { step: step, action: action, isChild: true } }";
+
         var nodes = node.querySelectorAll("DIV.menu-button A[external-dropdown]");
         for(i = 0; i < nodes.length; i++ ) {
-            if (nodes[i].attributes['external-dropdown'].value == "{id: 'processEditDropdown', scope: { step: step, action: step.Actions[0] } }") {
-                nodes[i].onClick = nodes[i].onclick = addCloneStepMenuItem;
+            var dropdownType = nodes[i].attributes['external-dropdown'].value
+            if ((dropdownType == normalStep) || (dropdownType == parentStep) || (dropdownType == childStep)) {
+                var oldClickHandler = nodes[i].onclick;
+                nodes[i].onClick = nodes[i].onclick = function() { if (oldClickHandler) oldClickHandler(); addCloneStepMenuItem(); }
             }
         }
     }

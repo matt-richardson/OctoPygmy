@@ -23,36 +23,64 @@ pygmy3_0.cloneStepHandler = (function() {
 		}).length > 0;
 	}
 
-	function handleGetResponse(response, sendResponse, stepId, deploymentProcessId, url, putJsonRequest)
-	{
-		var step = response.Steps.filter(function(step) { return step.Id == stepId })[0];
-		var newStep = JSON.parse(JSON.stringify(step));
-		newStep.Id = "";
-
+	function getNewStepName(steps, newStep) { 
 		var suffix = " - clone";
 		var counter = 0;
-		while (stepNameExists(response.Steps, newStep.Name + suffix)) {
+		while (stepNameExists(steps, newStep.Name + suffix)) {
 			suffix = " - clone (" + ++counter + ")";
 		}
-		newStep.Name = newStep.Name + suffix
+		return newStep.Name + suffix
+	}
 
-		for(i = 0; i < newStep.Actions.length; i++) {
-			newStep.Actions[i].Id = "";
-			newStep.Actions[i].Name = newStep.Actions[i].Name + suffix
+	function actionNameExists(steps, name) {
+		return steps.filter(function(step) {
+			return (step.Name == name) || (step.Actions.filter(function(action) { return action.Name == name }).length > 0)
+		}).length > 0;
+	}
+
+	function getNewActionName(steps, newAction) {
+		var suffix = " - clone";
+		var counter = 0;
+		while (actionNameExists(steps, newAction.Name + suffix)) {
+			suffix = " - clone (" + ++counter + ")";
 		}
-		response.Steps.push(newStep);
+		return newAction.Name + suffix;
+	}
+
+	function handleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, url, putJsonRequest)
+	{
+		var step = response.Steps.filter(function(step) { return step.Id == stepId })[0];
+		
+		if (actionId) {
+			var action = step.Actions.filter(function(action) { return action.Id == actionId})[0];
+			var newAction = JSON.parse(JSON.stringify(action));
+			newAction.Id = "";
+			newAction.Name = getNewActionName(response.Steps, newAction)
+			step.Actions.push(newAction);
+		}
+		else {
+			var newStep = JSON.parse(JSON.stringify(step));
+			newStep.Id = "";
+			newStep.Name = getNewStepName(response.Steps, newStep);
+			for(i = 0; i < newStep.Actions.length; i++) {
+				newStep.Actions[i].Id = "";
+				newStep.Actions[i].Name = getNewActionName(response.Steps, newStep.Actions[i]);
+			}
+			response.Steps.push(newStep);
+		}
 
 		putJsonRequest(url, response, function (status, response) { handlePutResponse(status, response, sendResponse, stepId, deploymentProcessId); })
 	}
 
 	function handleCloneStepRequest(request, sendResponse, octopusRoot, getJsonResponse, handleGetResponse, putJsonRequest) {
 		var stepId = request.properties.stepId;
+		var actionId = request.properties.actionId;
 		var deploymentProcessId = request.properties.deploymentProcessId;
-		console.log("Cloning step with id '" + stepId + "', deploymentProcessId '" + deploymentProcessId + "'");
+		console.log("Cloning step with stepId '" + stepId + "', actionId '" + actionId + "', deploymentProcessId '" + deploymentProcessId + "'");
 
 		var url = octopusRoot + "/api/deploymentprocesses/" + deploymentProcessId;
 
-		var handler = function (response) { handleGetResponse(response, sendResponse, stepId, deploymentProcessId, url, putJsonRequest); };
+		var handler = function (response) { handleGetResponse(response, sendResponse, stepId, actionId, deploymentProcessId, url, putJsonRequest); };
 		getJsonResponse(url, handler);
 	}
 
