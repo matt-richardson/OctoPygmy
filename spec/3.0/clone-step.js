@@ -78,11 +78,14 @@ describe("clone-step", function() {
       var attributes = {};
       attributes['data-step-id'] = {'value': '123'};
       attributes['data-deployment-process-id'] = { 'value': '456' };
+      attributes['data-action-id'] = { 'value': '789' };
+      attributes['data-is-child'] = { 'value': 'true' };
       var scope = { 'parentElement': { 'attributes' : attributes }};
 
       var result = pygmy3_0.cloneStep.cloneStep.apply(scope, [{}, sendMessage, receiveMessage]);
       expect(actualMessage.message).toBe('clone-step');
       expect(actualMessage.properties.stepId).toBe('123');
+      expect(actualMessage.properties.actionId).toBe('789');
       expect(actualMessage.properties.deploymentProcessId).toBe('456');
       expect(result).toBe(false); //needs to be false to prevent browser navigate
     });      
@@ -124,7 +127,7 @@ describe("clone-step", function() {
       pygmy3_0.cloneStep.addCloneStepMetaData();
       script = document.getElementById('processEditDropdown');
 
-      expect(script.text).toEqual('<ul class="dropdown-menu" role="menu" data-step-id="{{step.Id}}" data-deployment-process-id="{{project.DeploymentProcessId}}">');
+      expect(script.text).toEqual('<ul class="dropdown-menu" role="menu" data-step-id="{{step.Id}}" data-deployment-process-id="{{project.DeploymentProcessId}}" data-action-id="{{action.Id}}" data-is-child="{{isChild}}">');
     });      
   });
 
@@ -152,7 +155,7 @@ describe("clone-step", function() {
   });
 
   describe("addCloneStepMenuItems", function() {
-    it("adds the onclick handler to all child drop downs", function() {
+    it("adds the onclick handler to all non-parent drop downs", function() {
       var div = document.createElement('div');
       div.className = 'menu-button';
       var link = document.createElement("a");
@@ -166,7 +169,24 @@ describe("clone-step", function() {
       pygmy3_0.cloneStep.addCloneStepMenuItems(document);
 
       link = document.getElementById('link1');
-      expect(link.onclick.toString()).toContain('function addCloneStepMenuItem()');
-    });      
+      expect(link.onclick.toString()).toContain('function () { if (oldClickHandler) oldClickHandler(); addCloneStepMenuItem(); }');
+    });
+
+    it("adds the onclick handler to all parent drop downs", function() {
+      var div = document.createElement('div');
+      div.className = 'menu-button';
+      var link = document.createElement("a");
+      link.id = 'link1';
+      var attrib = document.createAttribute("external-dropdown");
+      attrib.value = "{id: 'processEditDropdown', scope: { step: step } }";
+      link.setAttributeNode(attrib);
+      div.appendChild(link);
+      document.body.appendChild(div);
+
+      pygmy3_0.cloneStep.addCloneStepMenuItems(document);
+
+      link = document.getElementById('link1');
+      expect(link.onclick.toString()).toContain('function () { if (oldClickHandler) oldClickHandler(); addCloneStepMenuItem(); }');
+    });
   });
 });
