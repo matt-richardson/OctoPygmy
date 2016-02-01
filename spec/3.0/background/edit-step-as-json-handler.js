@@ -123,7 +123,7 @@ describe("edit-step-as-json-handler", function() {
 				expect(response.properties.stepId).toEqual(undefined);
 				expect(response.properties.deploymentProcessId).toEqual(undefined);
 				expect(response.properties.errorMessage).toEqual('Failed to parse json');
-				expect(response.properties.errors).toEqual(["SyntaxError: Unexpected end of input"])
+				expect(response.properties.errors.toString()).toContain("SyntaxError: ")
 				called = true;
 			};
 			var octopusRoot = "http://baseUrl";
