@@ -12,6 +12,7 @@ var octopygmy = (function() {
 			informationLogging: null,
 			updateAllTemplate: true,
 			cloneStep: true,
+			editStepAsJson: true
 		};
 
 		chrome.storage.sync.get(defaultOptions, function(options) {
