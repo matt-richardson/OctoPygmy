@@ -21,3 +21,4 @@ deploy:
   file: bluefin.zip
   on:
     repo: davidroberts63/OctoPygmy
+    all_branches: true
