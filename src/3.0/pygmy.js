@@ -25,6 +25,7 @@ var pygmy3_0 = (function() {
 		if(options.libraryTemplate) this.integrateStepTemplateLibrary.observe(content);
 		if(options.updateAllTemplate) this.stepTemplateUpdater.observe(content);
 		if(options.cloneStep) this.cloneStep.observe(content);
+		if(options.editStepAsJson) this.editStepAsJson.observe(content);
 	}
 
 	return {

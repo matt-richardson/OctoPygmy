@@ -15,6 +15,7 @@ function save_options() {
 	options.informationLogging = document.getElementById('information-logging').checked;
 	options.updateAllTemplate = document.getElementById('update-all-template').checked;
 	options.cloneStep = document.getElementById('clone-step').checked;
+	options.editStepAsJson = document.getElementById('edit-step-as-json').checked;
 
 	console.debug("Options to save:");
 	console.debug(options);
@@ -44,7 +45,8 @@ function restore_options() {
 		warnLogging: false,
 		informationLogging: true,
 		updateAllTemplate: true,
-		cloneStep: true
+		cloneStep: true,
+		editStepAsJson: true
 	};
 
 	chrome.storage.sync.get(defaults, function(options) {
@@ -61,6 +63,7 @@ function restore_options() {
 		document.getElementById('information-logging').checked = options.informationLogging;
 		document.getElementById('update-all-template').checked = options.updateAllTemplate;
 		document.getElementById('clone-step').checked = options.cloneStep;
+		document.getElementById('edit-step-as-json').checked = options.editStepAsJson;
 		
 		pleaForAnalytics({ srcElement: document.getElementById('analytics') });
 	});
