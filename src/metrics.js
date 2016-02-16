@@ -55,7 +55,8 @@ function sendLibraryTemplate(downloadUrl, tabId, done)
 		var template = JSON.parse(response)
 
 		chrome.tabs.sendMessage(tabId, { Name: template.Name, Description: template.Description, DownloadUrl: downloadUrl})
-		done()
+		if (done)
+		    done();
 	})
 }
 
