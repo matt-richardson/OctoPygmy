@@ -3,7 +3,7 @@ node_js:
 - stable
 env:
   global:
-  - VERSION=1.2
+  - VERSION=1.4.0
 before_script:
 - phantomjs -v
 before_deploy:
@@ -21,4 +21,4 @@ deploy:
   file: bluefin.zip
   on:
     repo: davidroberts63/OctoPygmy
-    all_branches: true
+    tags: true
