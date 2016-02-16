@@ -52,7 +52,7 @@ pygmy3_0.editStepAsJson = (function() {
                 backdrop: "static",
                 keyboard: !0,
                 size: 'lg',
-                template: '<div class="modal-header">\n<button class="close" type="button" data-dismiss="modal" aria-hidden="true" ng-hide="isWorking.busy" ng-click="close()">├ù</button>\n<h3>Edit Step as JSON</h3>\n</div>\n<div class="modal-body">\n<div id="editStepAsJsonContainer" >\n<div id="editStepAsJson" style="height:600px" class="big-on-full" ui-ace="{ mode: aceMode, onLoad: editorLoaded }" ng-model="view.scriptBody"></div>\n</div>\n</div>\n<div class="modal-footer">\n<spin active="isWorking.busy"></spin>\n<div>\n<button class="btn btn-success" ng-disabled="isWorking.busy" ng-click="execute()">Save</button>\n<button class="btn btn-default" ng-disabled="isWorking.busy" ng-click="cancel()">Cancel</button>\n</div>\n</div>\n',
+                template: '<div class="modal-header">\n<button class="close" type="button" data-dismiss="modal" aria-hidden="true" ng-hide="isWorking.busy" ng-click="close()">Exit</button>\n<h3>Edit Step as JSON</h3>\n</div>\n<div class="modal-body">\n<div id="editStepAsJsonContainer" >\n<div id="editStepAsJson" style="height:600px" class="big-on-full" ui-ace="{ mode: aceMode, onLoad: editorLoaded }" ng-model="view.scriptBody"></div>\n</div>\n</div>\n<div class="modal-footer">\n<spin active="isWorking.busy"></spin>\n<div>\n<button class="btn btn-success" ng-disabled="isWorking.busy" ng-click="execute()">Save</button>\n<button class="btn btn-default" ng-disabled="isWorking.busy" ng-click="cancel()">Cancel</button>\n</div>\n</div>\n',
                 controller: function ($scope, $modalInstance) {
                   $scope.view = {
                      scriptBody: json 
