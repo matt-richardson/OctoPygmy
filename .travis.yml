@@ -1,14 +1,11 @@
 language: node_js
 node_js:
 - stable
-
 env:
   global:
-    - VERSION=1.2
-
+  - VERSION=1.2
 before_script:
 - phantomjs -v
-
 before_deploy:
 - zip -r bluefin.zip src/*
 - sed -i -e "s/{{version}}/${VERSION}/" .bintray.json
@@ -18,10 +15,10 @@ before_deploy:
 - sed -i -e "s/{{releasedate}}/${build_date}/" .bintray.json
 
 deploy:
-  provider: bintray
-  file: ".bintray.json"
-  user: davidroberts63
-  key:
-    secure: XzfDrm01xN+qPkjS/7wKJPt9NkeKooLeLEUfPU+MwQj5ClWz3vl7LGuZ8uy5Aw+aSxEFhi0e+NjRcLaiBtu1Nmla9c0tMiZn9w6RFnuVWMJ6CWYpZwSOtnVZg8hDAxtV6sIM/75rVTLKyYuYtxAuXN5U00IIPcvkvZqgb/Wwcmg=
+  provider: releases
+  api_key:
+    secure: QWoOT9ajir6YyImu4HkCo8y9QdqnU+yX+a7uB5Cxrf4XhlE1nSisayWRy29it7T4w0a2E208IZKS+YOXA7N8BjUnEmziKrutz9GxVQmoVmlQbDpgkTn6ga9NhgMvDOHYaSLohylNL7OSqNLlorThXYXLlXCOsydpwkkI0JE+PyA=
+  file: bluefin.zip
   on:
-    branch: 'master'
+    repo: davidroberts63/OctoPygmy
+    all_branches: true
