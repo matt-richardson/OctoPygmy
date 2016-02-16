@@ -3,10 +3,6 @@ pygmy3_0.dashboardCollapser = (function() {
 	var projectGroupIds = [];
 	var chooser;
 
-	function groupingId (groupName) {
-		return groupName.toLowerCase().replace(/[^a-z0-9]/g,'') + "-grouping";
-	}
-
 	function createChooser ()
 	{
 		chooser = document.createElement("select");
@@ -40,7 +36,7 @@ pygmy3_0.dashboardCollapser = (function() {
 		var groupName = projectHeader.innerText;
 
 		// Assign project group unique DOM id.
-		pygmyId = groupingId(groupName);
+		pygmyId = commonpygmy.groupingId(groupName);
 		commonpygmy.setNodePygmyId(node, pygmyId);
 
 		addItemToChooser(pygmyId, groupName);

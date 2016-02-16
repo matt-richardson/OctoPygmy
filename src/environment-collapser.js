@@ -2,10 +2,6 @@ var environmentCollapser = {
 	chooserId: "envrionment-chooser",
 	environmentGroupIds: [],
 
-	groupingId: function(groupName) {
-		return groupName.toLowerCase().replace(/[^a-z0-9]/g,'') + "-grouping";
-	},
-
 	createChooser: function ()
 	{
 		var chooser = document.createElement("select");
@@ -27,7 +23,7 @@ var environmentCollapser = {
 		var groupName = node.innerText;
 		var groupNode = node.parentNode.parentNode.parentNode; // Ernest P. Worrell goes 'Ewwwwwwww'
 
-		pygmyId = environmentCollapser.groupingId(groupName);
+		pygmyId = commonpygmy.groupingId(groupName);
 		commonpygmy.setNodePygmyId(groupNode, pygmyId);
 		var item = document.createElement("option");
 		item.value = pygmyId;
