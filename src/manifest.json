@@ -19,6 +19,7 @@
       "3.0/step-template-updater.js",
       "3.0/clone-step.js",
       "3.0/edit-step-as-json.js",
+      "3.0/view-release-deployment-process.js",
       "octopygmy.js",
       "dashboard-collapser.js",
       "environment-collapser.js",
@@ -45,11 +46,15 @@
       "3.0/background/step-template-update.js",
       "3.0/background/clone-step-handler.js",
       "3.0/background/edit-step-as-json-handler.js",
+      "3.0/background/template-loader.js",
       "metrics.js",
       "mixpanel.js",
       "nanoajax.min.js"],
     "persistent": false
   },
+  "web_accessible_resources": [
+    "templates/*.html"
+  ],
 
   "content_security_policy": "script-src 'self' https://cdn.mxpnl.com; object-src 'self'",
 

@@ -16,6 +16,7 @@ function save_options() {
 	options.updateAllTemplate = document.getElementById('update-all-template').checked;
 	options.cloneStep = document.getElementById('clone-step').checked;
 	options.editStepAsJson = document.getElementById('edit-step-as-json').checked;
+	options.viewReleaseDeploymentProcess = document.getElementById('view-release-deployment-process').checked;
 
 	console.debug("Options to save:");
 	console.debug(options);
@@ -46,7 +47,8 @@ function restore_options() {
 		informationLogging: true,
 		updateAllTemplate: true,
 		cloneStep: true,
-		editStepAsJson: true
+		editStepAsJson: true,
+		viewReleaseDeploymentProcess: true,
 	};
 
 	chrome.storage.sync.get(defaults, function(options) {
@@ -64,6 +66,7 @@ function restore_options() {
 		document.getElementById('update-all-template').checked = options.updateAllTemplate;
 		document.getElementById('clone-step').checked = options.cloneStep;
 		document.getElementById('edit-step-as-json').checked = options.editStepAsJson;
+		document.getElementById('view-release-deployment-process').checked = options.viewReleaseDeploymentProcess;
 		
 		pleaForAnalytics({ srcElement: document.getElementById('analytics') });
 	});

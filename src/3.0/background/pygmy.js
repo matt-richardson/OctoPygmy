@@ -6,6 +6,7 @@ var pygmy3_0 = (function() {
 		pygmy3_0.stepTemplateUpdate.setup();
 		pygmy3_0.cloneStepHandler.setup();
 		pygmy3_0.editStepAsJsonHandler.setup();
+		pygmy3_0.templateLoader.setup();
 	}
 	
 	return {
