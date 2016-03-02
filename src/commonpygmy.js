@@ -5,6 +5,10 @@ var commonpygmy = {
 	location: function() { return window.location; },
 	document: function() { return window.document; },
 
+	groupingId: function(groupName) {
+		return "octopygmy-" + groupName.toLowerCase().replace(/[^a-z0-9]/g,'') + "-grouping";
+	},
+
 	addFilterInput: function(inputNode, parentNode)
 	{
 		console.debug("Adding filter input");

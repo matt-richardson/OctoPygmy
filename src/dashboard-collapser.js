@@ -2,10 +2,6 @@ var dashboardCollapser = {
 	chooserId: "project-chooser",
 	projectGroupIds: [],
 
-	groupingId: function(groupName) {
-		return groupName.toLowerCase().replace(/[^a-z0-9]/g,'') + "-grouping";
-	},
-
 	createChooser: function ()
 	{
 		var chooser = document.createElement("select");
@@ -27,7 +23,7 @@ var dashboardCollapser = {
 		var projectHeader = node.getElementsByTagName("H3")[0];
 		var groupName = projectHeader.innerText;
 
-		pygmyId = this.groupingId(groupName);
+		pygmyId = commonpygmy.groupingId(groupName);
 		commonpygmy.setNodePygmyId(node, pygmyId);
 		var item = document.createElement("option");
 		item.value = pygmyId;

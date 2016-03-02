@@ -3,10 +3,6 @@ pygmy3_0.environmentCollapser = (function() {
 	var environmentGroupIds = [];
 	var chooser;
 
-	function groupingId(groupName) {
-		return groupName.toLowerCase().replace(/[^a-z0-9]/g,'') + "-grouping";
-	}
-
 	function createChooser() {
 		chooser = document.createElement("select");
 		chooser.id = chooserId;
@@ -40,7 +36,7 @@ pygmy3_0.environmentCollapser = (function() {
 		var groupNode = node;
 
 		// Assign environment unique DOM id
-		pygmyId = groupingId(groupName);
+		pygmyId = commonpygmy.groupingId(groupName);
 		commonpygmy.setNodePygmyId(groupNode, pygmyId);
 
 		addItemToChooser(pygmyId, groupName);
