@@ -2,9 +2,12 @@ var options = {
 	analytics: false,
 	hasSetOptions: '0.0', // Which version have the options been set for. Just major.minor
 };
+var octopusVersions = {};
+
 chrome.storage.sync.get(options, function(result) 
 { 
 	options = result;
+
 	setupMetrics();
 	displayOptionsPageIfNeeded();
 	
@@ -115,6 +118,7 @@ function setupMetrics()
 	{
 		console.debug('Message received: ')
 		console.debug(request)
+		var octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'))
 
 		if (request == 'reload-options') {
 			chrome.storage.sync.get(options, function(result) { options = result; });
@@ -135,22 +139,34 @@ function setupMetrics()
 		}
 
 		if (request == 'get-existing-template-names') {
-			octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'))
 			getExistingTemplateNames(octopusRoot, function(names) { sendExistingTemplateNames(names, sender.tab.id) })
 		}
 
 		if (request.templateName) {
 			chrome.runtime.sendMessage({ name: "imported-template", properties: { } });
-			octopusRoot = sender.url.substring(0,sender.url.indexOf('/app'))
 			getLibraryTemplateContent(sender.tab.id, request.templateName, octopusRoot);
 			return;
 		}
 
 		if (options.analytics && request.name && request.properties) {
 			console.debug("Analytics message received: " + request.name);
+			if (!octopusVersions[octopusRoot]) {
+				console.debug("Getting version number for Octopus Deploy at " + octopusRoot);
+				nanoajax.ajax(octopusRoot + "/api", function(status, response){
+					console.debug('Received root api response')
+					var data = JSON.parse(response);
+					console.debug(data.Version);
+					octopusVersions[octopusRoot] = data.Version;
 
-			request.properties.version = version;
-			mixpanel.track(request.name, request.properties);
+					console.debug("Sending analytics for Bluefin " + version + " on Octopus Deploy " + octopusVersions[octopusRoot]);
+					request.properties.version = version;
+					mixpanel.track(request.name, request.properties);
+				})
+			} else {
+				console.debug("Sending analytics for Bluefin " + version + " on Octopus Deploy " + octopusVersions[octopusRoot]);
+				request.properties.version = version;
+				mixpanel.track(request.name, request.properties);
+			}
 		}
 	});
 
