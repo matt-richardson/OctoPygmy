@@ -22,9 +22,9 @@ pygmy3_0.environmentFilter = (function () {
 	{
 		if (node.src.indexOf("Server-Online") >= 0) {
 			return "online";
-		} else if (node.src.indexOf("Server-Disabled")) {
+		} else if (node.src.indexOf("Server-Disabled") >= 0) {
 			return "disabled";
-		} else if (node.src.indexOf("Server-Offline")) {
+		} else if (node.src.indexOf("Server-Offline") >= 0) {
 			return "offline";
 		}
 	}
