@@ -3,7 +3,7 @@
 
   "name": "Blue fin",
   "description": "Eases the management of large installations of targets and projects in Octopus Deploy",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "author": "David Roberts (@davidroberts63)",
   "homepage_url": "http://bluefin.teapotcoder.com",
   "content_scripts": [

@@ -9,7 +9,6 @@ function save_options() {
 	options.environments = document.getElementById('environment-collapser').checked;
 	options.machines = document.getElementById('environment-machine-filter').checked;
 	options.libraryTemplate = document.getElementById('library-template-import').checked;
-	options.hasSetOptions = chrome.runtime.getManifest().version.substring(0, chrome.runtime.getManifest().version.lastIndexOf('.')); // Just use major.minor.
 	options.debugLogging = document.getElementById('debug-logging').checked;
 	options.warnLogging = document.getElementById('warn-logging').checked;
 	options.informationLogging = document.getElementById('information-logging').checked;
@@ -35,6 +34,12 @@ function save_options() {
 	});
 }
 
+function update_options_seen_version(options) {
+	options.hasSetOptions = chrome.runtime.getManifest().version.substring(0, chrome.runtime.getManifest().version.lastIndexOf('.')); // Just use major.minor.
+	
+	chrome.storage.sync.set(options);
+}
+
 function restore_options() {
 	var defaults = {
 		analytics: true,
@@ -55,6 +60,8 @@ function restore_options() {
 		console.debug("Got options:");
 		console.debug(options);
 
+		update_options_seen_version(options);
+		
 		document.getElementById('analytics').checked = options.analytics;
 		document.getElementById('dashboard-collapser').checked = options.dashboard;
 		document.getElementById('environment-collapser').checked = options.environments;
@@ -67,7 +74,7 @@ function restore_options() {
 		document.getElementById('clone-step').checked = options.cloneStep;
 		document.getElementById('edit-step-as-json').checked = options.editStepAsJson;
 		document.getElementById('view-release-deployment-process').checked = options.viewReleaseDeploymentProcess;
-		
+	
 		pleaForAnalytics({ srcElement: document.getElementById('analytics') });
 	});
 }
