@@ -55,6 +55,15 @@ describe("step-template-update", function() {
     });
   });
   
+  it("updates child step action version number", function() {
+      var process = getProcessWithOneOutOfDateStepInChildStep();
+      template = getTemplateWithNewParameterHavingADefaultValue();
+      
+      pygmy3_0.stepTemplateUpdate.updateDeploymentProcessTemplate("root", process, template, sender, updated, manualUpdate, noUpdate);
+      
+      expect(process.Steps[0].Actions[1].Properties["Octopus.Action.Template.Version"]).toEqual("2");
+  });
+  
   it("does nothing when process already has latest template", function() {
     var process = getProcessWithUpToDateActions();
     var template = getTemplateHavingDefaultValuesAndNoNewParameters();
@@ -151,6 +160,22 @@ describe("step-template-update", function() {
     newStep.Actions[0].Properties["Octopus.Action.Template.Id"] = "123";
     newStep.Actions[0].Properties["Octopus.Action.Template.Version"] = "1";
     process.Steps.push(newStep);
+    
+    return process;
+  }
+  
+  function getProcessWithOneOutOfDateStepInChildStep()
+  {
+    var process = getProcessWithUpToDateActions();
+    
+    process.Steps[0].Actions.push({
+        Id: "12", Name: "Action12",
+        Properties: {
+            "Octopus.Action.Template.Id": "123",
+            "Octopus.Action.Template.Version": "1",
+            "FirstParameter": "First value"
+        }
+    });
     
     return process;
   }
