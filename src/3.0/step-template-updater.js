@@ -79,10 +79,11 @@ pygmy3_0.stepTemplateUpdater = (function() {
 				if((typeof actionId) != "undefined"){
 					console.log("Action was updated: " + actionId);
 					
-					var stepAction = _.find(message.process.Steps, function(step){
-						return step.Actions[0].Id == actionId;
-					}).Actions[0];
-					
+					var processActions = _.flatten(_.pluck(message.process.Steps, "Actions"), true);
+					var stepAction = _.find(processActions, function(action){
+						return action.Id == actionId;
+					});
+
 					var status = actionLinks[i].parentNode.nextElementSibling.querySelector("span");
 					var version = status.previousSibling;
 					

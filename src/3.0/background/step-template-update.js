@@ -10,7 +10,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 			console.info("Step template id updating: " + templateId);
 			
 			if (templateId === null || templateId == ""){
-				console.debug("No template id found, skipping");
+				console.log("No template id found, skipping");
 				return;
 			}
 
@@ -92,7 +92,7 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	
 	function notifyProcessUpdated(process, actionsUpdated, manualUpdates, sender)
 	{
-		console.debug("Notifying tab of updated process");
+		console.log("Notifying tab of updated process");
 		chrome.tabs.sendMessage(sender.tab.id, {message: "process-updated", process: process, actionIdsUpdated: actionsUpdated, actionsNotUpdated: manualUpdates});
 	}
 	
@@ -111,51 +111,53 @@ pygmy3_0.stepTemplateUpdate = (function() {
 	
 	function updateDeploymentProcessTemplate(octopusRoot, process, template, sender, updated, updateManually, noUpdate)
 	{
-		console.debug("Updating deployment process template");
+		console.log("Updating deployment process template");
 		var actionIdsUpdated = [];
 		var manualUpdates = [];
 		
 		for (var i = 0; i < process.Steps.length; i++){
-			if (process.Steps[i].Actions[0].Properties["Octopus.Action.Template.Id"] == template.Id){
-				var action = process.Steps[i].Actions[0];
-				console.debug("Found template in deployment process: " + action.Name);
-				
-				if (action.Properties["Octopus.Action.Template.Version"] == template.Version){
-					console.debug("The " + action.Name + " is already up to date skipping.");
-					continue;
-				}
-				
-				if (_.some(template.Parameters, function(p){
-					return isNewParameterWithNoDefaultValue(p, action); }))
-				{
-					console.debug("Template action requires new parameter that has no default value.");
-					manualUpdates.push(action.Id);
-					continue;
-				}
-				
-				var previous = _.clone(action.Properties);
-				
-				action.Properties = _.clone(template.Properties);
-				action.SensitiveProperties = _.clone(template.SensitiveProperties);
+			for (var actionIndex = 0; actionIndex < process.Steps[i].Actions.length; actionIndex++){
+				if (process.Steps[i].Actions[actionIndex].Properties["Octopus.Action.Template.Id"] == template.Id){
+					var action = process.Steps[i].Actions[actionIndex];
+					console.log("Found template in deployment process: " + action.Name);
 
-				_.each(["Octopus.Action.TargetRoles", "Octopus.Action.MaxParallelism"], function(key){
-					if(_.contains(previous, key)){
-						action.Properties[key] = previous[key];
+					if (action.Properties["Octopus.Action.Template.Version"] == template.Version){
+						console.log("The " + action.Name + " is already up to date skipping.");
+						continue;
 					}
-				});
 
-				_.each(template.Parameters, function(parameter){
-					if(parameter.Name in previous){
-						action.Properties[parameter.Name] = previous[parameter.Name];
-					} else if(parameterHasDefaultValue(parameter)){
-						action.Properties[parameter.Name] = parameter.DefaultValue;
+					if (_.some(template.Parameters, function(p){
+						return isNewParameterWithNoDefaultValue(p, action); }))
+					{
+						console.log("Template action requires new parameter that has no default value.");
+						manualUpdates.push(action.Id);
+						continue;
 					}
-				});
 
-				action.Properties["Octopus.Action.Template.Id"] = template.Id;
-				action.Properties["Octopus.Action.Template.Version"] = template.Version;
-				
-				actionIdsUpdated.push(action.Id);
+					var previous = _.clone(action.Properties);
+
+					action.Properties = _.clone(template.Properties);
+					action.SensitiveProperties = _.clone(template.SensitiveProperties);
+
+					_.each(["Octopus.Action.TargetRoles", "Octopus.Action.MaxParallelism"], function(key){
+						if(_.contains(previous, key)){
+							action.Properties[key] = previous[key];
+						}
+					});
+
+					_.each(template.Parameters, function(parameter){
+						if(parameter.Name in previous){
+							action.Properties[parameter.Name] = previous[parameter.Name];
+						} else if(parameterHasDefaultValue(parameter)){
+							action.Properties[parameter.Name] = parameter.DefaultValue;
+						}
+					});
+
+					action.Properties["Octopus.Action.Template.Id"] = template.Id;
+					action.Properties["Octopus.Action.Template.Version"] = template.Version;
+
+					actionIdsUpdated.push(action.Id);
+				}
 			}
 		}
 		
