@@ -160,11 +160,13 @@ function setupMetrics()
 
 					console.debug("Sending analytics for Bluefin " + version + " on Octopus Deploy " + octopusVersions[octopusRoot]);
 					request.properties.version = version;
+					request.properties.octopusVersion = octopusVersions[octopusRoot];
 					mixpanel.track(request.name, request.properties);
 				})
 			} else {
 				console.debug("Sending analytics for Bluefin " + version + " on Octopus Deploy " + octopusVersions[octopusRoot]);
 				request.properties.version = version;
+				request.properties.octopusVersion = octopusVersions[octopusRoot];
 				mixpanel.track(request.name, request.properties);
 			}
 		}
