@@ -17,6 +17,9 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
     function angularShowModalDialog(sendMessageHandler) {
     	var button = document.getElementById('bluefin-showreleasedeploymentprocess-button'); 
     	button.onClick = button.onclick = function() { 
+            var analyticsHandler = document.getElementById('bluefin-showreleasedeploymentprocess-analytics-handler');
+            analyticsHandler.click();
+
             var element = angular.element("#content-wrapper");
             var modal = element.injector().get('$modal');
 			var modalInstance = modal.open({
@@ -127,6 +130,15 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
         showLink.style.cursor = 'pointer';
 		newDescription.appendChild(showLink);
 		variablesNote.parentNode.insertBefore(newDescription, newHeading.nextSibling);
+
+        console.debug("  - adding analytics handler");
+        var span = document.createElement('span');
+        span.id = 'bluefin-showreleasedeploymentprocess-analytics-handler';
+        span.onclick = span.onClick = function () {
+        	debugger;
+            chrome.runtime.sendMessage({ name: 'view-deployment-release-process', properties: {} }); // Analytics
+        }
+        variablesNote.parentNode.appendChild(span);
 
 		console.debug("  - getting template html 'show-release-deployment-plan.html'");
 		sendMessageHandler = sendMessageHandler || chrome.runtime.sendMessage;

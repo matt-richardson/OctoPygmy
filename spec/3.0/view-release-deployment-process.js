@@ -148,6 +148,20 @@ describe("view-release-deployment-process", function() {
       pygmy3_0.viewReleaseDeploymentProcess.addDeploymentProcessLink(sendMessageHandler, receiveMessageHandler);
       expect(document.querySelectorAll('h3').length).toBe(2);
     });
+
+    it("should add the analytics handler", function() {
+      var called = false;
+      var sendMessageHandler = function(message, handler) {
+        called = true;
+        expect(handler).toBe(receiveMessageHandler);
+      };
+      var receiveMessageHandler = function() {};
+
+      pygmy3_0.viewReleaseDeploymentProcess.addDeploymentProcessLink(sendMessageHandler, receiveMessageHandler);
+
+      expect(document.getElementById('bluefin-showreleasedeploymentprocess-analytics-handler')).not.toBe(null);
+      expect(typeof document.getElementById('bluefin-showreleasedeploymentprocess-analytics-handler').onclick).toBe('function');
+    });
   });
 
   describe("angularShowModalDialog", function() {
