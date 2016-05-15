@@ -43,9 +43,7 @@ pygmy3_0.viewResultantVariableList = (function() {
                         }), function(pr) {
                             var refs = scopeValues[pr[0] + "s"];
                             _.each(pr[1], function(id) {
-                                var item = _.find(refs, function(ref) {
-                                    return ref.Id === id
-                                });
+                                var item = _.findWhere(refs, {Id: id});
                                 item && values.push({ type: pr[0], name: item.Name } )
                             })
                         });
@@ -98,7 +96,8 @@ pygmy3_0.viewResultantVariableList = (function() {
             return;
 
         var links = document.querySelectorAll('a');
-        var variablesLinks;
+        var includeVariableSetsLink = null;
+        var chooseVariableSetsLink = null;
         for(var i=0; i < links.length; i++ ) {
             if (links[i].innerText === 'Include variable sets from the Library') {
                 includeVariableSetsLink = links[i];
@@ -107,6 +106,15 @@ pygmy3_0.viewResultantVariableList = (function() {
                 chooseVariableSetsLink = links[i];
             }
         }
+        if (includeVariableSetsLink == null) {
+            console.log("Unable to find the 'Include variable sets from the Library' link - unable to setup the 'view resultant variable list' functionality");
+            return;
+        }
+        if (chooseVariableSetsLink == null) {
+            console.log("Unable to find the 'Choose different library variable sets' link - unable to setup the 'view resultant variable list' functionality");
+            return;
+        }
+
         var includeVariableSetsLinkContainer = includeVariableSetsLink.parentNode;
         //dont add the link until we've got one of these on the screen
         if (hasClass(includeVariableSetsLinkContainer, "ng-hide") && hasClass(chooseVariableSetsLink, "ng-hide"))
