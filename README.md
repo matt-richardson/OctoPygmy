@@ -16,6 +16,7 @@ Get it from the Chrome web store [Bluefin Extension]
  - [Update step template across all projects]
  - [Clone step]
  - Edit step as JSON
+ - View resultant variable list on project variables page
  
 #### Development note
 This is using some ugly JavaScript. So please don't use this as an example of how to do JavaScript. I'm figuring this stuff out as I go. I'm primarily a server side dev on C#.

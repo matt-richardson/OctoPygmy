@@ -1,0 +1,49 @@
+<div class="modal-header">
+    <button class="close" type="button" data-dismiss="modal" aria-hidden="true" ng-hide="isWorking.busy" ng-click="close()">x</button>
+    <h3>All variables for project {{projectName}} </h3>
+</div>
+<div class="modal-body">
+    <div ng-show="projectHasUnsavedChanges" class="note note-warning">
+        Your project includes unsaved changes, which are not visible here.
+    </div>
+
+    <div class="variables-snapshot">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Scope</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+            <tbody class="smaller-fonts">
+                <tr ng-repeat="variable in variables | orderBy:'Name' ">
+                    <td>
+                        <div ng-class="{'limit-width': limitWidth}">{{ variable.Name }}</div>
+                    </td>
+                    <td>
+                        <div ng-class="{'limit-width': limitWidth}"><span ng-show="variable.IsSensitive">&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;</span>{{ variable.Value }}</div>
+                    </td>
+                    <td>
+                        <div ng-class="{'limit-width': limitWidth}" ng-repeat="scope in variable.formattedScope">
+                            <b>{{ scope.type }}</b>: {{ scope.name }}<br/>
+                        </div>
+                    </td>
+                    <td>
+                         <div ng-class="{'limit-width': limitWidth}">
+                            <a ng-click="close()" ng-show="variable.SourceId" href='#/library/variables/{{ variable.SourceId }}'>{{ variable.Source }}</a>
+                            <span ng-show="!variable.SourceId">{{ variable.Source }}</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <spin active="isWorking.busy"></spin>
+    <div>
+        <button class="btn btn-default" ng-disabled="isWorking.busy" ng-click="close()">close</button>
+    </div>
+</div>

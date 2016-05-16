@@ -27,6 +27,7 @@ var pygmy3_0 = (function() {
 		if(options.cloneStep) this.cloneStep.observe(content);
 		if(options.editStepAsJson) this.editStepAsJson.observe(content);
 		if(options.viewReleaseDeploymentProcess) this.viewReleaseDeploymentProcess.observe(content);
+		if(options.viewResultantVariableList) this.viewResultantVariableList.observe(content);
 	}
 
 	return {

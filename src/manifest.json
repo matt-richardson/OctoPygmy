@@ -20,6 +20,7 @@
       "3.0/clone-step.js",
       "3.0/edit-step-as-json.js",
       "3.0/view-release-deployment-process.js",
+      "3.0/view-resultant-variable-list.js",
       "octopygmy.js",
       "dashboard-collapser.js",
       "environment-collapser.js",
