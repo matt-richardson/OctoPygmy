@@ -55,14 +55,14 @@ pygmy3_0.viewResultantVariableList = (function() {
                     $scope.variableSetsLoading = {};
                     $scope.variables = [];
                     $scope.projectHasUnsavedChanges = unsavedChanges.hasUnsavedChanges();
-
+                    $scope.variableSetsWaitingToLoad = 0;
                     isLoading.promise(octopusRepository.Projects.get(projectId).then(function(project) {
                         $scope.projectName = project.Name;
+                        $scope.variableSetsWaitingToLoad += project.IncludedLibraryVariableSetIds.length;
                         isLoading.promise(octopusRepository.Variables.get(project.VariableSetId)).then(function(variableSet) {
-                            $scope.scopeValues = variableSet.ScopeValues;
                             _.each(variableSet.Variables, function(variable) {
                                 variable.Source = 'Project';
-                                variable.formattedScope = formatScope(variable.Id, variable.Scope, $scope.scopeValues);
+                                variable.formattedScope = formatScope(variable.Id, variable.Scope, variableSet.ScopeValues);
                             });
                             $scope.variables = $scope.variables.concat(variableSet.Variables);
                         })
@@ -74,9 +74,10 @@ pygmy3_0.viewResultantVariableList = (function() {
                                     _.each(variableSet.Variables, function(variable) {
                                         variable.Source = libraryVariableSet.Name;
                                         variable.SourceId = libraryVariableSet.Id;
-                                        variable.formattedScope = formatScope(variable.Id, variable.Scope, $scope.scopeValues);
+                                        variable.formattedScope = formatScope(variable.Id, variable.Scope, variableSet.ScopeValues);
                                     });
                                     $scope.variables = $scope.variables.concat(variableSet.Variables);
+                                    $scope.variableSetsWaitingToLoad--;
                                 })
                             })
                         })
