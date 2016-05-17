@@ -20,15 +20,12 @@ deploy:
     secure: QWoOT9ajir6YyImu4HkCo8y9QdqnU+yX+a7uB5Cxrf4XhlE1nSisayWRy29it7T4w0a2E208IZKS+YOXA7N8BjUnEmziKrutz9GxVQmoVmlQbDpgkTn6ga9NhgMvDOHYaSLohylNL7OSqNLlorThXYXLlXCOsydpwkkI0JE+PyA=
   file: bluefin.zip
   prerelease: true
-  body: >
-    ### Features
-    
-    ### Defect fixes
-    
-    ### Other
-    
+  body: "
+    ### Features\n
+    ### Defect fixes\n
+    ### Other\n
     ## How to use the direct download
-    
+    "
   on:
     repo: davidroberts63/OctoPygmy
     tags: true
