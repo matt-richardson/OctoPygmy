@@ -6,7 +6,7 @@
     <div ng-show="projectHasUnsavedChanges" class="note note-warning">
         Your project includes unsaved changes, which are not visible here.
     </div>
-
+    <loading-wrapper busy="isLoading">
     <div class="variables-snapshot" ng-show="variableSetsWaitingToLoad == 0">
         <table class="table table-bordered">
             <thead>
@@ -42,8 +42,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <spin active="isWorking.busy"></spin>
     <div>
-        <button class="btn btn-default" ng-disabled="isWorking.busy" ng-click="close()">close</button>
+        <button class="btn btn-default" ng-disabled="isLoading.busy" ng-click="close()">close</button>
     </div>
 </div>
