@@ -27,8 +27,8 @@
       "environment-rolename-filter.js",
       "integrate-step-template-library.js",
       "step-template-updater.js",
-      "list.min.js",
-      "underscore-min.js"
+      "libs/list.min.js",
+      "libs/underscore-min.js"
     ],
     "css": ["style.css"]
   }],
@@ -42,15 +42,15 @@
 
   "background": {
     "scripts": [
-      "underscore-min.js",
+      "libs/underscore-min.js",
       "3.0/background/pygmy.js",
       "3.0/background/step-template-update.js",
       "3.0/background/clone-step-handler.js",
       "3.0/background/edit-step-as-json-handler.js",
       "3.0/background/template-loader.js",
       "metrics.js",
-      "mixpanel.js",
-      "nanoajax.min.js"],
+      "libs/mixpanel.js",
+      "libs/nanoajax.min.js"],
     "persistent": false
   },
   "web_accessible_resources": [
