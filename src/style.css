@@ -1,3 +1,11 @@
 .grouping-chooser {
 	margin-left: 10px;
 }
+
+.fixed-table-width {
+	table-layout: fixed;
+}
+
+.force-word-wrap {
+	word-wrap: break-word
+}

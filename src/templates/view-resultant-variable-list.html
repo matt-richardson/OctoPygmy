@@ -6,9 +6,9 @@
     <div ng-show="projectHasUnsavedChanges" class="note note-warning">
         Your project includes unsaved changes, which are not visible here.
     </div>
-
+    <loading-wrapper busy="isLoading">
     <div class="variables-snapshot" ng-show="variableSetsWaitingToLoad == 0">
-        <table class="table table-bordered">
+        <table class="table table-bordered fixed-table-width">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -19,22 +19,21 @@
             </thead>
             <tbody class="smaller-fonts">
                 <tr ng-repeat="variable in variables | orderBy:'Name' ">
-                    <td>
-                        <div ng-class="{'limit-width': limitWidth}">{{ variable.Name }}</div>
+                    <td class="force-word-wrap">
+                        {{ variable.Name }}
                     </td>
-                    <td>
-                        <div ng-class="{'limit-width': limitWidth}"><span ng-show="variable.IsSensitive">&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;</span>{{ variable.Value }}</div>
+                    <td class="force-word-wrap">
+                        <span ng-show="variable.IsSensitive">&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;</span>
+                        {{ variable.Value }}
                     </td>
-                    <td>
-                        <div ng-class="{'limit-width': limitWidth}" ng-repeat="scope in variable.formattedScope">
+                    <td class="force-word-wrap">
+                        <div ng-repeat="scope in variable.formattedScope">
                             <b>{{ scope.type }}</b>: {{ scope.name }}<br/>
                         </div>
                     </td>
-                    <td>
-                         <div ng-class="{'limit-width': limitWidth}">
-                            <a ng-click="close()" ng-show="variable.SourceId" href='#/library/variables/{{ variable.SourceId }}'>{{ variable.Source }}</a>
-                            <span ng-show="!variable.SourceId">{{ variable.Source }}</span>
-                        </div>
+                    <td class="force-word-wrap">
+                        <a ng-click="close()" ng-show="variable.SourceId" href='#/library/variables/{{ variable.SourceId }}'>{{ variable.Source }}</a>
+                        <span ng-show="!variable.SourceId">{{ variable.Source }}</span>
                     </td>
                 </tr>
             </tbody>
@@ -42,8 +41,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <spin active="isWorking.busy"></spin>
     <div>
-        <button class="btn btn-default" ng-disabled="isWorking.busy" ng-click="close()">close</button>
+        <button class="btn btn-default" ng-disabled="isLoading.busy" ng-click="close()">close</button>
     </div>
 </div>
