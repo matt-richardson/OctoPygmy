@@ -51,7 +51,44 @@ pygmy3_0.viewResultantVariableList = (function() {
                         values
                     };
                     var projectId = $routeParams.id;
+                    $scope.filterVisible = false;
+                    $scope.toggleFilter = function() { $scope.filterVisible = !$scope.filterVisible; };
+                    $scope.search = {
+                        environmentId: "",
+                        machineId: "",
+                        actionId: "",
+                        roleIds: []
+                    };
 
+                    var doesScopeMatch = function(variableScope, searchId, scopeValues) {
+                        if (variableScope == undefined){
+                            return true;
+                        }
+                        if (searchId == ""){
+                            return true;
+                        }
+                        var match = _.findWhere(scopeValues, {Id: searchId});
+                        if (match == undefined){
+                            return true; //not sure we need this bit anymore?
+                        }
+
+                        var result = _.indexOf(variableScope, match.Id) > -1;
+                        return result;
+                    };
+
+                    $scope.filterScope = function(value, index, array) {
+                        //todo: implement proper variable specificity???
+                        var environmentMatches = doesScopeMatch(value.Scope.Environment, $scope.search.environmentId, $scope.scopeValues.Environments);
+                        var machineMatches = doesScopeMatch(value.Scope.Machine, $scope.search.machineId, $scope.scopeValues.Machines);
+                        var stepMatches = doesScopeMatch(value.Scope.Action, $scope.search.actionId, $scope.scopeValues.Actions);
+                        var roleMatches = $scope.search.roleIds.length == 0;
+                        _.each($scope.search.roleIds, function(roleId) {
+                            roleMatches = roleMatches || doesScopeMatch(value.Scope.Role, roleId, $scope.scopeValues.Roles);
+                        })
+                        return environmentMatches && machineMatches && stepMatches && roleMatches;
+                    };
+
+                    $scope.scopeValues = [];
                     $scope.variableSetsLoading = {};
                     $scope.variables = [];
                     $scope.projectHasUnsavedChanges = unsavedChanges.hasUnsavedChanges();
@@ -60,11 +97,29 @@ pygmy3_0.viewResultantVariableList = (function() {
                         $scope.projectName = project.Name;
                         $scope.variableSetsWaitingToLoad += project.IncludedLibraryVariableSetIds.length;
                         isLoading.promise(octopusRepository.Variables.get(project.VariableSetId)).then(function(variableSet) {
-                            _.each(variableSet.Variables, function(variable) {
-                                variable.Source = 'Project';
-                                variable.formattedScope = formatScope(variable.Id, variable.Scope, variableSet.ScopeValues);
-                            });
-                            $scope.variables = $scope.variables.concat(variableSet.Variables);
+                            isLoading.promise(octopusRepository.DeploymentProcesses.get(project.DeploymentProcessId)).then(function(deploymentProcess) {
+                                _.each(variableSet.Variables, function(variable) {
+                                    variable.Source = 'Project';
+                                    variable.formattedScope = formatScope(variable.Id, variable.Scope, variableSet.ScopeValues);
+                                });
+                                $scope.scopeValues = variableSet.ScopeValues;
+                                $scope.scopeValues.Actions = [];
+                                var stepCount = 0;
+
+                                _.each(deploymentProcess.Steps, function(step) {
+                                    stepCount++;
+                                    var actionCount = 0;
+                                    _.each(step.Actions, function(action) {
+                                        actionCount++;
+                                        var name = stepCount + ".";
+                                        if (step.Actions.length > 1)
+                                            name = name + actionCount + "."
+                                        name = name + " " + action.Name;
+                                        $scope.scopeValues.Actions.push({Id: action.Id, Name: name});
+                                    })
+                                });
+                                $scope.variables = $scope.variables.concat(variableSet.Variables);
+                            })
                         })
 
                         _.each(project.IncludedLibraryVariableSetIds, function(includedLibraryVariableSetId) {
