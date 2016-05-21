@@ -57,7 +57,8 @@ pygmy3_0.viewResultantVariableList = (function() {
                         environmentId: "",
                         machineId: "",
                         actionId: "",
-                        roleIds: []
+                        roleIds: [],
+                        channelId: ""
                     };
 
                     var doesScopeMatch = function(variableScope, searchId, scopeValues) {
@@ -81,11 +82,12 @@ pygmy3_0.viewResultantVariableList = (function() {
                         var environmentMatches = doesScopeMatch(value.Scope.Environment, $scope.search.environmentId, $scope.scopeValues.Environments);
                         var machineMatches = doesScopeMatch(value.Scope.Machine, $scope.search.machineId, $scope.scopeValues.Machines);
                         var stepMatches = doesScopeMatch(value.Scope.Action, $scope.search.actionId, $scope.scopeValues.Actions);
+                        var channelMatches = doesScopeMatch(value.Scope.Channel, $scope.search.channelId, $scope.scopeValues.Channels);
                         var roleMatches = $scope.search.roleIds.length == 0;
                         _.each($scope.search.roleIds, function(roleId) {
                             roleMatches = roleMatches || doesScopeMatch(value.Scope.Role, roleId, $scope.scopeValues.Roles);
                         })
-                        return environmentMatches && machineMatches && stepMatches && roleMatches;
+                        return environmentMatches && machineMatches && stepMatches && roleMatches && channelMatches;
                     };
 
                     $scope.scopeValues = [];
