@@ -97,29 +97,12 @@ pygmy3_0.viewResultantVariableList = (function() {
                         $scope.projectName = project.Name;
                         $scope.variableSetsWaitingToLoad += project.IncludedLibraryVariableSetIds.length;
                         isLoading.promise(octopusRepository.Variables.get(project.VariableSetId)).then(function(variableSet) {
-                            isLoading.promise(octopusRepository.DeploymentProcesses.get(project.DeploymentProcessId)).then(function(deploymentProcess) {
-                                _.each(variableSet.Variables, function(variable) {
-                                    variable.Source = 'Project';
-                                    variable.formattedScope = formatScope(variable.Id, variable.Scope, variableSet.ScopeValues);
-                                });
-                                $scope.scopeValues = variableSet.ScopeValues;
-                                $scope.scopeValues.Actions = [];
-                                var stepCount = 0;
-
-                                _.each(deploymentProcess.Steps, function(step) {
-                                    stepCount++;
-                                    var actionCount = 0;
-                                    _.each(step.Actions, function(action) {
-                                        actionCount++;
-                                        var name = stepCount + ".";
-                                        if (step.Actions.length > 1)
-                                            name = name + actionCount + "."
-                                        name = name + " " + action.Name;
-                                        $scope.scopeValues.Actions.push({Id: action.Id, Name: name});
-                                    })
-                                });
-                                $scope.variables = $scope.variables.concat(variableSet.Variables);
-                            })
+                            _.each(variableSet.Variables, function(variable) {
+                                variable.Source = 'Project';
+                                variable.formattedScope = formatScope(variable.Id, variable.Scope, variableSet.ScopeValues);
+                            });
+                            $scope.scopeValues = variableSet.ScopeValues;
+                            $scope.variables = $scope.variables.concat(variableSet.Variables);
                         })
 
                         _.each(project.IncludedLibraryVariableSetIds, function(includedLibraryVariableSetId) {
