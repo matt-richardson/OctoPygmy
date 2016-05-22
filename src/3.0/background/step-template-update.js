@@ -139,8 +139,10 @@ pygmy3_0.stepTemplateUpdate = (function() {
 					action.Properties = _.clone(template.Properties);
 					action.SensitiveProperties = _.clone(template.SensitiveProperties);
 
-					_.each(["Octopus.Action.TargetRoles", "Octopus.Action.MaxParallelism"], function(key){
-						if(_.contains(previous, key)){
+					// I wish there was a way to know which Action properties came from the project's step action as opposed to the
+					// step template's action. Some rule so as not to need to individually list them here.
+					_.each(["Octopus.Action.TargetRoles", "Octopus.Action.MaxParallelism", "Octopus.Action.RunOnServer"], function(key){
+						if(_.has(previous, key)){
 							action.Properties[key] = previous[key];
 						}
 					});

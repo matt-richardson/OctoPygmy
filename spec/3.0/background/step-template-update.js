@@ -37,6 +37,14 @@ describe("step-template-update", function() {
       expect(process.Steps[0].Actions[0].Properties["Octopus.Action.Template.Version"]).toEqual("2");
     });
     
+    it("copies the action RunOnServer property", function() {
+      expect(process.Steps[0].Actions[0].Properties["Octopus.Action.RunOnServer"]).toEqual("true");
+    });
+    
+    it("copies the action MaxParallelism property", function() {
+      expect(process.Steps[0].Actions[0].Properties["Octopus.Action.MaxParallelism"]).toEqual("2");
+    });
+    
     it("copies the property values from the original action", function() {
       expect(process.Steps[0].Actions[0].Properties.FirstParameter).toEqual("First value");
       expect(process.Steps[0].Actions[0].Properties.SecondParameter).toEqual("Second value");
@@ -193,6 +201,7 @@ describe("step-template-update", function() {
     properties["Octopus.Action.Template.Id"] = "123";
     properties["Octopus.Action.Template.Version"] = "1";
     properties["Octopus.Action.MaxParallelism"] = "2";
+    properties["Octopus.Action.RunOnServer"] = "true";
     
     process.Steps[1].Properties["Octopus.Action.TargetRoles"] = "role1,role2";
     properties = process.Steps[1].Actions[0].Properties = {};
