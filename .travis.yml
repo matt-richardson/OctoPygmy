@@ -21,11 +21,10 @@ deploy:
   file: bluefin.zip
   prerelease: true
   body: "
-    ### Features\n
-    ### Defect fixes\n
-    ### Other\n
-    ## How to use the direct download
-    "
+    ### Features<br/><br/>
+    ### Defect fixes<br/><br/>
+    ### Other<br/><br/>
+    ## How to use the direct download"
   on:
     repo: davidroberts63/OctoPygmy
     tags: true
