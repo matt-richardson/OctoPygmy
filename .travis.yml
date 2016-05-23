@@ -21,9 +21,9 @@ deploy:
   file: bluefin.zip
   prerelease: true
   body: "
-    ### Features<br/><br/>
-    ### Defect fixes<br/><br/>
-    ### Other<br/><br/>
+    ### Features<br /><br />
+    ### Defect fixes<br /><br />
+    ### Other<br /><br />
     ## How to use the direct download"
   on:
     repo: bluefin-octopusdeploy/chrome-extension
