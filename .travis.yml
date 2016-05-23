@@ -25,6 +25,7 @@ deploy:
     <h3>Defect fixes</h3>
     <h3>Other</h3>
     <br />
+    <h3>How to use the direct download</h3>
     Extract the <strong>bluefin.zip</strong> file somewhere on your machine. You may want to change the extracted folder from 'src' to something like 'bluefin-local'.<br/>
     <ol>
         <li>View the extensions in Chrome</li>
