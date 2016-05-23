@@ -26,5 +26,5 @@ deploy:
     ### Other<br/><br/>
     ## How to use the direct download"
   on:
-    repo: davidroberts63/OctoPygmy
+    repo: bluefin-octopusdeploy/chrome-extension
     tags: true
