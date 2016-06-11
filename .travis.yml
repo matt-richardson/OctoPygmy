@@ -19,7 +19,20 @@ deploy:
   api_key:
     secure: QWoOT9ajir6YyImu4HkCo8y9QdqnU+yX+a7uB5Cxrf4XhlE1nSisayWRy29it7T4w0a2E208IZKS+YOXA7N8BjUnEmziKrutz9GxVQmoVmlQbDpgkTn6ga9NhgMvDOHYaSLohylNL7OSqNLlorThXYXLlXCOsydpwkkI0JE+PyA=
   file: bluefin.zip
+  prerelease: true
+  body: "
+    <h3>Features</h3>
+    <h3>Defect fixes</h3>
+    <h3>Other</h3>
+    <br />
+    <h3>How to use the direct download</h3>
+    Extract the <strong>bluefin.zip</strong> file somewhere on your machine. You may want to change the extracted folder from 'src' to something like 'bluefin-local'.<br/>
+    <ol>
+        <li>View the extensions in Chrome</li>
+        <li>Be sure to delete or disable any current Bluefin extension you may already have.</li>
+        <li>Click <strong>Load Unpacked Extension....</strong> If you dont see that then click the check box for <strong>Developer Mode</strong> in the upper right of that same page.</li>
+        <li>Choose the folder you extracted the zip file. Be sure to select the <strong>src</strong> folder or whatever you may have renamed it to.</li>
+    </ol>"
   on:
-    repo: davidroberts63/OctoPygmy
+    repo: bluefin-octopusdeploy/chrome-extension
     tags: true
-    prerelease: true
