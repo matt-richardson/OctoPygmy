@@ -4,7 +4,7 @@ pygmy3_0.templateLoader = (function() {
 		if (request.message == 'get-template')
 		{
 			console.log("Loading template 'templates/" + request.properties.templateName + "'");
-			
+
 			var urlRetriever = urlRetriever || chrome.extension.getURL
 			var url = urlRetriever('templates/' + request.properties.templateName);
 			console.log("Extension relative url is '" + url + "'");
@@ -14,21 +14,22 @@ pygmy3_0.templateLoader = (function() {
 			getJsonResponseHandler(url, function(status, response){
 				console.log("Loaded content from url '" + url + "' with status '" + status + "' and response '" + response + "'");
 				var msg;
+				var removeLineEndings = request.properties.templateName.endsWith('.html');
 				if (status == 200) {
-					msg = { 
+					msg = {
 						message: 'get-template-response',
-						properties: { 
+						properties: {
 							status: 'success',
-							templateName: request.properties.templateName, 
-							template: response.replace(/(\r\n|\n|\r)/gm,"")
+							templateName: request.properties.templateName,
+							template: removeLineEndings ? response.replace(/(\r\n|\n|\r)/gm,"") : response
 						}
 					};
 				} else {
-					msg = { 
+					msg = {
 						message: 'get-template-response',
 						properties: {
 							status: 'failure',
-							templateName: request.properties.templateName, 
+							templateName: request.properties.templateName,
 							errorMessage: "Failed to load template - status code " + status
 						}
 					};

@@ -54,7 +54,8 @@
     "persistent": false
   },
   "web_accessible_resources": [
-    "templates/*.html"
+    "templates/*.html",
+    "templates/*.js"
   ],
 
   "content_security_policy": "script-src 'self' https://cdn.mxpnl.com; object-src 'self'",
