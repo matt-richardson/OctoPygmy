@@ -14,13 +14,14 @@ pygmy3_0.templateLoader = (function() {
 			getJsonResponseHandler(url, function(status, response){
 				console.log("Loaded content from url '" + url + "' with status '" + status + "' and response '" + response + "'");
 				var msg;
+				var removeLineEndings = request.properties.templateName.endsWith('.html');
 				if (status == 200) {
 					msg = { 
 						message: 'get-template-response',
 						properties: { 
 							status: 'success',
 							templateName: request.properties.templateName, 
-							template: response.replace(/(\r\n|\n|\r)/gm,"")
+							template: removeLineEndings ? response.replace(/(\r\n|\n|\r)/gm,"") : response
 						}
 					};
 				} else {
