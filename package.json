@@ -13,5 +13,8 @@
   "author": "davidroberts63",
   "license": "Apache 2.0",
   "readmeFilename": "README.md",
-  "gitHead": "9f47bf95f8e1cf3ca9985dcced309a83bb5302c0"
+  "gitHead": "9f47bf95f8e1cf3ca9985dcced309a83bb5302c0",
+  "dependencies": {
+    "selenium-webdriver": "^2.53.2"
+  }
 }
