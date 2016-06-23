@@ -8,7 +8,7 @@ var By = webdriver.By;
 
 driver = new webdriver.Builder().
   withCapabilities({
-    'name': 'Login Timing Test',
+    'name': 'Generic run test',
     'build': '1.51.15',
     'browserName': 'chrome',
     'platform': 'Windows 10',
