@@ -3,13 +3,12 @@ var accessKey = process.argv[3];
 var octopusUrl = process.argv[4];
 
 var webdriver = require('selenium-webdriver'); // muse use selenium-webdriver version <=2.47.0
-var saucelabs = new (require('saucelabs'))({username: username, password: accessKey});
 var driver;
 var By = webdriver.By;
 
 driver = new webdriver.Builder().
   withCapabilities({
-    'name': 'Basic chooser test',
+    'name': 'Login Timing Test',
     'build': '1.51.15',
     'browserName': 'chrome',
     'platform': 'Windows 10',
@@ -46,13 +45,16 @@ driver.getAllWindowHandles().then(function(handles) {
   driver.close();
   driver.switchTo().window(handles[0]);
 });
- 
+
+// Give the machine and service time to startup... This will change later
+driver.sleep(5000);
+
 driver.get(octopusUrl);
 driver.sleep(1000);
 driver.findElement(By.id("inputUsername")).sendKeys("AdministratorJoe");
 driver.findElement(By.id("inputPassword")).sendKeys("Password 123.");
 driver.findElement(By.css("button.btn.btn-success[type='submit']")).click();
-driver.sleep(1000);
+driver.sleep(3000);
 
 driver.findElement(By.css("select#project-chooser"));
 
@@ -62,5 +64,3 @@ driver.getTitle().then(function (title)
 });
 
 driver.quit();
-
-saucelabs.updateJob(driver.sessionId, { name: "Basic Project Chooser Test Run", passwed: true }, function() { console.log("Done testing"); });
