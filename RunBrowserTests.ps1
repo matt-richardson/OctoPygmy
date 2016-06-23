@@ -33,16 +33,26 @@ $blob = Set-AzureStorageBlobContent -File $ExtensionFilename -Container $Storage
 Write-Host "Uploaded extension located at:"
 Write-Host $blob.ICloudBlob.uri.AbsoluteUri
 
-try
+$failed = 0
+$max = 60
+do
 {
-    Write-Host "Waiting for Octopus Deploy ($url/api) to be ready..."
-    Invoke-RestMethod -Uri "$url/api" -Method GET -TimeoutSec 600
+    try
+    {
+        Write-Host "Waiting for Octopus Deploy ($url/api) to be ready ($failed of $max tries)..."
+        Invoke-RestMethod -Uri "$url/api" -Method GET -TimeoutSec 10
+        break
+    } catch { $failed++ }
+} while($failed -lt $max)
 
-    Write-Host "Running browser tests..."
-    & node.exe BrowserTests.js $SauceLabsUsername $SauceLabsAccessKey $url
+if($failed -ge $max)
+{
+    throw "Unable to connect to Octopus Deploy API. Requests timeed out."
+    exit 1
+}
 
-    # Just rethrow. Catching it so we don't run the browser tests if the API does respond in time
-} catch { throw }
+Write-Host "Running browser tests..."
+& node.exe BrowserTests.js $SauceLabsUsername $SauceLabsAccessKey $url
 
 Write-Host "Stopping test VM..."
 #Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
