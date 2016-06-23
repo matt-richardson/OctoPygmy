@@ -26,12 +26,12 @@ $vm = Start-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName | Ou
 $ip = Get-AzureRmPublicIpAddress -ResourceGroupName $VMResourceGroupName -Name $VMName
 $url = "http://" + $ip.IpAddress
 
-Write-Host "Uploading packed extension for use in browser testing..."
-Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccountName -ResourceGroupName $StorageResourceGroupName | Out-Null
-$blob = Set-AzureStorageBlobContent -File $ExtensionFilename -Container $StorageContainerName -Force
+#Write-Host "Uploading packed extension for use in browser testing..."
+#Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccountName -ResourceGroupName $StorageResourceGroupName | Out-Null
+#$blob = Set-AzureStorageBlobContent -File $ExtensionFilename -Container $StorageContainerName -Force
 
-Write-Host "Uploaded extension located at:"
-Write-Host $blob.ICloudBlob.uri.AbsoluteUri
+#Write-Host "Uploaded extension located at:"
+#Write-Host $blob.ICloudBlob.uri.AbsoluteUri
 
 $failed = 0
 $max = 60
