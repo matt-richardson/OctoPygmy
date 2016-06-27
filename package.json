@@ -1,6 +1,7 @@
 {
-  "name": "BlueFin",
+  "name": "Bluefin",
   "version": "1.0.0",
+  "license": "	Apache-2.0",
   "description": "Extension for Octopus Deploy",
   "main": "index.js",
   "scripts": {

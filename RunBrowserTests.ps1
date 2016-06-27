@@ -56,6 +56,6 @@ Write-Host "Running browser tests..."
 & node.exe BrowserTests.js $SauceLabsUsername $SauceLabsAccessKey $url
 
 Write-Host "Stopping test VM..."
-#Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
+Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
 
 Write-Host "Done running"
