@@ -13,6 +13,7 @@ param(
     $SauceLabsAccessKey
 )
 Write-Host "Prepping credentials for Azure login..."
+Disable-AzureDataCollection
 $securePassword = ConvertTo-SecureString $Password -AsPlainText -Force;
 $credentials = New-Object System.Management.Automation.PSCredential($Username, $securePassword);
 Write-Host "Logging into Azure..."
