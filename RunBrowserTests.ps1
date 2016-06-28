@@ -26,6 +26,7 @@ Write-Host "Starting test VM..."
 $vm = Start-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName | Out-Null
 $ip = Get-AzureRmPublicIpAddress -ResourceGroupName $VMResourceGroupName -Name $VMName
 $url = "http://" + $ip.IpAddress
+$ENV:OctopusUrl = $url
 
 #Write-Host "Uploading packed extension for use in browser testing..."
 #Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccountName -ResourceGroupName $StorageResourceGroupName | Out-Null
@@ -53,7 +54,7 @@ if($failed -ge $max)
 }
 
 Write-Host "Running browser tests..."
-& node.exe BrowserTests.js $SauceLabsUsername $SauceLabsAccessKey $url
+& .\node_modules\.bin\jasmine-node --verbose spec/browser-tests
 
 Write-Host "Stopping test VM..."
 Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null

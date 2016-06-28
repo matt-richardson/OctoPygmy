@@ -94,12 +94,4 @@ describe('Dashboard collapser', function() {
         driver.findElement(By.css("select#foobar-project-chooser"))
             .then(done);
     });
-    /*
-    it('should contain all project groups', function(done) {
-        var chooser = driver.findElement(By.css("select#project-chooser"));
-        chooser.click();
-        chooser.findElements(By.tagName("OPTION"))[1].isDisplayed()
-            .then(function() { done(); });
-    });
-    */
 });
