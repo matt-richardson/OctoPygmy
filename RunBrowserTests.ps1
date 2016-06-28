@@ -54,7 +54,7 @@ if($failed -ge $max)
 }
 
 Write-Host "Running browser tests..."
-& .\node_modules\.bin\jasmine-node --capture-exceptions --verbose spec/browser-tests
+& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests
 
 Write-Host "Stopping test VM..."
 Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
