@@ -18,6 +18,7 @@
   "dependencies": {
     "jasmine": "^2.4.1",
     "saucelabs": "^1.2.0",
-    "selenium-webdriver": "2.47.0"
+    "selenium-webdriver": "2.47.0",
+    "jasmine-node": "1.14.5"
   }
 }
