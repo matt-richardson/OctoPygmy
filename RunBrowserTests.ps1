@@ -62,7 +62,7 @@ mkdir .\results\browser-tests -force | Out-Null
 
 Write-Host "Uploading browser test results..."
 $client = New-Object 'System.Net.WebClient'
-dir .results\browser-tests\*.xml | %{ $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
+dir .\results\browser-tests\*.xml | %{ $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
 
 Write-Host "Stopping test VM..."
 Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
