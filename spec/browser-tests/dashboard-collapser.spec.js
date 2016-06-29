@@ -64,12 +64,13 @@ describe('Dashboard collapser', function() {
     });
 
     afterEach(function(done) {
+        console.log("afterEach");
         var spec = jasmine.getEnv().currentSpec;
         saucelabs.updateJob(driver.sessionID, {
-            passed: spec.results_.totalCount == spec.results_.passedCount,
-            name: spec.suite.description + ' ' + spec.description
-        }, function () {});
-        driver.quit().then(done);
+            passed: spec.results_.totalCount == spec.results_.passedCount
+        }, function () { 
+            driver.quit().then(done);
+        });
     });
     
     function closeOptionsTab() {
@@ -80,7 +81,7 @@ describe('Dashboard collapser', function() {
         });
     }
 
-    function login(done) {
+    function login() {
         driver.get(octopusUrl);
         driver.sleep(1000);
         driver.findElement(By.id("inputUsername")).sendKeys("AdministratorJoe");
@@ -90,8 +91,8 @@ describe('Dashboard collapser', function() {
     }
     
     it('should be shown', function (done) {
-        driver.sleep(500).then(done);
-        driver.findElement(By.css("select#foobar-project-chooser"))
-            .then(done);
+        driver.sleep(1000);
+        driver.findElement(By.css("select#project-chooser"))
+            .then(function() { done(); }, function(err) { done(err); });
     });
 });

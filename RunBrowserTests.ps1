@@ -12,8 +12,11 @@ param(
     $SauceLabsUsername,
     $SauceLabsAccessKey
 )
+
+# Disable-AzureDataCollection stil prompts user. So just set the property manually.
+"{'enableAzureDataCollection': false}" | Out-File -FilePath "$ENV:AppData\Windows Azure Powershell\AzureDataCollectionProfile.json"
+
 Write-Host "Prepping credentials for Azure login..."
-Disable-AzureDataCollection
 $securePassword = ConvertTo-SecureString $Password -AsPlainText -Force;
 $credentials = New-Object System.Management.Automation.PSCredential($Username, $securePassword);
 Write-Host "Logging into Azure..."
@@ -54,7 +57,12 @@ if($failed -ge $max)
 }
 
 Write-Host "Running browser tests..."
-& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests
+mkdir .\results\browser-tests -force | Out-Null
+& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests
+
+Write-Host "Uploading browser test results..."
+$client = New-Object 'System.Net.WebClient'
+dir .results\browser-tests\*.xml | %{ $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
 
 Write-Host "Stopping test VM..."
 Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
