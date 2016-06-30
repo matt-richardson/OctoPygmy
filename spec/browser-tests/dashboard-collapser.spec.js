@@ -1,10 +1,12 @@
 var webdriver = require('selenium-webdriver');
 var By = webdriver.By;
 var SauceLabs = require("saucelabs");
+var fs = require("fs");
 var username = process.env.SauceLabUsername;
 var accessKey = process.env.SauceLabAccessKey;
 var octopusUrl = process.env.OctopusUrl;
 var octopusPassword = process.env.OctopusPassword;
+var testIdFilename = process.env.TestIdFilename;
 var saucelabs = new SauceLabs({
       username: username,
       password: accessKey
@@ -63,9 +65,18 @@ describe('Dashboard collapser', function() {
         var spec = jasmine.getEnv().currentSpec;
         updateJob({passed: spec.results_.totalCount == spec.results_.passedCount})()
             .then(driver.quit())
+            .then(outputTestIdentifier(driver.sessionID, spec.suite.description + " " + spec.description))
             .then(done);
     });
     
+    function outputTestIdentifier(id, name) {
+        return function() {
+            return new Promise(function(resolve, reject) {
+                fs.appendFile(testIdFilename, id + "~" + name + "\n", "utf8", resolve);
+            });
+        }
+    }
+
     function updateJob(options) {
         return function() {
             return new Promise(function(resolve, reject) {
@@ -96,4 +107,8 @@ describe('Dashboard collapser', function() {
         driver.findElement(By.css("select#project-chooser"))
             .then(function() { done(); }, function(err) { done(err); });
     });
+
+    it('should just work', function(done) {
+        done();
+    })
 });

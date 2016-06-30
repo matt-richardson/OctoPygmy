@@ -14,6 +14,7 @@ param(
 )
 
 # Disable-AzureDataCollection stil prompts user. So just set the property manually.
+mkdir "$ENV:AppData\Windows Azure Powershell" -Force | Out-Null
 "{'enableAzureDataCollection': false}" | Out-File -FilePath "$ENV:AppData\Windows Azure Powershell\AzureDataCollectionProfile.json"
 
 Write-Host "Prepping credentials for Azure login..."
@@ -57,14 +58,28 @@ if($failed -ge $max)
 }
 
 Write-Host "Running browser tests..."
+$ENV:TestIdFilename = "results\browser-test-ids.txt"
 mkdir .\results\browser-tests -force | Out-Null
 & .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests
 
-Write-Host "Uploading browser test results..."
-$client = New-Object 'System.Net.WebClient'
-dir .\results\browser-tests\*.xml | %{ $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
+if ($ENV:APPVEYOR -eq "true")
+{
+    Write-Host "Uploading browser test results..."
+    $client = New-Object 'System.Net.WebClient'
+    dir .\results\browser-tests\*.xml | %{ $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
+
+    Write-Host "Adding test identifiers to build messages..."
+    Add-AppveyorMessage -Message "<a href='https://google.com'>Goog</a>"
+    $testIds = GC $ENV:TestIdFilename
+    $testIds | %{ 
+        $id = $_.Split("~")[0]
+        $name = $_.Split("~")[1])
+        Add-AppveyorMessage -Message "$name = https://saucelabs.com/beta/tests/$id/commands"
+    }
+
+}
 
 Write-Host "Stopping test VM..."
-Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
+#Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
 
 Write-Host "Done running"
