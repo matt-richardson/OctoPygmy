@@ -53,26 +53,27 @@ describe('Dashboard collapser', function() {
         driver.getSession().then(function(sessionid) {
             driver.sessionID = sessionid.id_;
         })
-        .then(new Promise(function(resolve, reject) {
-            saucelabs.updateJob(driver.sessionID, {
-                name: spec.suite.description + ' ' + spec.description
-            }, resolve);
-        }))
+        .then(updateJob({name: spec.suite.description + ' ' + spec.description}))
         .then(closeOptionsTab)
         .then(login)
         .then(done);
     });
 
     afterEach(function(done) {
-        console.log("afterEach");
         var spec = jasmine.getEnv().currentSpec;
-        saucelabs.updateJob(driver.sessionID, {
-            passed: spec.results_.totalCount == spec.results_.passedCount
-        }, function () { 
-            driver.quit().then(done);
-        });
+        updateJob({passed: spec.results_.totalCount == spec.results_.passedCount})()
+            .then(driver.quit())
+            .then(done);
     });
     
+    function updateJob(options) {
+        return function() {
+            return new Promise(function(resolve, reject) {
+                saucelabs.updateJob(driver.sessionID, options, resolve);
+            });
+        };
+    }
+
     function closeOptionsTab() {
         return driver.getAllWindowHandles().then(function(handles) {
             driver.switchTo().window(handles[1]);
