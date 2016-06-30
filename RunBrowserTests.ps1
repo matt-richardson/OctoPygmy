@@ -73,7 +73,7 @@ if ($ENV:APPVEYOR -eq "true")
     $testIds = GC $ENV:TestIdFilename
     $testIds | %{ 
         $id = $_.Split("~")[0]
-        $name = $_.Split("~")[1])
+        $name = $_.Split("~")[1]
         Add-AppveyorMessage -Message "$name = https://saucelabs.com/beta/tests/$id/commands"
     }
 
