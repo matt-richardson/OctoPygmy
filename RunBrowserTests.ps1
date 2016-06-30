@@ -69,7 +69,7 @@ if ($ENV:APPVEYOR -eq "true")
     dir .\results\browser-tests\*.xml | %{ $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
 
     Write-Host "Adding test identifiers to build messages..."
-    Add-AppveyorMessage -Message "<a href='https://google.com'>Goog</a>"
+    Add-AppveyorMessage -Message "Browser test result urls"
     $testIds = GC $ENV:TestIdFilename
     $testIds | %{ 
         $id = $_.Split("~")[0]
@@ -80,6 +80,6 @@ if ($ENV:APPVEYOR -eq "true")
 }
 
 Write-Host "Stopping test VM..."
-#Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
+Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
 
 Write-Host "Done running"
