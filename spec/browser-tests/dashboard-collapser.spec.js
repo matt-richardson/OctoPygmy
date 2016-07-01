@@ -28,7 +28,7 @@ describe('Dashboard collapser', function() {
                 'username': username,
                 'accessKey': accessKey,
                 'prerun': {
-                  'executable': 'https://gist.githubusercontent.com/davidroberts63/b7c01e7aa945cde9064aca04e947288a/raw/269145793cb19a6081b5c65e9bddd421ded73234/GetExtension.bat',
+                  'executable': 'https://gist.githubusercontent.com/davidroberts63/b7c01e7aa945cde9064aca04e947288a/raw/GetExtension.bat',
                   'args': [ process.env.ExtensionDownloadUrl ]
                 },
                 "chromeOptions": {
