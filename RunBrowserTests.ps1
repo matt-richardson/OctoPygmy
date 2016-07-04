@@ -92,4 +92,4 @@ Write-Host "Stopping test VM..."
 Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
 
 Write-Host "Done running"
-return if($testsPassed -eq 0) { 0 } else { 1 }
+return (if ($testsPassed -eq 0) { 0 } else { 1 })
