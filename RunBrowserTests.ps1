@@ -68,6 +68,7 @@ mkdir .\results\browser-tests -force | Out-Null
 & .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests
 if ($LastExitCode -ne 0)
 {
+    Write-Host "Tests failed"
     $testsPassed = $false
 }
 

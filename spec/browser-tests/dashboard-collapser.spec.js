@@ -33,7 +33,7 @@ describe('Dashboard collapser', function() {
                 },
                 "chromeOptions": {
                     "args": [ 
-                        "--load-extension=C:\\bluefin-extension\\src",
+                        "--load-extension=C:\\bluefin-extension",
                         "start-maximized",
                         "disable-webgl",
                         "blacklist-webgl",
