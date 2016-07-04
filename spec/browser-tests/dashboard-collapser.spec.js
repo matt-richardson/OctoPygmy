@@ -56,6 +56,7 @@ describe('Dashboard collapser', function() {
             driver.sessionID = sessionid.id_;
         })
         .then(updateJob({name: spec.suite.description + ' ' + spec.description}))
+        .then(outputTestIdentifier(driver.sessionID, spec.suite.description + " " + spec.description))
         .then(closeOptionsTab)
         .then(login)
         .then(done);
@@ -65,7 +66,6 @@ describe('Dashboard collapser', function() {
         var spec = jasmine.getEnv().currentSpec;
         updateJob({passed: spec.results_.totalCount == spec.results_.passedCount})()
             .then(driver.quit())
-            .then(outputTestIdentifier(driver.sessionID, spec.suite.description + " " + spec.description))
             .then(done);
     });
     

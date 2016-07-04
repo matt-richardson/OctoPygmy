@@ -13,6 +13,8 @@ param(
     $SauceLabsAccessKey
 )
 
+$testsPassed = $true
+
 # Disable-AzureDataCollection stil prompts user. So just set the property manually.
 mkdir "$ENV:AppData\Windows Azure Powershell" -Force | Out-Null
 "{'enableAzureDataCollection': false}" | Out-File -FilePath "$ENV:AppData\Windows Azure Powershell\AzureDataCollectionProfile.json"
@@ -61,6 +63,10 @@ Write-Host "Running browser tests..."
 $ENV:TestIdFilename = "results\browser-test-ids.txt"
 mkdir .\results\browser-tests -force | Out-Null
 & .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests
+if ($LastExitCode -ne 0)
+{
+    $testsPassed = $false
+}
 
 if ($ENV:APPVEYOR -eq "true")
 {
@@ -76,10 +82,10 @@ if ($ENV:APPVEYOR -eq "true")
         $name = $_.Split("~")[1]
         Add-AppveyorMessage -Message "$name = https://saucelabs.com/beta/tests/$id/commands"
     }
-
 }
 
 Write-Host "Stopping test VM..."
 Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
 
 Write-Host "Done running"
+return if($testsPassed -eq 0) { 0 } else { 1 }
