@@ -34,12 +34,15 @@ $ip = Get-AzureRmPublicIpAddress -ResourceGroupName $VMResourceGroupName -Name $
 $url = "http://" + $ip.IpAddress
 $ENV:OctopusUrl = $url
 
-#Write-Host "Uploading packed extension for use in browser testing..."
-#Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccountName -ResourceGroupName $StorageResourceGroupName | Out-Null
-#$blob = Set-AzureStorageBlobContent -File $ExtensionFilename -Container $StorageContainerName -Force
+Write-Host "Uploading packed extension for use in browser testing..."
+Add-Type -A 'System.IO.Compression.FileSystem'
+[IO.Compression.ZipFile]::CreateFromDirectory((Resolve-Path(".\src")).Path, (Resolve-Path(".\")).Path + "\bluefin.zip")
+Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccountName -ResourceGroupName $StorageResourceGroupName | Out-Null
+$blob = Set-AzureStorageBlobContent -File ".\bluefin.zip" -Container $StorageContainerName -Force
 
-#Write-Host "Uploaded extension located at:"
-#Write-Host $blob.ICloudBlob.uri.AbsoluteUri
+Write-Host "Uploaded extension located at:"
+Write-Host $blob.ICloudBlob.uri.AbsoluteUri
+$ENV:ExtensionDownloadUrl = $blob.ICloudBlob.uri.AbsoluteUri
 
 $failed = 0
 $max = 60
