@@ -89,7 +89,8 @@ if ($ENV:APPVEYOR -eq "true")
 }
 
 Write-Host "Stopping test VM..."
-Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
-
-Write-Host "Done running"
-return (if ($testsPassed -eq 0) { 0 } else { 1 })
+if((Test-Path ENV:LeaveVirtualMachineRunning)) {
+    Write-Host "Leaving virtual machine running for manuall testing..."
+} else {
+    Stop-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName -Force | Out-Null
+}
