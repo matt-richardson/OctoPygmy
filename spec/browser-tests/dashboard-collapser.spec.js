@@ -108,10 +108,14 @@ describe('Dashboard collapser', function() {
     it('should be shown', function (done) {
         driver.sleep(1000);
         driver.findElement(By.css("select#project-chooser"))
-            .then(function() { done(); }, function(err) { done(err); });
+            .then(success, fail);
     });
 
-    it('should just work', function(done) {
-        done();
-    })
+    function success(done) {
+        return function() { done(); }
+    }
+
+    function fail(done) {
+        return function(err) { done(err); }
+    }
 });
