@@ -104,18 +104,29 @@ describe('Dashboard collapser', function() {
         driver.findElement(By.css("button.btn.btn-success[type='submit']")).click();
         return driver.sleep(3000).then();
     }
-    
-    it('should be shown', function (done) {
-        driver.sleep(1000);
-        driver.findElement(By.css("select#project-chooser"))
-            .then(success, fail);
+
+    it('should show only the group selected', function(done) {
+        driver.isElementPresent(By.css("select#project-chooser"))
+            .then(failIfFalse(done, "Project chooser could not be found."));
+        var dropdown = driver.findElement(By.css("select#project-chooser"));
+        dropdown.click();
+        dropdown.sendKeys("Clever Mature Limit")
+        dropdown.click();
+        driver.findElement(By.css("[octopygmy-id='zoctopygmy-agreeableregularholiday-grouping']"))
+            .isDisplayed()
+            .then(failIfTrue(done, "Project chooser did not hide other project groupings"))
+            .then(done);
     });
 
-    function success(done) {
-        return function() { done(); }
+    function failIfTrue(done, failMessage) {
+        return function(result) {
+            if(result) done(failMessage);
+        }
     }
 
-    function fail(done) {
-        return function(err) { done(err); }
+    function failIfFalse(done, failMessage) {
+        return function(result) { 
+            if(!result) done(failMessage);
+        }
     }
 });
