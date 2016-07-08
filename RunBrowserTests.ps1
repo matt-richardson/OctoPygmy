@@ -36,6 +36,7 @@ $ENV:OctopusUrl = $url
 
 Write-Host "Uploading packed extension for use in browser testing..."
 Add-Type -A 'System.IO.Compression.FileSystem'
+if(Test-Path .\bluefin.zip) { Remove-Item .\bluefin.zip }
 [IO.Compression.ZipFile]::CreateFromDirectory((Resolve-Path(".\src")).Path, (Resolve-Path(".\")).Path + "\bluefin.zip")
 Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccountName -ResourceGroupName $StorageResourceGroupName | Out-Null
 $blob = Set-AzureStorageBlobContent -File ".\bluefin.zip" -Container $StorageContainerName -Force

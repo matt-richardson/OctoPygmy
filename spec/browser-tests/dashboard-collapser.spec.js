@@ -1,5 +1,6 @@
 var webdriver = require('selenium-webdriver');
 var By = webdriver.By;
+var until = webdriver.until;
 var SauceLabs = require("saucelabs");
 var fs = require("fs");
 var username = process.env.SauceLabUsername;
@@ -115,6 +116,25 @@ describe('Dashboard collapser', function() {
         driver.findElement(By.css("[octopygmy-id='zoctopygmy-agreeableregularholiday-grouping']"))
             .isDisplayed()
             .then(failIfTrue(done, "Project chooser did not hide other project groupings"))
+            .then(done);
+    });
+
+    it('should show only the environment selected', function(done) {
+        driver.findElement(By.css("a[href='#/environments']")).click();
+        driver.wait(until.elementIsNotVisible(driver.findElement(By.css("span.spin-static"))), 1000)
+            .then(failIfFalse(done, "Environments didn't load in time"));
+        driver.isElementPresent(By.css("select#envrionment-chooser"))
+            .then(failIfFalse(done, "Environment chooser could not be found"));
+        var dropdown = driver.findElement(By.css("select#envrionment-chooser"));
+        dropdown.click();
+        dropdown.sendKeys("QA");
+        dropdown.click();
+        driver.findElement(By.css("[octopygmy-id='zoctopygmy-development-grouping']"))
+            .isDisplayed()
+            .then(failIfTrue(done, "Environment chooser did not hide other environments"));
+        driver.findElement(By.css("[octopygmy-id='zoctopygmy-qa-grouping']"))
+            .isDisplayed()
+            .then(failIfFalse(done, "Environment chooser should NOT have hidden the selected environment"))
             .then(done);
     });
 
