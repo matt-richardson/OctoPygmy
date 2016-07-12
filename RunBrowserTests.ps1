@@ -44,6 +44,10 @@ Write-Host "Uploaded extension located at:"
 Write-Host $blob.ICloudBlob.uri.AbsoluteUri
 $ENV:ExtensionDownloadUrl = $blob.ICloudBlob.uri.AbsoluteUri
 
+Write-Host "Getting extension verison number"
+$manifest = ConvertFrom-Json (GC .\src\manifest.json -raw)
+$bluefinVersion = $manifest.version
+
 $failed = 0
 $max = 60
 $octopusVersion = "0"
@@ -53,7 +57,7 @@ do
     {
         Write-Host "Waiting for Octopus Deploy ($octopusUrl/api) to be ready ($failed of $max tries)..."
         $response = Invoke-RestMethod -Uri "$octopusUrl/api" -Method GET -TimeoutSec 10
-        $response | Write-Host
+        $response | Format-List *
         $octopusVersion = $response.Version
         break
     } catch { $failed++ }
@@ -67,7 +71,7 @@ if($failed -ge $max)
 
 Write-Host "Running browser tests..."
 mkdir .\results\browser-tests -force | Out-Null
-& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests --config TestIdFilename "results\browser-test-ids.txt" --config OctopusUrl "$octopusUrl" --config OctopusVersion "$octopusVersion"
+& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests --config TestIdFilename "results\browser-test-ids.txt" --config OctopusUrl "$octopusUrl" --config OctopusVersion "$octopusVersion" --config BluefinVersion "$bluefinVersion"
 
 if ($LastExitCode -ne 0)
 {

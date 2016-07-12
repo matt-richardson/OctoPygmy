@@ -5,6 +5,8 @@ var username = process.env.SauceLabUsername;
 var accessKey = process.env.SauceLabAccessKey;
 var octopusUrl = process.env.OctopusUrl;
 var octopusPassword = process.env.OctopusPassword;
+var octopusVersion = process.env.OctopusVersion;
+var bluefinVersion = process.env.BluefinVersion;
 var testIdFilename = process.env.TestIdFilename;
 var tests = require("./common-driver.js");
 
@@ -14,7 +16,7 @@ describe('Environment collapser', function() {
     var driver = null;
 
     beforeEach(function(done) {
-        driver = tests.setupDriver(username, accessKey, process.env.ExtensionDownloadUrl, octopusUrl, octopusPassword, testIdFilename, octopusVersion, done);
+        driver = tests.setupDriver(username, accessKey, process.env.ExtensionDownloadUrl, octopusUrl, octopusPassword, testIdFilename, octopusVersion, bluefinVersion, done);
     });
 
     afterEach(function(done) {
