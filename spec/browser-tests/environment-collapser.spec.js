@@ -14,7 +14,7 @@ describe('Environment collapser', function() {
     var driver = null;
 
     beforeEach(function(done) {
-        driver = tests.setupDriver(username, accessKey, process.env.ExtensionDownloadUrl, octopusUrl, octopusPassword, testIdFilename, done);
+        driver = tests.setupDriver(username, accessKey, process.env.ExtensionDownloadUrl, octopusUrl, octopusPassword, testIdFilename, octopusVersion, done);
     });
 
     afterEach(function(done) {

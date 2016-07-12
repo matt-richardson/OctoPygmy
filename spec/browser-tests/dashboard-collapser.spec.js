@@ -5,17 +5,18 @@ var username = process.env.SauceLabUsername;
 var accessKey = process.env.SauceLabAccessKey;
 var octopusUrl = process.env.OctopusUrl;
 var octopusPassword = process.env.OctopusPassword;
+var octopusVersion = process.env.OctopusVersion;
 var testIdFilename = process.env.TestIdFilename;
 var tests = require("./common-driver.js");
 
 jasmine.getEnv().defaultTimeoutInterval = 100000;
-console.log("Testing against " + octopusUrl);
+console.log("Testing against version " + octopusVersion + " at " + octopusUrl);
 
 describe('Dashboard collapser', function() {
     var driver = null;
     
     beforeEach(function(done) {
-        driver = tests.setupDriver(username, accessKey, process.env.ExtensionDownloadUrl, octopusUrl, octopusPassword, testIdFilename, done);
+        driver = tests.setupDriver(username, accessKey, process.env.ExtensionDownloadUrl, octopusUrl, octopusPassword, testIdFilename, octopusVersion, done);
     });
 
     afterEach(function(done) {

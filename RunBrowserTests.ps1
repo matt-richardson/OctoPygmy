@@ -46,12 +46,15 @@ $ENV:ExtensionDownloadUrl = $blob.ICloudBlob.uri.AbsoluteUri
 
 $failed = 0
 $max = 60
+$octopusVersion = "0"
 do
 {
     try
     {
         Write-Host "Waiting for Octopus Deploy ($octopusUrl/api) to be ready ($failed of $max tries)..."
-        Invoke-RestMethod -Uri "$octopusUrl/api" -Method GET -TimeoutSec 10
+        $response = Invoke-RestMethod -Uri "$octopusUrl/api" -Method GET -TimeoutSec 10
+        $response | Write-Host
+        $octopusVersion = $response.Version
         break
     } catch { $failed++ }
 } while($failed -lt $max)
@@ -64,7 +67,7 @@ if($failed -ge $max)
 
 Write-Host "Running browser tests..."
 mkdir .\results\browser-tests -force | Out-Null
-& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests --config TestIdFilename "results\browser-test-ids.txt" --config OctopusUrl "$octopusUrl"
+& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests --config TestIdFilename "results\browser-test-ids.txt" --config OctopusUrl "$octopusUrl" --config OctopusVersion "$octopusVersion"
 
 if ($LastExitCode -ne 0)
 {

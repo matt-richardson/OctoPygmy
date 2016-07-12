@@ -39,7 +39,7 @@ module.exports = {
         }
     },
 
-    setupDriver: function(sauceUsername, sauceKey, extensionUrl, octopusUrl, octopusPassword, testIdFilename, done) {
+    setupDriver: function(sauceUsername, sauceKey, extensionUrl, octopusUrl, octopusPassword, testIdFilename, octopusVersion, done) {
         saucelabs = new SauceLabs({
             username: sauceUsername,
             password: sauceKey
@@ -48,7 +48,7 @@ module.exports = {
         var result = new webdriver.Builder().
             withCapabilities({
                 'name': 'Spec run in node',
-                'build': '1.51.15',
+                'build': '1.51.15-' + octopusVersion,
                 'browserName': 'chrome',
                 'platform': 'Windows 10',
                 'version': '43.0',
