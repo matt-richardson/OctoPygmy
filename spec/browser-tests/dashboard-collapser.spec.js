@@ -9,6 +9,7 @@ var testIdFilename = process.env.TestIdFilename;
 var tests = require("./common-driver.js");
 
 jasmine.getEnv().defaultTimeoutInterval = 100000;
+console.log("Testing against " + octopusUrl);
 
 describe('Dashboard collapser', function() {
     var driver = null;

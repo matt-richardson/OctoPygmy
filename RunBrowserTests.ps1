@@ -31,8 +31,7 @@ Get-AzureRmSubscription -SubscriptionName $SubscriptionName | Select-AzureRmSubs
 Write-Host "Starting test VM..."
 $vm = Start-AzureRMVM -ResourceGroupName $VMResourceGroupName -Name $VMName | Out-Null
 $ip = Get-AzureRmPublicIpAddress -ResourceGroupName $VMResourceGroupName -Name $VMName
-$url = "http://" + $ip.IpAddress
-$ENV:OctopusUrl = $url
+$octopusUrl = "http://" + $ip.IpAddress
 
 Write-Host "Uploading packed extension for use in browser testing..."
 Add-Type -A 'System.IO.Compression.FileSystem'
@@ -51,22 +50,22 @@ do
 {
     try
     {
-        Write-Host "Waiting for Octopus Deploy ($url/api) to be ready ($failed of $max tries)..."
-        Invoke-RestMethod -Uri "$url/api" -Method GET -TimeoutSec 10
+        Write-Host "Waiting for Octopus Deploy ($octopusUrl/api) to be ready ($failed of $max tries)..."
+        Invoke-RestMethod -Uri "$octopusUrl/api" -Method GET -TimeoutSec 10
         break
     } catch { $failed++ }
 } while($failed -lt $max)
 
 if($failed -ge $max)
 {
-    throw "Unable to connect to Octopus Deploy API. Requests timeed out."
+    throw "Unable to connect to Octopus Deploy API. Requests timed out."
     exit 1
 }
 
 Write-Host "Running browser tests..."
-$ENV:TestIdFilename = "results\browser-test-ids.txt"
 mkdir .\results\browser-tests -force | Out-Null
-& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests
+& .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output results\browser-tests --config TestIdFilename "results\browser-test-ids.txt" --config OctopusUrl "$octopusUrl"
+
 if ($LastExitCode -ne 0)
 {
     Write-Host "Tests failed"
