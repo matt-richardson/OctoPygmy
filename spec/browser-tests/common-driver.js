@@ -40,7 +40,6 @@ module.exports = {
     },
 
     setupDriver: function(sauceUsername, sauceKey, extensionUrl, octopusUrl, octopusPassword, testIdFilename, done) {
-        console.log("id filename: " + testIdFilename);
         saucelabs = new SauceLabs({
             username: sauceUsername,
             password: sauceKey
