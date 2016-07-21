@@ -71,7 +71,7 @@ try
     {
         Write-Host "Uploading browser test results..."
         $client = New-Object System.Net.WebClient
-        dir .$resultsPath\*.xml | %{ Write-Host "Uploading $($_.Path) to AppVeyor"; $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_.Path) }
+        dir .$resultsPath\*.xml | %{ Write-Host "Uploading $_ to AppVeyor"; $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
 
         Write-Host "Adding test identifiers to build messages..."
         Add-AppveyorMessage -Message "Browser test result urls"
