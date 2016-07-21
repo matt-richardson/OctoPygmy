@@ -64,14 +64,14 @@ try
 
     if ($LastExitCode -ne 0)
     {
-        Write-Host "Tests failed"
+        throw "Tests failed"
     }
 
     if ($ENV:APPVEYOR -eq "true")
     {
         Write-Host "Uploading browser test results..."
-        $client = New-Object 'System.Net.WebClient'
-        dir .$resultsPath\*.xml | %{ $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_) }
+        $client = New-Object System.Net.WebClient
+        dir .$resultsPath\*.xml | %{ Write-Host "Uploading $($_.Path) to AppVeyor"; $client.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $_.Path) }
 
         Write-Host "Adding test identifiers to build messages..."
         Add-AppveyorMessage -Message "Browser test result urls"
@@ -85,6 +85,7 @@ try
 } catch {
     Write-Host "ERROR"
     $_ | Write-Error
+    throw
 } finally {
     Write-Host "Stopping test VM..."
     if((Test-Path ENV:LeaveVirtualMachineRunning)) {
