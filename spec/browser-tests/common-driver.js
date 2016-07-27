@@ -105,8 +105,11 @@ module.exports = {
         return function() {
             return driver.getAllWindowHandles().then(function(handles) {
                 driver.switchTo().window(handles[1]);
+                driver.findElement(By.id("analytics")).click();
+                driver.findElement(By.id("save")).click();
                 driver.close();
                 driver.switchTo().window(handles[0]);
+                driver.navigate().refresh();
             });
         }
     },
