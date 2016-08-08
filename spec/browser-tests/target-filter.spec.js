@@ -29,7 +29,7 @@ describe('Target filter', function() {
             .then(tests.failIfFalse(done, "Environments didn't load in time"));
         driver.isElementPresent(By.css("select#grouping-chooser"))
             .then(tests.failIfFalse(done, "Target filter could not be found"));
-        driver.findeElement(By.css("select#grouping-chooser"))
+        driver.findElement(By.css("select#grouping-chooser"))
             .sendKeys("app-internal");
         driver.findElement(By.css("[octopygmy-id='zoctopygmy-database-internal-grouping']"))
             .isDisplayed()
