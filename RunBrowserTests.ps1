@@ -62,11 +62,6 @@ try
     mkdir .\$resultsPath -force | Out-Null
     & .\node_modules\.bin\jasmine-node --captureExceptions --verbose spec/browser-tests --junitreport --output $resultsPath --config TestIdFilename ".\$resultsPath\test-ids.txt" --config OctopusUrl "$octopusUrl" --config OctopusVersion "$octopusVersion" --config BluefinVersion "$bluefinVersion"
 
-    if ($LastExitCode -ne 0)
-    {
-        throw "Tests failed"
-    }
-
     if ($ENV:APPVEYOR -eq "true")
     {
         Write-Host "Uploading browser test results..."
@@ -82,6 +77,12 @@ try
             Add-AppveyorMessage -Message "$name = https://saucelabs.com/beta/tests/$id/commands"
         }
     }
+
+    if ($LastExitCode -ne 0)
+    {
+        throw "Tests failed"
+    }
+
 } catch {
     Write-Host "ERROR"
     $_ | Write-Error
