@@ -27,13 +27,13 @@ describe('Target filter', function() {
         driver.findElement(By.css("a[href='#/environments']")).click();
         driver.wait(until.elementIsNotVisible(driver.findElement(By.css("span.spin-static"))), 1000)
             .then(tests.failIfFalse(done, "Environments didn't load in time"));
-        driver.isElementPresent(By.css("select#grouping-chooser"))
+        driver.isElementPresent(By.css("input.grouping-chooser"))
             .then(tests.failIfFalse(done, "Target filter could not be found"));
-        driver.findElement(By.css("select#grouping-chooser"))
+        driver.findElement(By.css("input.grouping-chooser"))
             .sendKeys("app-internal");
         driver.findElement(By.css("[octopygmy-id='zoctopygmy-database-internal-grouping']"))
             .isDisplayed()
-            .then(tests.failIfTrue(done, "Target filter did not hid targets with non-matching tag"))
+            .then(tests.failIfTrue(done, "Target filter did not hide targets with non-matching tag"))
             .then(done);
     });
 });
