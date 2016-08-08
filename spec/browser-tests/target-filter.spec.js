@@ -31,6 +31,8 @@ describe('Target filter', function() {
             .then(tests.failIfFalse(done, "Target filter could not be found"));
         driver.findElement(By.css("input.grouping-chooser"))
             .sendKeys("app-internal");
+        driver.isElementPresent(By.css("[octopygmy-id='zoctopygmy-database-internal-grouping']"))
+            .then(tests.failIfFalse(done, "Target filter did not mark targets with bluefin id."));
         driver.findElement(By.css("[octopygmy-id='zoctopygmy-database-internal-grouping']"))
             .isDisplayed()
             .then(tests.failIfTrue(done, "Target filter did not hide targets with non-matching tag"))
