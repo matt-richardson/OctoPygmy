@@ -12,7 +12,7 @@ var tests = require("./common-driver.js");
 
 jasmine.getEnv().defaultTimeoutInterval = 100000;
 
-describe('Target filter', function() {
+describe("Target filter (" + octopusVersion + ")", function() {
     var driver = null;
 
     beforeEach(function(done) {
@@ -24,6 +24,8 @@ describe('Target filter', function() {
     });
 
     it('should only show targets with matching tag', function(done) {
+        var targetCss = "[octopygmy-id='zoctopygmy-database-internal-grouping']";
+
         driver.findElement(By.css("a[href='#/environments']")).click();
         driver.wait(until.elementIsNotVisible(driver.findElement(By.css("span.spin-static"))), 1000)
             .then(tests.failIfFalse(done, "Environments didn't load in time"));
@@ -31,9 +33,9 @@ describe('Target filter', function() {
             .then(tests.failIfFalse(done, "Target filter could not be found"));
         driver.findElement(By.css("input.grouping-chooser"))
             .sendKeys("app-internal");
-        driver.isElementPresent(By.css("[octopygmy-id='zoctopygmy-database-internal-grouping']"))
+        driver.isElementPresent(By.css(targetCss))
             .then(tests.failIfFalse(done, "Target filter did not mark targets with bluefin id."));
-        driver.findElement(By.css("[octopygmy-id='zoctopygmy-database-internal-grouping']"))
+        driver.findElement(By.css(targetCss))
             .isDisplayed()
             .then(tests.failIfTrue(done, "Target filter did not hide targets with non-matching tag"))
             .then(done);

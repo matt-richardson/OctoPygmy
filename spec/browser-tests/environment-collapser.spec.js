@@ -12,7 +12,7 @@ var tests = require("./common-driver.js");
 
 jasmine.getEnv().defaultTimeoutInterval = 100000;
 
-describe('Environment collapser', function() {
+describe("Environment collapser (" + octopusVersion + ")", function() {
     var driver = null;
 
     beforeEach(function(done) {

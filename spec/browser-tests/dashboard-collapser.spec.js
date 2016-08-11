@@ -13,7 +13,7 @@ var tests = require("./common-driver.js");
 jasmine.getEnv().defaultTimeoutInterval = 100000;
 console.log("Testing against version " + octopusVersion + " at " + octopusUrl);
 
-describe('Dashboard collapser', function() {
+describe("Dashboard collapser (" + octopusVersion + ")", function() {
     var driver = null;
     
     beforeEach(function(done) {
