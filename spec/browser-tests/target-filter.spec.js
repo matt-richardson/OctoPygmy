@@ -24,6 +24,8 @@ describe("Target filter (" + octopusVersion + ")", function() {
     });
 
     it('should only show targets with matching tag', function(done) {
+        if(tests.failuresOccured()) { done(); return; } // Required because jasmine runs 'it' even if 'beforeEach' fails. Argh.
+        
         var targetCss = "[octopygmy-id='zoctopygmy-database-internal-grouping']";
 
         driver.findElement(By.css("a[href='#/environments']")).click();

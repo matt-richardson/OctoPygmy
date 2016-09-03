@@ -2,6 +2,7 @@ var webdriver = require('selenium-webdriver');
 var By = webdriver.By;
 var SauceLabs = require("saucelabs");
 var fs = require("fs");
+var until = webdriver.until;
 
 module.exports = {
     failIfTrue: function(done, failMessage) {
@@ -16,6 +17,16 @@ module.exports = {
         }
     },
     
+    failed: function(done, failMessage) {
+        return function(reason) {
+            done(reason + "::" + failMessage);
+        }
+    },
+
+    failuresOccured: function() {
+        return jasmine.getEnv().currentSpec.results_.failedCount > 0;
+    },
+
     saucelabs: {},
 
     setTestStatus: function(driver, done) {
@@ -23,6 +34,7 @@ module.exports = {
         driver.controlFlow().reset(); // Discontinue any further driver actions that may have been defined.
         this.updateJob(driver, {passed: spec.results_.totalCount == spec.results_.passedCount})()
             .then(driver.quit())
+            .then(function() { console.log("Setting test status"); })
             .then(done);
     },
     
@@ -88,7 +100,7 @@ module.exports = {
         .then(this.updateJob(result, {name: spec.suite.description + ' ' + spec.description}))
         .then(this.outputTestIdentifier(testIdFilename, result, spec.suite.description + " " + spec.description))
         .then(this.closeOptionsTab(result))
-        .then(this.login(result, octopusUrl, octopusPassword))
+        .then(this.login(result, octopusUrl, octopusPassword, done))
         .then(done);
 
         return result;
@@ -115,11 +127,11 @@ module.exports = {
         }
     },
 
-    login: function(driver, url, password) {
+    login: function(driver, url, password, done) {
+        var tests = this;
         return function() {
             driver.get(url);
-            driver.wait(until.elementIsVisible(driver.findElement(By.css("inputUsername"))), 3000)
-                .then(tests.failIfFalse(done, "Login page didn't load in time"));
+            driver.wait(until.elementLocated(By.id("inputUsername")), 3000, "Didn't get the login page.").thenCatch(done);
             driver.findElement(By.id("inputUsername")).sendKeys("AdministratorJoe");
             driver.findElement(By.id("inputPassword")).sendKeys(password);
             driver.findElement(By.css("button.btn.btn-success[type='submit']")).click();

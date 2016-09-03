@@ -25,6 +25,8 @@ describe("Environment collapser (" + octopusVersion + ")", function() {
 
 
     it('should show only the environment selected', function(done) {
+        if(tests.failuresOccured()) { done(); return; } // Required because jasmine runs 'it' even if 'beforeEach' fails. Argh.
+        
         driver.findElement(By.css("a[href='#/environments']")).click();
         driver.wait(until.elementIsNotVisible(driver.findElement(By.css("span.spin-static"))), 1000)
             .then(tests.failIfFalse(done, "Environments didn't load in time"));

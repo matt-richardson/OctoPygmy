@@ -25,6 +25,8 @@ describe("Dashboard collapser (" + octopusVersion + ")", function() {
     });
 
     it('should show only the group selected', function(done) {
+        if(tests.failuresOccured()) { done(); return; } // Required because jasmine runs 'it' even if 'beforeEach' fails. Argh.
+
         driver.isElementPresent(By.css("select#project-chooser"))
             .then(tests.failIfFalse(done, "Project chooser could not be found."));
         var dropdown = driver.findElement(By.css("select#project-chooser"));
