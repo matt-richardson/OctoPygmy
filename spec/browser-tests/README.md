@@ -41,5 +41,10 @@ If you need to `findElement` you will most likely need to first check `isElement
 ## Things that still need to be done
 - Resetting of database after tests are complete. I think this can be done by executing an Octopus script console task via REST api to restore the original database. For the moment none of the tests actually change data.
 
+## Typical Errors in the AppVeyor build
+> ConvertTo-SecureString : Cannot bind argument to parameter 'String' because it is null.
+>
+> This is because certain secure information needed to start the VMs is not currently available for pull requests from other repositories.
+
 ## Don't be afraid to make improvements or correct things.
 None of us know it all. If you know more about Jasmine, node, Selenium npm, Sauce Labs, etc... and can see an improvement then suggest it.
