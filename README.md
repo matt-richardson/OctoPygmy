@@ -3,6 +3,9 @@
 
 [![Build Status](https://travis-ci.org/bluefin-octopusdeploy/chrome-extension.svg?branch=master)](https://travis-ci.org/bluefin-octopusdeploy/chrome-extension) [![gitter.im](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://gitter.im/bluefin-octopusdeploy/chrome-extension)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/8e7fro2k7oh6f6x8/branch/master?svg=true)](https://ci.appveyor.com/project/BluefinOctopusDeploy/chrome-extension/branch/master)
+> AppVeyor build/browser tests still in development
+
 A small Chrome extension for Octopus Deploy to provide some additional functions to the user interface.
 
 Get it from the Chrome web store [Bluefin Extension]
@@ -19,10 +22,9 @@ Get it from the Chrome web store [Bluefin Extension]
  - [Clone step]
  - Edit step as JSON
  - View resultant variable list on project variables page
- 
-#### Development note
-This is using some ugly JavaScript. So please don't use this as an example of how to do JavaScript. I'm figuring this stuff out as I go. I'm primarily a server side dev on C#.
- 
+
+#### Browser tests
+See the [spec/browser-tests/README](https://github.com/bluefin-octopusdeploy/chrome-extension/blob/BrowserTesting/spec/browser-tests/README.md)
 #### Other project of note
 
 There is another individual that has a project of Powershell cmdlets that you may also be interested in. Please note, I am not the author of that project.
