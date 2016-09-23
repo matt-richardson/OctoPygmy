@@ -48,6 +48,7 @@
       "3.0/background/clone-step-handler.js",
       "3.0/background/edit-step-as-json-handler.js",
       "3.0/background/template-loader.js",
+      "3.0/background/octopus-version-handler.js",
       "metrics.js",
       "libs/mixpanel.js",
       "libs/nanoajax.min.js"],
