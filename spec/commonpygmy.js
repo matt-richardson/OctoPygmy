@@ -73,4 +73,34 @@ describe("commonpygmy", function() {
 			}
 		});
 	});
+
+	describe("isNewerVersionThan", function() {
+		it("should return false when versions are the same", function() {
+			expect(commonpygmy.isNewerVersionThan("3.4.0", "3.4.0")).toBe(false);
+		});
+
+		it("should return false when major is lower", function() {
+			expect(commonpygmy.isNewerVersionThan("2.4.0", "3.4.0")).toBe(false);
+		});
+
+		it("should return false when minor is lower", function() {
+			expect(commonpygmy.isNewerVersionThan("3.3.0", "3.4.0")).toBe(false);
+		});
+
+		it("should return false when revision is lower", function() {
+			expect(commonpygmy.isNewerVersionThan("3.4.9", "3.4.10")).toBe(false);
+		});
+
+		it("should return true when major is higher", function() {
+			expect(commonpygmy.isNewerVersionThan("4.0.0", "3.4.0")).toBe(true);
+		});
+
+		it("should return true when minor is higher", function() {
+			expect(commonpygmy.isNewerVersionThan("3.4.0", "3.3.0")).toBe(true);
+		});
+
+		it("should return true when revision is higher", function() {
+			expect(commonpygmy.isNewerVersionThan("3.4.9", "3.4.0")).toBe(true);
+		});
+	});
 });

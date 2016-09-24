@@ -62,7 +62,7 @@ var commonpygmy = {
 
     	if (majorA > majorB)
     		return true;
-    	if (majorA > majorB)
+    	if (majorA < majorB)
     		return false;
 
     	var minorA = parseInt(a_components[1]);
@@ -70,7 +70,7 @@ var commonpygmy = {
 
     	if (minorA > minorB)
     		return true;
-    	if (minorA > minorB)
+    	if (minorA < minorB)
     		return false;
 
     	var revisionA = parseInt(a_components[2]);
@@ -78,7 +78,7 @@ var commonpygmy = {
 
     	if (revisionA > revisionB)
     		return true;
-    	if (revisionA > revisionB)
+    	if (revisionA < revisionB)
     		return false;
 
     	return false;
