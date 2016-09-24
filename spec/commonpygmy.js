@@ -1,5 +1,20 @@
 describe("commonpygmy", function() {
-	describe("addFilterInput", function() {
+    var originalConsoleDebug;
+    var originalConsoleLog;
+
+    beforeEach(function () {
+        originalConsoleDebug = console.debug;
+        originalConsoleLog = console.log;
+        console.debug = function() {};
+        console.log = function() {};
+    });
+
+    afterEach(function() {
+        console.debug = originalConsoleDebug;
+        console.log = originalConsoleLog
+    });
+
+  	describe("addFilterInput", function() {
 		it("adds the input to the node", function() {
 			var input = { id: 'the-id' };
 			var parent = { appendChild: function() {} };
