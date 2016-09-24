@@ -167,8 +167,12 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
     	}
     }
 
-    function observe(content, octopusVersion) {
+    function setOctopusVersion(octopusVersion) {
     	this.octopusVersion = octopusVersion;
+    }
+
+    function observe(content, octopusVersion) {
+    	setOctopusVersion(octopusVersion);
 		var observer = new MutationObserver(function(targets, observer) { checkIfWeAreOnReleasePage(); });
         observer.observe(content, { childList: true, subtree: true, attributes: false, characterData: false});
 
@@ -179,6 +183,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
         observe: observe,
         receiveMessage: receiveMessage,
         checkIfWeAreOnReleasePage: checkIfWeAreOnReleasePage,
-        addDeploymentProcessLink: addDeploymentProcessLink
+        addDeploymentProcessLink: addDeploymentProcessLink,
+        setOctopusVersion: setOctopusVersion
     };
 })();
