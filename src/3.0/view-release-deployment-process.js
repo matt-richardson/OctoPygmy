@@ -83,6 +83,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
 					                                $scope.lifecycle = lifecycle,
 					                                $scope.environments = environments,
 					                                $scope.wasDeployedToChannel = wasDeployedToChannel,
+					                                $scope.channelName = wasDeployedToChannel ? _.filter(channels.Items, function(c) { return c.Id == release.ChannelId })[0].Name : null,
 					                                $scope.channels = channels,
 					                                $scope.deploymentProcess = deploymentProcess,
 					                                $scope.builtInFeedPackageActions = _.filter(_.flatten(_.map(deploymentProcess.Steps, function(s) {

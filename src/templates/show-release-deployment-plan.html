@@ -1,6 +1,7 @@
 <div class="modal-header">
 	<button class="close" type="button" data-dismiss="modal" aria-hidden="true" ng-hide="isWorking.busy" ng-click="close()">x</button>
 	<h3>Deployment process for release {{releaseVersion}} </h3>
+	<p ng-show="wasDeployedToChannel">Deployed to channel: {{channelName}}</p>
 </div>
 <div class="modal-body">
 	<style>#viewReleaseDeploymentProcessContainer a { color: #333; } .col-lg-8 { width: 100%;}</style>
