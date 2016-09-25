@@ -11,8 +11,8 @@
 					<div class="form-box form-horizontal">
 						<div>
 							<div class="steps stack narrow650 margin-bottom-20">
-								<div class="stack-item" ng-class="{\'stack-link-previous\': step.StartTrigger == \'StartWithPrevious\' && !$first}" ng-repeat="step in deploymentProcess.Steps">
-									<div ng-show="step.Actions.length > 1">
+								<div class="stack-item" ng-class="{\'stack-link-previous\': step.StartTrigger == \'StartWithPrevious\' && !$first}" ng-repeat="step in deploymentProcess.Steps" ng-show="step.channelMatches">
+									<div ng-show="step.Actions.length > 1 && step.channelMatches">
 										<div class="stack-content">
 											<div class="action rolling">
 												<h4>
@@ -22,14 +22,14 @@
 											</div>
 										</div>
 										<div class="stack">
-											<div class="stack-item" ng-repeat="action in step.Actions">
+											<div class="stack-item" ng-repeat="action in step.Actions" ng-show="action.channelMatches">
 												<div class="stack-content">
 													<action-summary edit-link="" number="($parent.$index + 1) + \'.\' + ($index + 1)" action="action" step="step"></action-summary>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div ng-show="step.Actions.length == 1">
+									<div ng-show="step.Actions.length == 1 && step.channelMatches">
 										<div class="stack-content">
 											<action-summary edit-link="" number="($index + 1)" action="step.Actions[0]" step="step"></action-summary>
 										</div>

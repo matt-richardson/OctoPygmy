@@ -63,6 +63,14 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
 						});
 					};
 
+                    function channelMatches(release, action) {
+                        if (!release.ChannelId || !action.Channels)
+                            return true;
+                        if (action.Channels.length == 0)
+                            return true;
+                        return _.indexOf(action.Channels, release.ChannelId) > -1;
+                    }
+
 			        isLoading.promise(octopusRepository.Projects.get(projectId).then(function(project) {
 			            isLoading.promise(octopusRepository.Lifecycles.get(project.LifecycleId).then(function(lifecycleDefinition) {
 			                isLoading.promise(octopusRepository.Lifecycles.preview(lifecycleDefinition).then(function(lifecycle) {
@@ -70,9 +78,11 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
 			                        isLoading.promise(getChannels(project).then(function(channels) {
 			                            isLoading.promise(octopusRepository.Projects.getReleaseByVersion(project, version).then(function(release) {
 			                            	isLoading.promise(octopusRepository.DeploymentProcesses.get(release.ProjectDeploymentProcessSnapshotId).then(function(deploymentProcess) {
-				                                return $scope.project = project,
+			                            		var wasDeployedToChannel = release.ChannelId && release.ChannelId.length > 0 && channels && channels.Items.length > 1;
+			                            		return $scope.project = project,
 					                                $scope.lifecycle = lifecycle,
 					                                $scope.environments = environments,
+					                                $scope.wasDeployedToChannel = wasDeployedToChannel,
 					                                $scope.channels = channels,
 					                                $scope.deploymentProcess = deploymentProcess,
 					                                $scope.builtInFeedPackageActions = _.filter(_.flatten(_.map(deploymentProcess.Steps, function(s) {
@@ -82,10 +92,12 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
 					                                }),
 					                                _.each(deploymentProcess.Steps, function(s) {
 					                                    _.each(s.Actions, function(a) {
+					                                    	a.channelMatches = channelMatches(release, a);
 					                                        a.environments = getTags(a.Environments, environments);
 					                                        if (a.channels)
 					                                        	a.channels = getTags(a.Channels, channels.Items)
 					                                    })
+					                                    s.channelMatches = _.any(s.Actions, function(a) { return a.channelMatches;});
 					                                })
 			                            	}))
 			                            }))
