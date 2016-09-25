@@ -71,22 +71,22 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
 			                            isLoading.promise(octopusRepository.Projects.getReleaseByVersion(project, version).then(function(release) {
 			                            	isLoading.promise(octopusRepository.DeploymentProcesses.get(release.ProjectDeploymentProcessSnapshotId).then(function(deploymentProcess) {
 				                                return $scope.project = project,
-				                                $scope.lifecycle = lifecycle,
-				                                $scope.environments = environments,
-				                                $scope.channels = channels,
-				                                $scope.deploymentProcess = deploymentProcess,
-				                                $scope.builtInFeedPackageActions = _.filter(_.flatten(_.map(deploymentProcess.Steps, function(s) {
-				                                    return s.Actions
-				                                })), function(a) {
-				                                    return "feeds-builtin" === a.Properties["Octopus.Action.Package.NuGetFeedId"]
-				                                }),
-				                                _.each(deploymentProcess.Steps, function(s) {
-				                                    _.each(s.Actions, function(a) {
-				                                        a.environments = getTags(a.Environments, environments);
-				                                        if (a.channels)
-				                                        	a.channels = getTags(a.Channels, channels.Items)
-				                                    })
-				                                })
+					                                $scope.lifecycle = lifecycle,
+					                                $scope.environments = environments,
+					                                $scope.channels = channels,
+					                                $scope.deploymentProcess = deploymentProcess,
+					                                $scope.builtInFeedPackageActions = _.filter(_.flatten(_.map(deploymentProcess.Steps, function(s) {
+					                                    return s.Actions
+					                                })), function(a) {
+					                                    return "feeds-builtin" === a.Properties["Octopus.Action.Package.NuGetFeedId"]
+					                                }),
+					                                _.each(deploymentProcess.Steps, function(s) {
+					                                    _.each(s.Actions, function(a) {
+					                                        a.environments = getTags(a.Environments, environments);
+					                                        if (a.channels)
+					                                        	a.channels = getTags(a.Channels, channels.Items)
+					                                    })
+					                                })
 			                            	}))
 			                            }))
 			                        }))
