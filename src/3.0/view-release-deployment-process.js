@@ -168,7 +168,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
     }
 
     function setOctopusVersion(octopusVersion) {
-    	this.octopusVersion = octopusVersion;
+        pygmy3_0.viewReleaseDeploymentProcess.octopusVersion = octopusVersion;
     }
 
     function observe(content, octopusVersion) {
