@@ -24,27 +24,28 @@
 										<div class="stack">
 											<div class="stack-item" ng-repeat="action in step.Actions">
 												<div class="stack-content">
-												<action-summary edit-link="" number="($parent.$index + 1) + \'.\' + ($index + 1)" action="action" step="step"></action-summary>
+													<action-summary edit-link="" number="($parent.$index + 1) + \'.\' + ($index + 1)" action="action" step="step"></action-summary>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div ng-show="step.Actions.length == 1">
-									<div class="stack-content">
-									<action-summary edit-link="" number="($index + 1)" action="step.Actions[0]" step="step"></action-summary>
+									<div ng-show="step.Actions.length == 1">
+										<div class="stack-content">
+											<action-summary edit-link="" number="($index + 1)" action="step.Actions[0]" step="step"></action-summary>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</project-layout>
-</div>
+		</project-layout>
+	</div>
 </div>
 <div class="modal-footer">
-<spin active="isWorking.busy"></spin>
-<div>
-	<button class="btn btn-default" ng-disabled="isWorking.busy" ng-click="close()">close</button>
-</div>
+	<spin active="isWorking.busy"></spin>
+	<div>
+		<button class="btn btn-default" ng-disabled="isWorking.busy" ng-click="close()">close</button>
+	</div>
 </div>
