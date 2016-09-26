@@ -155,9 +155,20 @@ describe("clone-step", function() {
   });
 
   describe("addCloneStepMenuItems", function() {
+    afterEach(function() {
+      var div = document.getElementById('div-for-testing-clone-step');
+      if (div) {
+        if (div.remove)
+          div.remove();
+        else
+          div.parentNode.removeChild(div);
+      }
+    });
+
     it("adds the onclick handler to all non-parent drop downs", function() {
       var div = document.createElement('div');
       div.className = 'menu-button';
+      div.id = "div-for-testing-clone-step";
       var link = document.createElement("a");
       link.id = 'link1';
       var attrib = document.createAttribute("external-dropdown");
@@ -175,6 +186,7 @@ describe("clone-step", function() {
     it("adds the onclick handler to all parent drop downs", function() {
       var div = document.createElement('div');
       div.className = 'menu-button';
+      div.id = "div-for-testing-clone-step";
       var link = document.createElement("a");
       link.id = 'link1';
       var attrib = document.createAttribute("external-dropdown");

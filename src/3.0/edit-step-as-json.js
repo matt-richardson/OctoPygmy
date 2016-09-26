@@ -185,17 +185,24 @@ pygmy3_0.editStepAsJson = (function() {
         }
     }
 
-    function addEditStepAsJsonMenuItems(node) {
+    function addEditStepAsJsonMenuItems(node, handler) {
         var normalStep = "{id: 'processEditDropdown', scope: { step: step, action: step.Actions[0] } }";
         var parentStep = "{id: 'processEditDropdown', scope: { step: step } }";
         var childStep = "{id: 'processEditDropdown', scope: { step: step, action: action, isChild: true } }";
+
+        handler = handler || addEditStepAsJsonMenuItem
 
         var nodes = node.querySelectorAll("DIV.menu-button A[external-dropdown]");
         for(i = 0; i < nodes.length; i++ ) {
             var dropdownType = nodes[i].attributes['external-dropdown'].value
             if ((dropdownType == normalStep) || (dropdownType == parentStep) || (dropdownType == childStep)) {
-            	var oldClickHandler = nodes[i].onclick;
-                nodes[i].onClick = nodes[i].onclick = function() { if (oldClickHandler) oldClickHandler(); addEditStepAsJsonMenuItem(); }
+            	if (!nodes[i].hasAttribute("data-handler-added")) {
+                    var oldClickHandler = nodes[i].onclick;
+                    nodes[i].onClick = nodes[i].onclick = function() { if (oldClickHandler) oldClickHandler(); handler(); }
+                    attribute = document.createAttribute("data-handler-added");
+                    attribute.value = "true";
+                    nodes[i].setAttributeNode(attribute);
+                }
             }
         }
     }
