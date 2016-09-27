@@ -124,12 +124,12 @@ var originalConsoleDebug;
       };
       var receiveMessageHandler = function() {};
 
-      //6 links before we start
-      //todo: some other tests are leaving links on the page - need to clean them up
+      //3 links before we start
+      expect(document.querySelectorAll('a').length).toBe(3);
       pygmy3_0.viewResultantVariableList.addViewResultantVariableListButton(sendMessageHandler, receiveMessageHandler);
-      expect(document.querySelectorAll('a').length).toBe(7);
+      expect(document.querySelectorAll('a').length).toBe(4);
       pygmy3_0.viewResultantVariableList.addViewResultantVariableListButton(sendMessageHandler, receiveMessageHandler);
-      expect(document.querySelectorAll('a').length).toBe(7);
+      expect(document.querySelectorAll('a').length).toBe(4);
     });
 
     it("should not add the link if both the existing 'choose' and 'include' links are not yet visible", function() {
@@ -143,8 +143,10 @@ var originalConsoleDebug;
       document.getElementById('includeLink').parentNode.className = 'ng-hide';
       document.getElementById('chooseLink').className = 'ng-hide';
 
+      //3 links before we start
+      expect(document.querySelectorAll('a').length).toBe(3);
       pygmy3_0.viewResultantVariableList.addViewResultantVariableListButton(sendMessageHandler, receiveMessageHandler);
-      expect(document.querySelectorAll('a').length).toBe(6);
+      expect(document.querySelectorAll('a').length).toBe(3);
     });
 
     it("should hide the link if there are no variable sets", function() {

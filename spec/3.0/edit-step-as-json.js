@@ -293,9 +293,20 @@ describe("edit-step-as-json", function() {
   });
 
   describe("addEditStepAsJsonMenuItems", function() {
+    afterEach(function() {
+      var div = document.getElementById('div-for-testing-edit-step-as-json');
+      if (div) {
+        if (div.remove)
+          div.remove();
+        else
+          div.parentNode.removeChild(div);
+      }
+    });
+
   	it("adds the onclick handler to all parent drop downs", function() {
 	var div = document.createElement('div');
       div.className = 'menu-button';
+      div.id = "div-for-testing-edit-step-as-json"
       var link = document.createElement("a");
       link.id = 'link1';
       var attrib = document.createAttribute("external-dropdown");
@@ -304,11 +315,36 @@ describe("edit-step-as-json", function() {
       div.appendChild(link);
       document.body.appendChild(div);
 
-      pygmy3_0.editStepAsJson.addEditStepAsJsonMenuItems(document);
+      pygmy3_0.editStepAsJson.addEditStepAsJsonMenuItems(document, function() {});
 
       link = document.getElementById('link1');
-      expect(link.onclick.toString()).toContain('function () { if (oldClickHandler) oldClickHandler(); addEditStepAsJsonMenuItem(); }');
+      expect(link.onclick.toString()).toContain('function () { if (oldClickHandler) oldClickHandler(); handler(); }');
   	});
+
+    it("does not add the handler twice", function() {
+      var div = document.createElement('div');
+      div.className = 'menu-button';
+      div.id = "div-for-testing-edit-step-as-json"
+      var link = document.createElement("a");
+      link.id = 'link1';
+      var attrib = document.createAttribute("external-dropdown");
+      attrib.value = "{id: 'processEditDropdown', scope: { step: step } }";
+      link.setAttributeNode(attrib);
+      div.appendChild(link);
+      document.body.appendChild(div);
+
+      var counter = 0;
+      function handler() {
+        counter++;
+      }
+
+      pygmy3_0.editStepAsJson.addEditStepAsJsonMenuItems(document, handler);
+      pygmy3_0.editStepAsJson.addEditStepAsJsonMenuItems(document, handler);
+
+      link = document.getElementById('link1');
+      link.onclick();
+      expect(counter).toEqual(1);
+    });
   });
 
 })
