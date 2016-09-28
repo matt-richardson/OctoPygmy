@@ -121,7 +121,7 @@ pygmy3_0.viewResultantVariableList = (function() {
         if (hasClass(includeVariableSetsLinkContainer, "ng-hide") && hasClass(chooseVariableSetsLink, "ng-hide"))
             return;
 
-        console.log("Loading Blue fin feature 'show variable set variables'");
+        console.log("Loading Bluefin feature 'show variable set variables'");
 
         console.debug("  - adding 'show' link");
         var showLinkContainer = document.createElement('div');

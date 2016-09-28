@@ -117,7 +117,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
         if (document.getElementById('bluefin-showreleasedeploymentprocess-button'))
     		return;
 
-        console.log("Loading Blue fin feature 'show release deployment process'");
+        console.log("Loading Bluefin feature 'show release deployment process'");
 
     	var headings = document.querySelectorAll('h3');
     	var variablesHeading;

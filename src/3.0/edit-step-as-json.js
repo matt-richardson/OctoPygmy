@@ -209,7 +209,7 @@ pygmy3_0.editStepAsJson = (function() {
 
     function nodeMutated(node, octopusVersion) {
         if (node.querySelector("#processEditDropdown")) {
-            console.debug("Loading Blue fin feature 'edit step as json'");
+            console.debug("Loading Bluefin feature 'edit step as json'");
             addEditStepAsJsonMetaData();
             addEditStepAsJsonRefreshHandler(octopusVersion);
         }

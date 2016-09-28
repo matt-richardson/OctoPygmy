@@ -114,7 +114,7 @@ pygmy3_0.cloneStep = (function() {
 
     function nodeMutated(node) {
         if (node.querySelector("#processEditDropdown")) {
-            console.debug("Loading Blue fin feature 'clone step'");
+            console.debug("Loading Bluefin feature 'clone step'");
             addCloneStepMetaData();
             addCloneStepRefreshHandler();
         }
