@@ -19,6 +19,9 @@
 
 [AppVeyor Build](https://ci.appveyor.com/project/BluefinOctopusDeploy/chrome-extension)
 
+## Running tests locally
+Run the `RunBrowserTestsLocally.ps1` powershell script, be sure you've run `npm install`. You will also need a copy of the chrome driver in your PATH. You can download it from [Google](https://sites.google.com/a/chromium.org/chromedriver/). The latest one should be okay. Just be sure you put the `chromedriver.exe` (that's all there is) somewhere in your PATH. You can just put it in the folder you execute the script from as well. Just don't commit it. When running that script you will need to provide the `-octopusUrl`. Typically it'll be `http://localhost` but you may need to specify the port in that url if you changed that.
+
 ## Naming
 Name the browser test spec files in the following manner: `feature`.spec.js. Feature should be the same name as the source file that implements the feature.
 

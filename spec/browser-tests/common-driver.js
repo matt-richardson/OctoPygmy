@@ -30,15 +30,26 @@ module.exports = {
     saucelabs: {},
 
     setTestStatus: function(driver, done) {
-        var spec = jasmine.getEnv().currentSpec;
         driver.controlFlow().reset(); // Discontinue any further driver actions that may have been defined.
-        this.updateJob(driver, {passed: spec.results_.totalCount == spec.results_.passedCount})()
-            .then(driver.quit())
-            .then(function() { console.log("Setting test status"); })
-            .then(done);
+
+        if (this.saucelabs.username != null) {
+            var spec = jasmine.getEnv().currentSpec;
+            this.updateJob(driver, {passed: spec.results_.totalCount == spec.results_.passedCount})()
+                .then(driver.quit())
+                .then(function() { console.log("Setting test status"); })
+                .then(done);
+        } else {
+            driver.quit();
+            done();
+        }
     },
     
     updateJob: function(driver, options) {
+        if (this.saucelabs.username == null)
+        {
+            return function() {}; // No op. Assume running locally.
+        }
+
         return function() {
             return new Promise(function(resolve, reject) {
                 this.saucelabs.updateJob(driver.sessionID, options, resolve);
@@ -89,10 +100,14 @@ module.exports = {
                         "test-type"
                     ]
                     },
-            }).
-            usingServer("http://" + sauceUsername + ":" + sauceKey +
-              "@ondemand.saucelabs.com:80/wd/hub").
-            build();
+            });
+        
+        // Run against SauceLabs or just run locally.
+        if(sauceUsername != null) {
+            result = result.usingServer("http://" + sauceUsername + ":" + sauceKey + "@ondemand.saucelabs.com:80/wd/hub");
+        }
+
+        result = result.build();
 
         var spec = jasmine.getEnv().currentSpec;
         result.getSession()
@@ -132,7 +147,7 @@ module.exports = {
         return function() {
             driver.get(url);
             driver.wait(until.elementLocated(By.id("inputUsername")), 3000, "Didn't get the login page.").thenCatch(done);
-            driver.findElement(By.id("inputUsername")).sendKeys("AdministratorJoe");
+            driver.findElement(By.id("inputUsername")).sendKeys("JoeAdministrator");
             driver.findElement(By.id("inputPassword")).sendKeys(password);
             driver.findElement(By.css("button.btn.btn-success[type='submit']")).click();
             return driver.sleep(3000).then();
