@@ -7,7 +7,7 @@
     [string] $OctopusAdminPassword = "Password 123.",
     [string] $GeneratedDataFilePath = ".\gendata.json",
     [string] $DatabaseBackupFilePath = "C:\Backups\Octopus33Loaded.bak",
-    [string] $TentacleInstallPath = "C:\Program Files\Octopus Deploy\Tentacle",
+    [string] $TentaclePath = "C:\Program Files\Octopus Deploy\Tentacle\Tentacle.exe",
     [string] $ExportPath = "C:\Backups\OctopusExport",
     [string] $MigratorPath = "C:\Program Files\Octopus Deploy\Octopus-3.3.0\Octopus.Migrator.exe",
     [string] $InstanceName = "OctopusServer33"
@@ -135,7 +135,7 @@ ALTER DATABASE [$DatabaseName] SET MULTI_USER;
 function Get-TentacleThumbprint
 {
     Write-SectionHeader "Get tentacle thumbprint"
-    $exe = "$($TentacleInstallPath)\Tentacle.exe"
+    $exe = "$TentaclePath"
     $output = & $exe show-thumbprint
     Write-CommandOutput $output
     $thumbprint = $output[-1].Substring($output[-1].IndexOf(": ")+2)
@@ -250,6 +250,28 @@ function LoadProjects($data)
     }
     Write-Host "======================================"
 }
+
+function VerifyParameters()
+{
+    Write-SectionHeader "Checking your parameters"
+    if((Test-Path $MigratorPath -PathType Leaf) -eq $false)
+    {
+        Write-Error "The migrator path of '$MigratorPath' does not exist. Specify the full path to Octopus.Migrator.exe"
+        return
+    }
+    if((Test-Path $TentaclePath -PathType Leaf) -eq $false)
+    {
+        Write-Error "The Tentacle path of '$TentaclePath' does not exist. Specify the full path to Tentacle.exe"
+        return
+    }
+    if((Test-Path $GeneratedDataFilePath -PathType Leaf) -eq $false)
+    {
+        Write-Error "The generated data path of '$GeneratedDataFilePath' does not exist. Specify the full path to the generated data JSON file."
+        return
+    }
+}
+
+VerifyParameters
 
 $connection = CreateConnection
 $connection.Open()
