@@ -22,6 +22,13 @@
 ## Running tests locally
 Run the `RunBrowserTestsLocally.ps1` powershell script, be sure you've run `npm install`. You will also need a copy of the chrome driver in your PATH. You can download it from [Google](https://sites.google.com/a/chromium.org/chromedriver/). The latest one should be okay. Just be sure you put the `chromedriver.exe` (that's all there is) somewhere in your PATH. You can just put it in the folder you execute the script from as well. Just don't commit it. When running that script you will need to provide the `-octopusUrl`. Typically it'll be `http://localhost` but you may need to specify the port in that url if you changed that.
 
+> Do you see this error when running the browser tests?
+>
+> `UnknownError: unknown error: cannot find Chrome binary`
+>
+> It means you need to install the Chrome browser. Yes this caught me off guard in a local VM once. Just so used to Chrome just being there.
+
+
 ## Loading test data into the Octopus Deploy server.
 **Be careful** this part destroys data. Make sure you are connecting to a test server and database. The `Load-Octopus.ps1` powershell script in `browser-tests\setup-scripts` will load the test data that the browser tests rely on.
 
