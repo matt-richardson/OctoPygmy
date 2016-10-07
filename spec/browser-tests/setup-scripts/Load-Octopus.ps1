@@ -1,16 +1,16 @@
 ﻿param(
-    [string] $OctopusRootUrl = "http://localhost:8033/",
+    [string] $OctopusRootUrl = "http://localhost/",
     [string] $SqlServerInstance = "SQLExpress",
-    [string] $DatabaseName = "Octopus33",
-    [string] $ServiceName = "OctopusDeploy: OctopusServer33",
+    [string] $DatabaseName = "Octopus",
+    [string] $ServiceName = "OctopusDeploy",
     [string] $OctopusAdminUsername = "JoeAdministrator",
     [string] $OctopusAdminPassword = "Password 123.",
     [string] $GeneratedDataFilePath = ".\gendata.json",
-    [string] $DatabaseBackupFilePath = "C:\Backups\Octopus33Loaded.bak",
+    [string] $DatabaseBackupFilePath = "C:\Backups\OctopusInitial.bak",
     [string] $TentaclePath = "C:\Program Files\Octopus Deploy\Tentacle\Tentacle.exe",
     [string] $ExportPath = "C:\Backups\OctopusExport",
-    [string] $MigratorPath = "C:\Program Files\Octopus Deploy\Octopus-3.3.0\Octopus.Migrator.exe",
-    [string] $InstanceName = "OctopusServer33"
+    [string] $MigratorPath = "C:\Program Files\Octopus Deploy\Octopus\Octopus.Migrator.exe",
+    [string] $InstanceName = "OctopusServer"
 )
 $ErrorActionPreference = "STOP"
 

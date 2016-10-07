@@ -30,23 +30,23 @@ Run the `RunBrowserTestsLocally.ps1` powershell script, be sure you've run `npm 
 
 
 ## Loading test data into the Octopus Deploy server.
-**Be careful** this part destroys data. Make sure you are connecting to a test server and database. The `Load-Octopus.ps1` powershell script in `browser-tests\setup-scripts` will load the test data that the browser tests rely on.
+**Be careful** this part can destroy data. Make sure you are connecting to a test server and database. The `Load-Octopus.ps1` powershell script in `browser-tests\setup-scripts` will load the test data that the browser tests rely on.
 
 Example call of load script:
 ```
 & .\Load-Octopus.ps1 `
-   -OctopusRootUrl "http://localhost:8034/"`
-   -SqlServerInstance "SQLExpress"`
-   -DatabaseName "Octopus34"`
-   -ServiceName "OctopusDeploy: OctopusServer34"`
-   -OctopusAdminUsername "JoeAdministrator"`
-   -OctopusAdminPassword "Password 123."`
-   -GeneratedDataFilePath ".\gendata.json"`
-   -DatabaseBackupFilePath "C:\Backups\Octopus34Loaded.bak"`
-   -TentacleInstallPath "C:\Program Files\Octopus Deploy\Tentacle"`
-   -ExportPath "C:\Backups\OctopusExport34"`
-   -MigratorPath "C:\Program Files\Octopus Deploy\Octopus-3.4.9\Octopus.Migrator.exe"`
-   -InstanceName "OctopusServer34"
+    -OctopusRootUrl "http://localhost/" `
+    -SqlServerInstance "SQLExpress" `
+    -DatabaseName "Octopus" `
+    -ServiceName "OctopusDeploy" `
+    -OctopusAdminUsername "JoeAdministrator" `
+    -OctopusAdminPassword "Password 123." `
+    -GeneratedDataFilePath ".\gendata.json" `
+    -DatabaseBackupFilePath "C:\Backups\OctopusInitial.bak" `
+    -TentaclePath "C:\Program Files\Octopus Deploy\Tentacle\Tentacle.exe" `
+    -ExportPath "C:\Backups\OctopusExport" `
+    -MigratorPath "C:\Program Files\Octopus Deploy\Octopus\Octopus.Migrator.exe" `
+    -InstanceName "OctopusServer
 ```
 
 The first thing the script does is restore a database backup as specified in the `-DatabaseBackupFilePath` parameter. If that file does not exist it will create the folder (if needed) and then make a backup of the database to that location. So be sure SQL Server has access to the path you specify. It does this so you can re-load the data multiple times without duplicating anything. 
@@ -66,22 +66,11 @@ The second way is primarily to allow for quick resets of data after the tests th
 You need to have a Tentacle installed. The `-TentacleInstallPath` is used so that the load script can get the thumbprint of the tentacle for use in created valid targets.
 
 ### The SetupOctopusDeployServer.ps1 script
-This is intended to be used for testing **multiple** versions of Octopus Deploy on one machine. Be **very** carful with this. Only run it on a VM or other test machine as it messes with the registry and has the potential to mess things up.
+This will do a fresh install of SQL Server Express, Octopus Deploy server and Tentacle onto the machine. You typically want to use this on a virtual machine or the like. It installs [Chocolatey](https://chocolatey.org/) to install the other items.
 
-Having said that.
+> If you make changes to the installation you will need to use the same changes (port, instance,...) in the load script and tests.
 
-It installs [Chocolatey](https://chocolatey.org/). Using chocolatey it installs the following:
-- SQL Server 2014 Express
-- Octopus Deploy Tentacle 3.4.0
-- Octopus Deploy Server 3.4.0
-- Messes with the registry to make MsiExec think Octopus Deploy is not installed.
-- Octopus Deploy Server 3.4.9
-
-Each version of the Octopus Deploy server is installed to its own folder so they can run side by side. They use a separate database each but connect to the same Tentacle. The port number for each install of Octopus Deploy Server is different according to the version number. For example `http://localhost:8034` will bring up the 3.4.9 server web app.
-
-> If you make changes you will need to use the same changes (port, instance,...) in the load script and tests.
-
-You will need to provide a license file for use. Specify the path to it with the `-licenseFilePath` parameter to the script.
+You will need to provide a license file for use. Specify the path to it with the `-licenseFilePath` parameter to the script. You will also need to specify the `-version` of Octopus Deploy you want to install. See the Chocolatey packages for current versions available to install.
 
 ## Naming
 Name the browser test spec files in the following manner: `feature`.spec.js. Feature should be the same name as the source file that implements the feature.
