@@ -4,21 +4,6 @@
 >
 > Then again, maybe I'm the only one.
 
-## Current setup
-
-1. Commit or pull request is made
-1. AppVeyor starts the build process
-1. A build defined PowerShell script runs
-1. Starting Azure VMs for multiple versions of Octopus Deploy
-1. Starting Jasmine tests in this folder
-1. Using Selenium to connect to SauceLabs to run on Windows 10
-1. Uploading Jasmine test results to AppVeyor build
-    - Test status (passed/failed) in the *Tests* section
-    - SauceLabs URLs for the tests in the *Messages* section
-1. Stopping the Azure VMs
-
-[AppVeyor Build](https://ci.appveyor.com/project/BluefinOctopusDeploy/chrome-extension)
-
 ## Running tests locally
 Run the `RunBrowserTestsLocally.ps1` powershell script, be sure you've run `npm install`. You will also need a copy of the chrome driver in your PATH. You can download it from [Google](https://sites.google.com/a/chromium.org/chromedriver/). The latest one should be okay. Just be sure you put the `chromedriver.exe` (that's all there is) somewhere in your PATH. You can just put it in the folder you execute the script from as well. Just don't commit it. When running that script you will need to provide the `-octopusUrl`. Typically it'll be `http://localhost` but you may need to specify the port in that url if you changed that.
 
@@ -32,7 +17,7 @@ Run the `RunBrowserTestsLocally.ps1` powershell script, be sure you've run `npm 
 ## Loading test data into the Octopus Deploy server.
 **Be careful** this part can destroy data. Make sure you are connecting to a test server and database. The `Load-Octopus.ps1` powershell script in `browser-tests\setup-scripts` will load the test data that the browser tests rely on.
 
-Example call of load script:
+Example call of load script (using the default values):
 ```
 & .\Load-Octopus.ps1 `
     -OctopusRootUrl "http://localhost/" `
