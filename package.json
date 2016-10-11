@@ -1,6 +1,7 @@
 {
-  "name": "BlueFin",
+  "name": "Bluefin",
   "version": "1.0.0",
+  "license": "Apache-2.0",
   "description": "Extension for Octopus Deploy",
   "main": "index.js",
   "scripts": {
@@ -13,5 +14,11 @@
   "author": "davidroberts63",
   "license": "Apache 2.0",
   "readmeFilename": "README.md",
-  "gitHead": "9f47bf95f8e1cf3ca9985dcced309a83bb5302c0"
+  "gitHead": "9f47bf95f8e1cf3ca9985dcced309a83bb5302c0",
+  "dependencies": {
+    "jasmine": "^2.4.1",
+    "saucelabs": "^1.2.0",
+    "selenium-webdriver": "2.47.0",
+    "jasmine-node": "1.14.5"
+  }
 }
