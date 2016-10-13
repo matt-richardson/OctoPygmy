@@ -128,13 +128,22 @@ pygmy3_0.viewResultantVariableList = (function() {
         showLinkContainer.className = 'pull-right'
         var showLink = document.createElement('a');
         showLink.innerText = 'Show resultant variable list';
-        showLink.title = "Lists all available variables, combinining the project and variable sets variables";
+        showLink.title = "Lists all available variables, combinining the project and variable sets variables. Enhanced by Bluefin.";
         showLink.id = 'bluefin-viewresultantvariablelist-button';
         showLink.style.cursor = 'pointer';
+
+        var imgUrl = chrome.extension.getURL("bluefinlogo48.png");
+        showLink.style.background = "url('" + imgUrl + "')";
+        showLink.style.backgroundRepeat = "no-repeat";
+        showLink.style.backgroundSize = "19px";
+        showLink.style.backgroundPositionX = "12.7em";
+        showLink.style.paddingRight = "25px"
+
         showLinkContainer.appendChild(showLink);
 
         //if the choose is hidden, then there are no variable sets yet
         if (hasClass(chooseVariableSetsLink, "ng-hide")) {
+            console.log("Not showing the resultant variables list link, as there are no variable sets added to this project");
             showLinkContainer.className = 'ng-hide';
         }
 

@@ -118,6 +118,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
     		return;
 
         console.log("Loading Bluefin feature 'show release deployment process'");
+        //todo: consider making this part angular
 
     	var headings = document.querySelectorAll('h3');
     	var variablesHeading;
@@ -134,6 +135,14 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
         newHeading.id = 'bluefin-showreleasedeploymentprocess-heading';
         newHeading.className = 'margin-top-20';
         newHeading.innerText = "Deployment Process";
+        newHeading.title = 'Enhanced by Bluefin';
+        var imgUrl = chrome.extension.getURL("bluefinlogo48.png");
+        newHeading.style.background = "url('" + imgUrl + "')";
+        newHeading.style.backgroundRepeat = "no-repeat";
+        newHeading.style.backgroundSize = "19px";
+        newHeading.style.backgroundPositionY = "4px";
+        newHeading.style.backgroundPositionX = "10em";
+
 		variablesNote.parentNode.insertBefore(newHeading, variablesNote.nextSibling.nextSibling.nextSibling);
 
 		console.debug("  - adding new desciption text and 'show' link");

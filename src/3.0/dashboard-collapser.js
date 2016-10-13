@@ -5,18 +5,32 @@ pygmy3_0.dashboardCollapser = (function() {
 
 	function createChooser ()
 	{
+		var container = document.createElement("div");
+		container.style.display = "inline";
+		container.id = chooserId + "-container";
+
+		var imgUrl = chrome.extension.getURL("bluefinlogo48.png");
+		var logo = document.createElement("img");
+		logo.src = imgUrl;
+		logo.title = "Enhanced by Bluefin";
+		logo.width = "19";
+		logo.height = "19";
+		logo.style.marginLeft = "10px";
+
 		chooser = document.createElement("select");
 		chooser.id = chooserId;
 		chooser.onchange = showOnlygroup;
 		chooser.className = "grouping-chooser";
-		
+		container.appendChild(chooser);
+		container.appendChild(logo);
+
 		var item = document.createElement("option");
 		item.value = commonpygmy.allItemsValue;
 		item.innerHTML = "~ All ~";
 
 		chooser.appendChild(item);
 
-		return chooser;
+		return container;
 	}
 
 	function addItemToChooser(id, name)

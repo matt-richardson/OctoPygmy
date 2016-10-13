@@ -28,7 +28,19 @@ pygmy3_0.stepTemplateUpdater = (function() {
 
 	function createUpdaterButton()
 	{
-		var raw = '<button type="button" class="btn btn-sm btn-warning" style="margin-left: 10px;" id="' + buttonId + '">Update All</button>';
+    var imgUrl = chrome.extension.getURL("bluefinlogo48.png");
+		var raw = '<button type="button" \
+											 class="btn btn-sm btn-warning" \
+											 style="margin-left: 10px;\
+											 			  background-image: url(\'' + imgUrl + '\');\
+						            			background-position-x: 6.5em;\
+						            			background-position-y: 3px;\
+						            			background-repeat: no-repeat;\
+						            			background-size: 19px;\
+						            			width: 9em;\
+						            			padding-right: 34px;"\
+						    			 title="Enhanced by Bluefin"\
+											 id="' + buttonId + '">Update All</button>';
 		return generateNodeFromHtml(raw);
 	}
 

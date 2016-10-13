@@ -8,14 +8,28 @@ pygmy3_0.environmentFilter = (function () {
 	}
 
 	function createFilterInput() {
+		var container = document.createElement("div");
+		container.style.display = "inline";
+		container.id = this.inputId + "-container";
+
+		var imgUrl = chrome.extension.getURL("bluefinlogo48.png");
+		var logo = document.createElement("img");
+		logo.src = imgUrl;
+		logo.title = "Enhanced by Bluefin";
+		logo.width = "19";
+		logo.height = "19";
+		logo.style.marginLeft = "10px";
+
 		var input = document.createElement("input");
 		input.id = this.inputId;
 		input.type = "text";
 		input.className = "grouping-chooser";
 		input.oninput = filterFor;
 		input.onblur = doneWithFilter;
+		container.appendChild(input);
+		container.appendChild(logo);
 
-		return input;
+		return container;
 	}
 
 	function determineStatus(node)

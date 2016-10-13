@@ -43,8 +43,14 @@ pygmy3_0.integrateStepTemplateLibrary = (function() {
 		existingTemplates.classList.add('col-sm-7');
 
 		var viewRow = existingTemplates.parentNode;
+    var imgUrl = chrome.extension.getURL("bluefinlogo48.png");
 		var libraryNodeHtml = '<div id="' + libraryNodeId + '" class="col-lg-5 col-md-5 col-sm-5" style="padding-left: 0;margin-left: 0;">\
-<h3>Library</h3>\
+<h3 style=\'background-image: url("' + imgUrl + '");\
+            background-position-x: 3.5em;\
+            background-position-y: 4px;\
+            background-repeat: no-repeat;\
+            background-size: 19px;\'\
+    title=\'Enhanced by Bluefin\'>Library</h3>\
 <ul id="' + libraryNodeId + '-list' + '" class="list" style="padding-left: 0;margin: 0;">\
 </ul>\
 </div>';

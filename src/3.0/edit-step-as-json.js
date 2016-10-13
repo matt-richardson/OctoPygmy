@@ -101,13 +101,25 @@ pygmy3_0.editStepAsJson = (function() {
         console.debug("Adding 'edit step as json' menu item to dropdown menu")
         var menu = document.querySelector("ul.dropdown-menu[role='menu']");
 
+        for(i = 0; i < menu.children.length; i++ ) {
+            if (menu.children[i].children.length > 0)
+                menu.children[i].children[0].style.paddingLeft = '40px';
+        }
+
         var newMenuItem = document.createElement('li')
         newMenuItem.className = 'divider';
         menu.appendChild(newMenuItem);
 
         newMenuItem = document.createElement('li')
-        newMenuItem.innerHTML = '<a tabindex="-1" href="">Edit step as JSON</a>'
+        newMenuItem.title = "Enhanced by Bluefin";
+        newMenuItem.innerHTML = '<a tabindex="-1" href="" style="padding-left:40px">Edit step as JSON</a>'
         newMenuItem.onClick = newMenuItem.onclick = editStepAsJson;
+        var imgUrl = chrome.extension.getURL("bluefinlogo48.png");
+        newMenuItem.style.background = "url('" + imgUrl + "')";
+        newMenuItem.style.backgroundRepeat = "no-repeat";
+        newMenuItem.style.backgroundSize = "19px";
+        newMenuItem.style.backgroundPositionY = "4px";
+        newMenuItem.style.backgroundPositionX = "10px";
         menu.appendChild(newMenuItem);
     }
 
