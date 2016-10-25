@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory=$true)]
-    $octopusUrl
+    $octopusUrl,
+    $octopusVersion = "local"
 )
 
 $ENV:OctopusPassword = "Password 123." # This is only used for testing. And on a install that has no real data. So there.
@@ -16,4 +17,4 @@ if((Test-Path $jasmineNode -PathType Leaf) -eq $false)
     return
 }
 cp .\src C:\bluefin-extension -Recurse -Force
-& $jasmineNode --captureExceptions --verbose spec/browser-tests --junitreport --output $resultsPath --config TestIdFilename ".\$resultsPath\test-ids.txt" --config OctopusUrl "$octopusUrl" --config OctopusVersion "local" --config BluefinVersion "current"
+& $jasmineNode --captureExceptions --verbose spec/browser-tests --junitreport --output $resultsPath --config TestIdFilename ".\$resultsPath\test-ids.txt" --config OctopusUrl "$octopusUrl" --config OctopusVersion $octopusVersion --config BluefinVersion "current"

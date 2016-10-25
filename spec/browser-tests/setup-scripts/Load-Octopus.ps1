@@ -79,11 +79,7 @@ function CreateBackupLocation()
 
         New-Item -Path $directory -ItemType Directory | Out-Null
 
-        $username = "NT Service\MSSQL"   #... \MSSQLSERVER if NOT SQL Express
-        if($SqlServerInstance -ne "")
-        { 
-            $username += "`$$($SqlServerInstance)"
-        }
+        $username = "NT Service\MSSQLSERVER"
         Write-Log "Adding write permissions for $username"
         $acl = Get-Acl $directory
         $acl.SetAccessRuleProtection($False, $False) | Out-Null
@@ -95,7 +91,7 @@ function CreateBackupLocation()
 
 function CreateConnection()
 {
-    $connectionString = "Server=.\$SqlServerInstance;Database=$DatabaseName;Trusted_Connection=true"
+    $connectionString = "Server=$SqlServerInstance;Database=$DatabaseName;Trusted_Connection=true"
     $connection = New-Object System.Data.SqlClient.SqlConnection($connectionString);
     return $connection;
 }

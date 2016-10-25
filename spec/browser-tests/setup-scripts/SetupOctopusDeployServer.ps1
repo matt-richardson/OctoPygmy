@@ -5,16 +5,25 @@
     $version
 )
 
+$workingDir = Split-Path $SCRIPT:MyInvocation.MyCommand.Path -Parent
+CD $workingDir
+
+try {
+
 $ErrorActionPreference = "STOP"
+
+if (Test-Path .\finished) { Remove-Item .\finished -Force }
+if (Test-Path .\failed) { Remove-Item .\failed -Force }
 
 if (!(Get-Command cinst -ErrorAction SilentlyContinue))
 {
     iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
 }
 
-Import-Module C:\ProgramData\chocolatey\helpers\chocolateyProfile.psm1
-Import-Module C:\ProgramData\chocolatey\helpers\chocolateyInstaller.psm1
-
+#Write-Host "Loading chocolatey modules"
+#Import-Module C:\ProgramData\chocolatey\helpers\chocolateyProfile.psm1
+#Import-Module C:\ProgramData\chocolatey\helpers\chocolateyInstaller.psm1
+<#
 Install-ChocolateyPackage `
     -PackageName 'SQLServerExpress2014' `
     -FileType 'exe' `
@@ -25,6 +34,7 @@ Install-ChocolateyPackage `
     -Checksumtype64 'SHA256' `
     -ValidExitCodes @(0,3010) `
     --allow-empty-checksums-secure
+#>
 
 cinst OctopusDeploy -version $version --yes --force
 cinst OctopusDeploy.Tentacle -version $version --yes --force
@@ -39,7 +49,7 @@ $licenseBase64 = [System.Convert]::ToBase64String($bytes)
 $instance = @{
     name = "OctopusServer";
     server = "C:\Program Files\Octopus Deploy\Octopus\Octopus.Server.exe";
-    connectionString = "Server=.\SQLExpress;Database=Octopus;Trusted_Connection=True;";
+    connectionString = "Server=.;Database=Octopus;Trusted_Connection=True;";
     serverPort = 80;
     commsListenPort = 1800;
     username = "JoeAdministrator";
@@ -48,6 +58,8 @@ $instance = @{
 }
 
 Write-Host "== Configuring Octopus Deploy Server " -BackgroundColor DarkCyan
+$ip = Get-NetIpAddress -PrefixOrigin "Dhcp" -AddressFamily "IPv4" | Select -ExpandProperty IpAddress
+
 & $instance.server create-instance --console --instance $instance.name --config "C:\$($instance.name)\OctopusServer.config"
 & $instance.server configure --console --instance $instance.name `
     --home "C:\$($instance.name)" `
@@ -55,9 +67,8 @@ Write-Host "== Configuring Octopus Deploy Server " -BackgroundColor DarkCyan
     --upgradeCheck False `
     --upgradeCheckWithStatistics False `
     --webAuthenticationMode UsernamePassword `
-    --webForceSSL False `
-    --webListenPrefixes http://localhost:$($instance.serverPort) `
-    --commsListenPort $instance.commsListenPort
+    --webListenPrefixes "http://localhost,http://$ip" `
+    --webForceSSL False
 & $instance.server database --console --instance $instance.name --create --grant="NT AUTHORITY\SYSTEM"
 & $instance.server service --console --instance $instance.name --stop
 & $instance.server admin --console --instance $instance.name --username $instance.username --password $instance.password
@@ -65,16 +76,21 @@ Write-Host "== Configuring Octopus Deploy Server " -BackgroundColor DarkCyan
 & $instance.server service --console --instance $instance.name --install --reconfigure --start
 
 Write-Host "  Get thumbprint for tentacle configuration later on"
-$result = & $instance.server show-thumbprint --instance $instance.name
-$instance.thumbprint = $result[-1] # Last line of command line output is the server thumbprint.
+$thumbprintResult = & $instance.server show-thumbprint --instance $instance.name
+$instance.thumbprint = $thumbprintResult[-1] # Last line of command line output is the server thumbprint.
 
 Write-Host "== Configuring the Tentacle"
 $tentacle = "C:\Program Files\Octopus Deploy\Tentacle\Tentacle.exe" 
-& $tentacle create-instance --instance "Tentacle" --config "C:\OctopusTentacle\Tentacle.config"
-& $tentacle new-certificate --instance "Tentacle" --if-blank
-& $tentacle configure --instance "Tentacle" --reset-trust
-& $tentacle configure --instance "Tentacle" --home "C:\OctopusTentacle" --app "C:\OctopusTentacle\Applications" --port "10933" --noListen "False"
-& $tentacle configure --instance "Tentacle" --trust $instance.thumbprint
-& $tentacle service --instance "Tentacle" --install --start
+& $tentacle create-instance --console --instance "Tentacle" --config "C:\OctopusTentacle\Tentacle.config"
+& $tentacle new-certificate --console --instance "Tentacle" --if-blank
+& $tentacle configure --console --instance "Tentacle" --reset-trust
+& $tentacle configure --console --instance "Tentacle" --home "C:\OctopusTentacle" --app "C:\OctopusTentacle\Applications" --port "10933" --noListen "False"
+& $tentacle configure --console --instance "Tentacle" --trust $instance.thumbprint
+& $tentacle service --console --instance "Tentacle" --install --start
 
 Write-Host "Done"
+"" | Out-File .\finished
+
+} catch {
+    $_ | Out-File .\failed
+}
