@@ -25,7 +25,6 @@ pygmy3_0.environmentCollapser = (function() {
 		item.value = id;
 		item.innerHTML = name;
 		
-		chooser = document.getElementById(chooserId);
 		chooser.appendChild(item);
 	}
 
@@ -61,6 +60,7 @@ pygmy3_0.environmentCollapser = (function() {
 			
 			if (node.parentNode && node.parentNode.tagName == 'DIV' && node.getAttribute("ng-repeat") == "environment in environments") {
 				console.debug("Found an inserted environment");
+				ensureChooserExists();
 				addGroupToChooser(node);
 			}
 
@@ -71,6 +71,23 @@ pygmy3_0.environmentCollapser = (function() {
 				commonpygmy.addFilterInput(filterInput, node.parentNode);
 			}
 		}
+	}
+
+	function ensureChooserExists()
+	{
+		if (chooser == null)
+		{
+			console.debug("Adding the environment chooser. Due to hard refresh of page");
+			var breadcrumb = getPageBreadcrumb("Environments");
+			var filterInput = createChooser();
+			commonpygmy.addFilterInput(filterInput, breadcrumb.parentNode);
+		}
+	}
+
+	function getPageBreadcrumb(innerText)
+	{
+		var breadcrumbs = document.querySelectorAll("ul.breadcrumb");
+		return _.find(breadcrumbs, function(crumb) { return crumb.innerText.trim() == innerText; });
 	}
 
 	// Copy and pasted from dashboard collapser. Refactor to common method?
