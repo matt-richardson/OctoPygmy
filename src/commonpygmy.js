@@ -82,5 +82,12 @@ var commonpygmy = {
     		return false;
 
     	return false;
+	},
+
+	getPageBreadcrumb: function(innerText)
+	{
+		var breadcrumbs = document.querySelectorAll("ul.breadcrumb");
+		return _.find(breadcrumbs, function(crumb) { return crumb.innerText.trim() == innerText; });
 	}
+
 }

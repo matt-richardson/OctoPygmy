@@ -107,12 +107,14 @@ pygmy3_0.environmentFilter = (function () {
 			if (node.tagName == "LI" && node.getAttribute("ng-repeat") == "machine in machines") {
 				console.debug("Found inserted target machine");
 				console.debug(node.innerText);
+				ensureFilterInputExists();
 				addTargetToCache(node);
 			}
 
 			if (node.tagName == "UL" && node.className == "octo-tiles") {
 				console.debug("Found 3.3 inserted target machine set");
 				console.debug(node);
+				ensureFilterInputExists();
 				add33TargetToCache(node);
 			}
 			
@@ -122,6 +124,17 @@ pygmy3_0.environmentFilter = (function () {
 				var filterInput = createFilterInput();
 				commonpygmy.addFilterInput(filterInput, node.parentNode);
 			}
+		}
+	}
+
+	function ensureFilterInputExists()
+	{
+		if (document.getElementById(this.inputId) == null)
+		{
+			console.debug("Adding the environment filter. Due to hard refresh of page");
+			var breadcrumb = commonpygmy.getPageBreadcrumb("Environments");
+			var filterInput = createFilterInput();
+			commonpygmy.addFilterInput(filterInput, breadcrumb.parentNode);
 		}
 	}
 

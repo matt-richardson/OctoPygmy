@@ -78,16 +78,10 @@ pygmy3_0.environmentCollapser = (function() {
 		if (chooser == null)
 		{
 			console.debug("Adding the environment chooser. Due to hard refresh of page");
-			var breadcrumb = getPageBreadcrumb("Environments");
+			var breadcrumb = commonpygmy.getPageBreadcrumb("Environments");
 			var filterInput = createChooser();
 			commonpygmy.addFilterInput(filterInput, breadcrumb.parentNode);
 		}
-	}
-
-	function getPageBreadcrumb(innerText)
-	{
-		var breadcrumbs = document.querySelectorAll("ul.breadcrumb");
-		return _.find(breadcrumbs, function(crumb) { return crumb.innerText.trim() == innerText; });
 	}
 
 	// Copy and pasted from dashboard collapser. Refactor to common method?
