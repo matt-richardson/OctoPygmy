@@ -31,7 +31,7 @@ pygmy3_0.environmentFilter = (function () {
 
 	function add33TargetToCache(node) {
 		var targets = node.getElementsByTagName("LI");
-		targets.forEach(addTargetToCache);
+		_.each(targets, addTargetToCache);
 	}
 	
 	function addTargetToCache(node) {
