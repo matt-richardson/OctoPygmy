@@ -9,3 +9,8 @@
 .force-word-wrap {
 	word-wrap: break-word
 }
+
+.project-chooser {
+    margin-left: 10px;
+    padding-left: 10px;
+}

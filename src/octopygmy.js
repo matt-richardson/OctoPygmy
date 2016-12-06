@@ -4,6 +4,7 @@ var octopygmy = (function() {
 	{
 		var defaultOptions = {
 			dashboard: true,
+            dashboardFilter: true,
 			environments: true,
 			machines: true,
 			libraryTemplate: true,
@@ -40,6 +41,7 @@ var octopygmy = (function() {
 			body.addEventListener("DOMNodeInserted", function(event)
 			{
 				if (options.dashboard)	dashboardCollapser.nodeInsertion(event)
+                if (options.dashboardFilter) dashboardFilter.nodeInsertion(event)
 				if (options.environments) environmentCollapser.nodeInsertion(event)
 				if (options.machines) environmentRoleNameFilter.nodeInsertion(event)
 				if (options.libraryTemplate) integrateStepTemplateLibrary.nodeInsertion.call(integrateStepTemplateLibrary, event)

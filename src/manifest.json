@@ -13,6 +13,7 @@
       "commonpygmy.js",
       "3.0/pygmy.js",
       "3.0/dashboard-collapser.js",
+      "3.0/dashboard-filter.js",
       "3.0/environment-collapser.js",
       "3.0/environment-filter.js",
       "3.0/integrate-step-template-library.js",

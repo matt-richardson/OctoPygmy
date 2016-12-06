@@ -75,7 +75,8 @@ pygmy3_0.dashboardCollapser = (function() {
 			{
 				console.debug("Found an inserted project grouping");
 				addGroupToChooser(node);
-			}			
+			}		
+            
 			if (node.tagName == 'UL' && node.innerText == 'Dashboard') {
 				console.info('Setting up dashboard filter');
 				var filterInput = createChooser();
