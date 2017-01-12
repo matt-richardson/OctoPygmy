@@ -25,7 +25,6 @@ pygmy3_0.environmentCollapser = (function() {
 		item.value = id;
 		item.innerHTML = name;
 		
-		chooser = document.getElementById(chooserId);
 		chooser.appendChild(item);
 	}
 
@@ -61,6 +60,7 @@ pygmy3_0.environmentCollapser = (function() {
 			
 			if (node.parentNode && node.parentNode.tagName == 'DIV' && node.getAttribute("ng-repeat") == "environment in environments") {
 				console.debug("Found an inserted environment");
+				ensureChooserExists();
 				addGroupToChooser(node);
 			}
 
@@ -70,6 +70,17 @@ pygmy3_0.environmentCollapser = (function() {
 				var filterInput = createChooser();
 				commonpygmy.addFilterInput(filterInput, node.parentNode);
 			}
+		}
+	}
+
+	function ensureChooserExists()
+	{
+		if (chooser == null)
+		{
+			console.debug("Adding the environment chooser. Due to hard refresh of page");
+			var breadcrumb = commonpygmy.getPageBreadcrumb("Environments");
+			var filterInput = createChooser();
+			commonpygmy.addFilterInput(filterInput, breadcrumb.parentNode);
 		}
 	}
 

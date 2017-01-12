@@ -29,6 +29,11 @@ pygmy3_0.environmentFilter = (function () {
 		}
 	}
 
+	function add33TargetToCache(node) {
+		var targets = node.getElementsByTagName("LI");
+		_.each(targets, addTargetToCache);
+	}
+	
 	function addTargetToCache(node) {
 		var machineNode = node;
 		var statusNode = machineNode.getElementsByTagName("IMG")[0];
@@ -91,6 +96,9 @@ pygmy3_0.environmentFilter = (function () {
 		chrome.runtime.sendMessage({ name: "used-role-name-filter", properties: { "filter": filterMetric  } });
 	}
 
+
+// var watchIt = function(mut) {if(mut.addedNodes.length > 0) {if(mut.addedNodes[0].tagName == "LI" && mut.addedNodes[0].classList.contains("dropdown-item-container")) {return;} else {console.debug("Nodes added at WatchIt");console.debug(mut.addedNodes);}}}
+
 	function nodeInsertion(nodes) {
 		for (var i = 0; i < nodes.length; i++) {
 			var node = nodes[i];
@@ -99,15 +107,34 @@ pygmy3_0.environmentFilter = (function () {
 			if (node.tagName == "LI" && node.getAttribute("ng-repeat") == "machine in machines") {
 				console.debug("Found inserted target machine");
 				console.debug(node.innerText);
+				ensureFilterInputExists();
 				addTargetToCache(node);
 			}
 
+			if (node.tagName == "UL" && node.className == "octo-tiles") {
+				console.debug("Found 3.3 inserted target machine set");
+				console.debug(node);
+				ensureFilterInputExists();
+				add33TargetToCache(node);
+			}
+			
 			// This is just like the dashboard collapser. Refactor to a common method?
 			if (node.tagName == "UL" && node.innerText.trim() == "Environments") {
 				console.info('Setting up environment filter');
 				var filterInput = createFilterInput();
 				commonpygmy.addFilterInput(filterInput, node.parentNode);
 			}
+		}
+	}
+
+	function ensureFilterInputExists()
+	{
+		if (document.getElementById(this.inputId) == null)
+		{
+			console.debug("Adding the environment filter. Due to hard refresh of page");
+			var breadcrumb = commonpygmy.getPageBreadcrumb("Environments");
+			var filterInput = createFilterInput();
+			commonpygmy.addFilterInput(filterInput, breadcrumb.parentNode);
 		}
 	}
 

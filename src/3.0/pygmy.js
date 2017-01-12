@@ -6,7 +6,7 @@ var pygmy3_0 = (function() {
 		console.debug("   path: " + commonpygmy.location().pathname);
 		console.debug("   title:" + commonpygmy.document().title);
 
-		if (commonpygmy.location().pathname.indexOf('/app') < 0) return false;
+		if (!commonpygmy.location().pathname.endsWith('/app')) return false;
 		if (commonpygmy.document().title.indexOf("Octopus Deploy") < 0) return false;
 		if (!commonpygmy.document().getElementById(contentElementId)) return false;
 

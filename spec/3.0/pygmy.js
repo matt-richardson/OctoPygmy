@@ -14,7 +14,10 @@ describe("pygmy3_0", function() {
 
 			expect(pygmy3_0.worksWithPage()).toBe(false);
 		});
-
+		it('return true for an angular Octopus app with custom segment', function() {
+			spyOn(commonpygmy, 'location').and.returnValue({ pathname: 'anyurl/app' });
+			expect(pygmy3_0.worksWithPage()).toBe(false);
+		})
 		it("returns false for an angular Octopus app with 2.0 structure", function() {
 			spyOn(commonpygmy, 'location').and.returnValue({ pathname: '/app' });
 			spyOn(commonpygmy, 'document').and.returnValue({ 
