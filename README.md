@@ -14,11 +14,11 @@ Get it from the Chrome web store [Bluefin Extension]
  - [Environment collapser]
  - [Filter machines by role or name]
  - Filter machines by state (online, offline, disabled, etc...)
- - [Community Library integrated into step template library view]
+ - [Community Library integrated into step template library view] - _natively supported in Octopus since 3.7.0_
  - [Update step template across all projects]
- - [Clone step]
+ - [Clone step] - _natively supported in Octopus since 3.7.16_
  - Edit step as JSON
- - View resultant variable list on project variables page
+ - View resultant variable list on project variables page - _natively supported in Octopus since 3.4.0_
  
 #### Development note
 This is using some ugly JavaScript. So please don't use this as an example of how to do JavaScript. I'm figuring this stuff out as I go. I'm primarily a server side dev on C#.
