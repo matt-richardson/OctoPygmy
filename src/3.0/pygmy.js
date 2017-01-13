@@ -25,9 +25,9 @@ var pygmy3_0 = (function() {
 				if(options.dashboard) self.dashboardCollapser.observe(content);
 				if(options.environments) self.environmentCollapser.observe(content);
 				if(options.machines) self.environmentFilter.observe(content);
-				if(options.libraryTemplate) self.integrateStepTemplateLibrary.observe(content);
+				if(options.libraryTemplate) self.integrateStepTemplateLibrary.observe(content, response.version);
 				if(options.updateAllTemplate) self.stepTemplateUpdater.observe(content);
-				if(options.cloneStep) self.cloneStep.observe(content);
+				if(options.cloneStep) self.cloneStep.observe(content, response.version);
 				if(options.editStepAsJson) self.editStepAsJson.observe(content, response.version);
 				if(options.viewReleaseDeploymentProcess) self.viewReleaseDeploymentProcess.observe(content, response.version);
 				if(options.viewResultantVariableList) self.viewResultantVariableList.observe(content, response.version);
