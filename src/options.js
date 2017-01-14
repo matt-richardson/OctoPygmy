@@ -46,7 +46,7 @@ function restore_options() {
 	var defaults = {
 		analytics: true,
 		dashboard: true,
-        dashboardFilter: true,
+		dashboardFilter: true,
 		environments: true,
 		machines: true,
 		libraryTemplate: true,

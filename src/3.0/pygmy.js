@@ -23,7 +23,7 @@ var pygmy3_0 = (function() {
 
 				console.debug("Initializing features based upon options");
 				if(options.dashboard) self.dashboardCollapser.observe(content);
-                if(options.dashboardFilter) self.dashboardFilter.observe(content);
+				if(options.dashboardFilter) self.dashboardFilter.observe(content);
 				if(options.environments) self.environmentCollapser.observe(content);
 				if(options.machines) self.environmentFilter.observe(content);
 				if(options.libraryTemplate) self.integrateStepTemplateLibrary.observe(content);
