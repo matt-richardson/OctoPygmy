@@ -26,7 +26,17 @@ pygmy3_0.dashboardFilter = (function () {
         for(var i = 1; i < groupProjects.length; i++)
         {
             var projectNode = groupProjects[i];
-            var pygmyId = projectId(projectNode.getElementsByClassName("project-name")[0].innerText);
+            var projectName = "";
+
+            //In Octopus 3.3.x, the try will work.
+            //However, as of 3.7.x, the class 'project-name' seems to be gone
+            try {
+                projectName = projectNode.getElementsByClassName("project-name")[0].innerText;
+            } catch(e) {
+                projectName = projectNode.querySelectorAll(".media-body a")[0].innerText;
+            }
+
+            var pygmyId = projectId(projectName);
 
             commonpygmy.setNodePygmyId(projectNode, pygmyId);
 
