@@ -1,6 +1,8 @@
 pygmy3_0.dashboardFilter = (function () {
-    var inputId = "project-filter"
-    var projects = []
+    var inputId = "project-filter";
+    var projects = [];
+    var allParentIds = [];
+    var allProjectIds = [];
 
     function createFilterInput() {
         var input = document.createElement("input");
@@ -68,13 +70,16 @@ pygmy3_0.dashboardFilter = (function () {
             }
         }
 
-        var allParentIds = _.map(projects, function(project){
-            return project.parentId;
-        });
+        //Cache the array of parent and project ids
+        if (allProjectIds.length === 0){
+            allParentIds = _.map(projects, function(project){
+                return project.parentId;
+            });
 
-        var allProjectIds = _.map(projects, function(project){
-            return project.pygmyId;
-        });
+            allProjectIds = _.map(projects, function(project){
+                return project.pygmyId;
+            });
+        }
 
         commonpygmy.showItems(allProjectIds, projectIdsToShow, 'table-row', 'none');
         commonpygmy.showItems(allParentIds, parentIdsToShow, 'block', 'none');
