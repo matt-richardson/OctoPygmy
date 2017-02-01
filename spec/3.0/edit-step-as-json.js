@@ -266,7 +266,7 @@ describe("edit-step-as-json", function() {
       var script = document.querySelector('#bluefin-editstepasjson-refreshhandler');
       expect(script).not.toBe(null);
       expect(script.type).toEqual("text/javascript");
-      expect(script.text).toContain("var rerfeshHandler = document.getElementById('bluefin-editstepasjson-refreshbutton'); rerfeshHandler.onClick = rerfeshHandler.onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Edit Step as JSON Failed', this.attributes['message'].value, [{label: 'ok'}]);} }");
+      expect(script.text).toContain("var rerfeshHandler = document.getElementById('bluefin-editstepasjson-refreshbutton'); rerfeshHandler.onClick = rerfeshHandler.onclick = function() { if (this.attributes['status'].value == 'success') { var injector = angular.element(\"#processEditDropdown\").injector(); try {injector.get(\"$state\").reload()} catch (e) { injector.get(\"$route\").reload();}} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Edit Step as JSON Failed', this.attributes['message'].value, [{label: 'ok'}]);} }");
   	});
 
   	it("adds an submit handler element", function() {
