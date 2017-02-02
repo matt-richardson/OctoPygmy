@@ -160,7 +160,7 @@ pygmy3_0.editStepAsJson = (function() {
             var refreshHandlerScript = document.createElement("script");
             refreshHandlerScript.id = 'bluefin-editstepasjson-refreshhandler';
             refreshHandlerScript.type = 'text/javascript';
-            refreshHandlerScript.text = "var rerfeshHandler = document.getElementById('bluefin-editstepasjson-refreshbutton'); rerfeshHandler.onClick = rerfeshHandler.onclick = function() { if (this.attributes['status'].value == 'success') { angular.element(\"#processEditDropdown\").injector().get(\"$route\").reload();} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Edit Step as JSON Failed', this.attributes['message'].value, [{label: 'ok'}]);} }";
+            refreshHandlerScript.text = "var rerfeshHandler = document.getElementById('bluefin-editstepasjson-refreshbutton'); rerfeshHandler.onClick = rerfeshHandler.onclick = function() { if (this.attributes['status'].value == 'success') { var injector = angular.element(\"#processEditDropdown\").injector(); try {injector.get(\"$state\").reload()} catch (e) { injector.get(\"$route\").reload();}} else { angular.element(\"#processEditDropdown\").injector().get(\"octoDialog\").messageBox('Edit Step as JSON Failed', this.attributes['message'].value, [{label: 'ok'}]);} }";
             document.body.appendChild(refreshHandlerScript);
 
             //handles submit json request to push to background page
