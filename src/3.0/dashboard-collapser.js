@@ -24,8 +24,19 @@ pygmy3_0.dashboardCollapser = (function() {
 		var item = document.createElement("option");
 		item.value = id;
 		item.innerHTML = name;
-		
+
 		chooser = document.getElementById(chooserId);
+		if (chooser == null) {
+			console.info('Setting up dashboard filter');
+			var filterInput = createChooser();
+			var dashboard = document.getElementsByClassName('breadcrumb');
+			if (dashboard.length == 0) {
+				//pre 3.8.5
+				dashboard = document.getElementsByClassName('breadcrumb ng-scope');
+			}
+			commonpygmy.addFilterInput(filterInput, dashboard[0]);
+			chooser = document.getElementById(chooserId);
+		}
 		chooser.appendChild(item);
 	}
 
@@ -75,18 +86,15 @@ pygmy3_0.dashboardCollapser = (function() {
 			{
 				console.debug("Found an inserted project grouping");
 				addGroupToChooser(node);
-			}			
-			if (node.tagName == 'UL' && node.innerText == 'Dashboard') {
-				console.info('Setting up dashboard filter');
-				var filterInput = createChooser();
-				commonpygmy.addFilterInput(filterInput, node.parentNode);
 			}
 		}
 	}
 
 	function observe(content)
 	{
-		var observer = new MutationObserver(function(records) { 
+		var observer = new MutationObserver(function(records) {
+			if (!window.location.href.endsWith('/app#/'))
+				return;
 			for (var i = 0; i < records.length; i++) {
 				nodeInsertion(records[i].addedNodes);
 			}
