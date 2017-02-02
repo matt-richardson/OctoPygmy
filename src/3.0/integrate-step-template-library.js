@@ -143,7 +143,10 @@ pygmy3_0.integrateStepTemplateLibrary = (function() {
 	}
 
 	// Copy and pasted from dashboard collapser. Refactor to common method?
-	function observe(content) {
+	function observe(content, octopusVersion) {
+		if (commonpygmy.isNewerVersionThan(octopusVersion, "3.6.999")) {
+			return;
+		}
 		var observer = new MutationObserver(function(records) { 
 			for (var i = 0; i < records.length; i++) {
 				nodeInsertion(records[i].addedNodes);

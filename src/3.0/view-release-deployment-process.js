@@ -12,6 +12,9 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
             if (commonpygmy.isNewerVersionThan(pygmy3_0.viewReleaseDeploymentProcess.octopusVersion, "3.4.0")) {
                 functionAsText = functionAsText.replace(/\$modal/g, "$uibModal");
             }
+            if (commonpygmy.isNewerVersionThan(pygmy3_0.viewReleaseDeploymentProcess.octopusVersion, "3.8.4")) {
+                functionAsText = functionAsText.replace(/\$routeParams/g, "$stateParams");
+            }
             functionAsText = functionAsText.replace("#{template}", response.properties.template);
 	        showDeploymentProcessHandlerScript.text = functionAsText.slice(functionAsText.indexOf("{") + 1, functionAsText.lastIndexOf("}"));
 	        document.body.appendChild(showDeploymentProcessHandlerScript);
@@ -31,7 +34,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
                 keyboard: !0,
                 size: 'md',
                 template: '#{template}',
-                controller: function ($scope, $routeParams, busy, pageTitle, octopusRepository, $route, pluginRegistry, octoDialog, $modal, $location, unsavedChanges, $modalInstance) {
+                controller: function ($scope, $routeParams, busy, pageTitle, octopusRepository, pluginRegistry, octoDialog, $modal, $location, unsavedChanges, $modalInstance) {
 			        var isLoading = $scope.isLoading = busy.create();
 			        var isSaving = $scope.isSaving = busy.create();
 			        $scope.project = null;
@@ -43,8 +46,9 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
 			            var action = pluginRegistry.getDeploymentAction(step.Actions[0].ActionType);
 			            return action.canHaveChildren
 			        };
+
 			        $scope.releaseVersion = $routeParams.version;
-			        var projectId = $routeParams.id;
+			        var projectId = $routeParams.id || $routeParams.projectId;
 			        var version = $routeParams.version;
 			        var getTags = function(allOptions, selectedOptions) {
 			            if (0 === allOptions.length)

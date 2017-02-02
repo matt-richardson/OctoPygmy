@@ -17,14 +17,16 @@ Get it from the Chrome web store [Bluefin Extension]
  - [Environment collapser]
  - [Filter machines by role or name]
  - Filter machines by state (online, offline, disabled, etc...)
- - [Community Library integrated into step template library view]
+ - [Community Library integrated into step template library view] - _natively supported in Octopus since 3.7.0_
  - [Update step template across all projects]
- - [Clone step]
+ - [Clone step] - _natively supported in Octopus since 3.7.16_
  - Edit step as JSON
- - View resultant variable list on project variables page
+ - View resultant variable list on project variables page - _natively supported in Octopus since 3.4.0_
+ - View Deployment Procss for Release
 
 #### Browser tests
 See the [spec/browser-tests/README](https://github.com/bluefin-octopusdeploy/chrome-extension/blob/BrowserTesting/spec/browser-tests/README.md)
+
 #### Other project of note
 
 There is another individual that has a project of Powershell cmdlets that you may also be interested in. Please note, I am not the author of that project.

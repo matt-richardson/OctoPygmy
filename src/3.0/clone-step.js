@@ -129,7 +129,10 @@ pygmy3_0.cloneStep = (function() {
         }
     }
 
-    function observe(content) {
+    function observe(content, octopusVersion) {
+        if (commonpygmy.isNewerVersionThan(octopusVersion, "3.7.15")) {
+            return;
+        }
         var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 nodesMutated(mutation.addedNodes);
