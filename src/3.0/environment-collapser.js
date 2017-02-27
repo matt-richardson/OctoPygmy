@@ -53,7 +53,20 @@ pygmy3_0.environmentCollapser = (function() {
 		chrome.runtime.sendMessage({ name: "used-environment-collapser", properties: { "grouping": groupingMetric  } });
 	}
 
+	function removeEnvironmentCollapserIfExists() {
+		if (chooser) {
+			chooser.parentNode.removeChild(chooser);
+			chooser = null;
+		}
+	}
+
 	function nodeInsertion(nodes) {
+
+		if (window.location.href.indexOf('/app#/environments') == -1) {
+			removeEnvironmentCollapserIfExists();
+ 			return;
+		}
+
 		for (var i = 0; i < nodes.length; i++) {
 			var node = nodes[i];
 			if (node.nodeType != 1) return; // Not an element just ignore.
