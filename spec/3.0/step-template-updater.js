@@ -15,6 +15,12 @@ describe("step-template-updater", function() {
   });
 
   describe("version check", function() {
+
+    //mock out theMutationObserver as it doesn't exist in the jasmine/phantom version
+    //used on the travis build servers
+    function MutationObserver(callback) {
+    };
+
     it("should not show for version 3.12.0", function() {
       var content = document.createElement('div');
       var called = false;
