@@ -18,7 +18,7 @@ Get it from the Chrome web store [Bluefin Extension]
  - [Filter machines by role or name]
  - Filter machines by state (online, offline, disabled, etc...)
  - [Community Library integrated into step template library view] - _natively supported in Octopus since 3.7.0_
- - [Update step template across all projects]
+ - [Update step template across all projects] -  - _natively supported in Octopus since 3.12.0_
  - [Clone step] - _natively supported in Octopus since 3.7.16_
  - Edit step as JSON
  - View resultant variable list on project variables page - _natively supported in Octopus since 3.4.0_

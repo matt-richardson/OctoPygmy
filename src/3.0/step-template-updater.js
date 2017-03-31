@@ -125,8 +125,12 @@ pygmy3_0.stepTemplateUpdater = (function() {
 		}
 	}
 
-	function observe(content)
+	function observe(content, octopusVersion)
 	{
+    if (commonpygmy.isNewerVersionThan(octopusVersion, "3.11.999")) {
+        return;
+    }
+
 		var observer = new MutationObserver(function(records) {
 			for (var i = 0; i < records.length; i++) {
 				nodeInsertion(records[i].addedNodes);
