@@ -6,6 +6,7 @@ function save_options() {
 	var options = {};
 	options.analytics = document.getElementById('analytics').checked;
 	options.dashboard = document.getElementById('dashboard-collapser').checked;
+	options.dashboardFilter = document.getElementById('dashboard-filter').checked;
 	options.environments = document.getElementById('environment-collapser').checked;
 	options.machines = document.getElementById('environment-machine-filter').checked;
 	options.libraryTemplate = document.getElementById('library-template-import').checked;
@@ -45,6 +46,7 @@ function restore_options() {
 	var defaults = {
 		analytics: true,
 		dashboard: true,
+		dashboardFilter: true,
 		environments: true,
 		machines: true,
 		libraryTemplate: true,
@@ -66,6 +68,7 @@ function restore_options() {
 		
 		document.getElementById('analytics').checked = options.analytics;
 		document.getElementById('dashboard-collapser').checked = options.dashboard;
+		document.getElementById('dashboard-filter').checked = options.dashboardFilter;
 		document.getElementById('environment-collapser').checked = options.environments;
 		document.getElementById('environment-machine-filter').checked = options.machines;
 		document.getElementById('library-template-import').checked = options.machines;
