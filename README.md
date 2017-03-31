@@ -23,6 +23,7 @@ Get it from the Chrome web store [Bluefin Extension]
  - Edit step as JSON
  - View resultant variable list on project variables page - _natively supported in Octopus since 3.4.0_
  - View Deployment Process for Release
+ - Dashboard project filter - _Allows searching even when all projects are shown in newer Octopus versions._
 
 #### Browser tests
 See the [spec/browser-tests/README](https://github.com/bluefin-octopusdeploy/chrome-extension/blob/BrowserTesting/spec/browser-tests/README.md)
@@ -36,6 +37,7 @@ There is another individual that has a project of Powershell cmdlets that you ma
 #### Contributors
 
 [Matt Richardson]
+[Nicolas Villanueva]
 
 [Bluefin Extension]:https://chrome.google.com/webstore/detail/octopygmy/gmnfhfdbcadjmpoigffmoondjhblabom?hl=en-US&gl=US
 [Octopus-Cmdlets]:https://github.com/Swoogan/Octopus-Cmdlets
@@ -45,3 +47,4 @@ There is another individual that has a project of Powershell cmdlets that you ma
 [Community Library integrated into step template library view]:https://octopusdeploy.uservoice.com/forums/170787-general/suggestions/6994715-tighter-integration-between-step-templates-and-com
 [Clone step]:https://octopusdeploy.uservoice.com/forums/170787-general/suggestions/6470009-cloning-of-steps
 [Matt Richardson]:https://github.com/matt-richardson
+[Nicolas Villanueva]:https://github.com/MexicanAce
