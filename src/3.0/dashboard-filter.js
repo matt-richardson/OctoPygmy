@@ -98,6 +98,7 @@ pygmy3_0.dashboardFilter = (function () {
             if (node.parentNode && node.parentNode.tagName == 'FASTBOARD')
             {
                 console.debug("Found an inserted project grouping");
+                ensureFilterInputExists();
                 addGroupToCache(node);
             }
 
