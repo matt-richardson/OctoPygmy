@@ -90,7 +90,20 @@ pygmy3_0.dashboardFilter = (function () {
         chrome.runtime.sendMessage({ name: "used-project-name-filter", properties: { "filter": filterMetric  } });
     }
 
+    function removeFilterIfExists() {
+        var filter = document.getElementById(this.inputId);
+        if (filter)
+            filter.parentNode.removeChild(filter);
+    }
+
     function nodeInsertion(nodes) {
+
+        if (window.location.href.endsWith('/app#/') == false) {
+            removeFilterIfExists();
+            return;
+        }
+
+
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
             if (node.nodeType != 1) return; // Not an element just ignore.
