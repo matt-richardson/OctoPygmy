@@ -9,7 +9,7 @@ pygmy3_0.environmentFilter = (function () {
 
 	function createFilterInput() {
 		var input = document.createElement("input");
-		input.id = this.inputId;
+		input.id = inputId;
 		input.type = "text";
 		input.className = "grouping-chooser";
 		input.oninput = filterFor;
@@ -96,10 +96,19 @@ pygmy3_0.environmentFilter = (function () {
 		chrome.runtime.sendMessage({ name: "used-role-name-filter", properties: { "filter": filterMetric  } });
 	}
 
-
-// var watchIt = function(mut) {if(mut.addedNodes.length > 0) {if(mut.addedNodes[0].tagName == "LI" && mut.addedNodes[0].classList.contains("dropdown-item-container")) {return;} else {console.debug("Nodes added at WatchIt");console.debug(mut.addedNodes);}}}
+	function removeEnvironmentFilterIfExists() {
+		var filter = document.getElementById(inputId);
+		if (filter)
+			filter.parentNode.removeChild(filter);
+	}
 
 	function nodeInsertion(nodes) {
+
+		if (window.location.href.indexOf('/app#/environments') == -1) {
+			removeEnvironmentFilterIfExists();
+ 			return;
+		}
+
 		for (var i = 0; i < nodes.length; i++) {
 			var node = nodes[i];
 			if (node.nodeType != 1) return; // Not an element just ignore.
@@ -129,7 +138,7 @@ pygmy3_0.environmentFilter = (function () {
 
 	function ensureFilterInputExists()
 	{
-		if (document.getElementById(this.inputId) == null)
+		if (document.getElementById(inputId) == null)
 		{
 			console.debug("Adding the environment filter. Due to hard refresh of page");
 			var breadcrumb = commonpygmy.getPageBreadcrumb("Environments");
