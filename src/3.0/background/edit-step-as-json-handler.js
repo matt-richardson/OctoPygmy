@@ -61,7 +61,7 @@ pygmy3_0.editStepAsJsonHandler = (function() {
 		getJsonResponse(url, handler);
 	}
 
-	function handleEditedStepAsJsonRequest(request, sendResponse, octopusRoot, getJsonResponse, handleEditedStepGetResponse, putJsonRequest, antiForgeryToken) {
+	function handleEditedStepAsJsonRequest(request, sendResponse, octopusRoot, getJsonResponse, handleEditedStepGetResponse, putJsonRequest) {
 		var json = request.properties.json;
 		var deploymentProcessId = request.properties.deploymentProcessId;
 		var antiForgeryToken = request.properties.antiForgeryToken;
