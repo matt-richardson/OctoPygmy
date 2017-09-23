@@ -42,11 +42,11 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
           };
           $scope.actionClass = function(action) {
             return action.ActionType.replace('.', '').toLowerCase();
-          },
-            $scope.canHaveChildren = function(step) {
-              var action = pluginRegistry.getDeploymentAction(step.Actions[0].ActionType);
-              return action.canHaveChildren;
-            };
+          };
+          $scope.canHaveChildren = function(step) {
+            var action = pluginRegistry.getDeploymentAction(step.Actions[0].ActionType);
+            return action.canHaveChildren;
+          };
 
           $scope.releaseVersion = $routeParams.version;
           var projectId = $routeParams.id || $routeParams.projectId;
@@ -56,7 +56,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
               return '';
             }
             var result = [];
-            return _.each(selectedOptions, function(e) {
+            return selectedOptions.forEach(function(e) {
               allOptions.indexOf(e.Id) >= 0 && result.push(e.Name);
             }),
               result.join(',');
@@ -76,7 +76,7 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
             if (action.Channels.length == 0) {
               return true;
             }
-            return _.indexOf(action.Channels, release.ChannelId) > -1;
+            return action.Channels.indexOf(release.ChannelId) > -1;
           }
 
           isLoading.promise(octopusRepository.Projects.get(projectId).then(function(project) {
@@ -98,23 +98,25 @@ pygmy3_0.viewReleaseDeploymentProcess = (function() {
                         $scope.lifecycle = lifecycle;
                         $scope.environments = environments;
                         $scope.wasDeployedToChannel = wasDeployedToChannel;
-                        $scope.channelName = wasDeployedToChannel ? _.filter(channels.Items, function(c) {
+                        $scope.channelName = wasDeployedToChannel ? channels.Items.filter(function(c) {
                           return c.Id == release.ChannelId;
                         })[0].Name : null;
                         $scope.channels = channels;
                         $scope.deploymentProcess = deploymentProcess;
-                        $scope.builtInFeedPackageActions = _.filter(_.flatten(_.map(deploymentProcess.Steps, getActionFromStep)), isBuiltInFeedAction);
-                        _.each(deploymentProcess.Steps, function(s) {
-                          _.each(s.Actions, function(a) {
+                        var mapOfStepsToActions = deploymentProcess.Steps.map(getActionFromStep);
+                        var flattenedMapOfStepsToActions = [].concat.apply([], mapOfStepsToActions);
+                        $scope.builtInFeedPackageActions = flattenedMapOfStepsToActions.filter(isBuiltInFeedAction);
+                        deploymentProcess.Steps.forEach(function(s) {
+                          s.Actions.forEach(function(a) {
                             a.channelMatches = channelMatches(release, a);
                             a.environments = getTags(a.Environments, environments);
                             if (a.channels) {
                               a.channels = getTags(a.Channels, channels.Items);
                             }
                           });
-                          s.channelMatches = _.any(s.Actions, function(a) {
+                          s.channelMatches = s.Actions.filter(function(a) {
                             return a.channelMatches;
-                          });
+                          }).length > 0;
                         });
                         return;
                       }));

@@ -3,6 +3,7 @@ module.exports = {
     "rules": {
         "require-jsdoc": "off",
         "no-var": "off",
-        "max-len": "off"
+        "max-len": "off",
+        "prefer-spread": "off"
     }
 };
