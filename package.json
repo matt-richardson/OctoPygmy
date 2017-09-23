@@ -16,11 +16,11 @@
   "gitHead": "9f47bf95f8e1cf3ca9985dcced309a83bb5302c0",
   "dependencies": {
     "jasmine": "^2.4.1",
+    "jasmine-node": "1.14.5",
+    "phantomjs-prebuilt": "^2.1.14",
     "saucelabs": "^1.2.0",
     "selenium-webdriver": "2.47.0",
-    "jasmine-node": "1.14.5"
-  },
-  "devDependencies": {
+    "jasmine-node": "1.14.5",
     "eslint": "^4.7.2",
     "eslint-config-google": "^0.9.1"
   }
